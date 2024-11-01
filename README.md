@@ -1,4 +1,4 @@
-# FINT FLYT INSTANCE GATEWAY TEMPLATE
+# FINT FLYT Altinn Gateway
 
 ## Overview
 This template serves as a skeleton gateway with example code for creating specific instance-gateways in FINT Flyt. Its primary function is to handle POST requests containing data, which is then processed and published to other microservices through Kafka inside the FINT Flyt infrastructure.

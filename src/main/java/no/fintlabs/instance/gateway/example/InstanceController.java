@@ -15,7 +15,7 @@ import reactor.core.publisher.Mono;
 import static no.fintlabs.resourceserver.UrlPaths.EXTERNAL_API;
 
 @RestController
-@RequestMapping(EXTERNAL_API + "/sourceapplication/instances")
+@RequestMapping(EXTERNAL_API + "/altinn/instances")
 public class InstanceController {
 
     private final InstanceProcessor<IncomingInstance> simpleInstanceProcessor;

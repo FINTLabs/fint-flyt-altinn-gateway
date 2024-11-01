@@ -3,4 +3,4 @@ kind: Kustomization
 resources:
   - flais.yaml
   - oauth2-file-client.yaml
-  - oauth2-sourceapplication-client.yaml
+  - oauth2-altinn-client.yaml

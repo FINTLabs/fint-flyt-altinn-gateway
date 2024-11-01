@@ -19,4 +19,4 @@ server:
   port: 8999
 logging:
   level:
-    no.fintlabs.sourceapplicationInstanceController: DEBUG
+    no.fintlabs.altinnInstanceController: DEBUG

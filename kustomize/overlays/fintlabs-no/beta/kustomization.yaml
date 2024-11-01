@@ -6,7 +6,7 @@ resources:
   - ../../../base
 
 commonLabels:
-  app.kubernetes.io/instance: fint-flyt-sourceapplication-instance-gateway_fintlabs_no
+  app.kubernetes.io/instance: fint-flyt-altinn-gateway_fintlabs_no
   fintlabs.no/org-id: fintlabs.no
 
 patches:
@@ -22,8 +22,8 @@ patches:
         value: "/beta"
       - op: replace
         path: "/spec/ingress/basePath"
-        value: "/beta/api/sourceapplication/instances/999999999"
+        value: "/beta/api/altinn/instances/999999999"
     target:
       kind: Application
-      name: fint-flyt-sourceapplication-instance-gateway
+      name: fint-flyt-altinn-gateway
 
