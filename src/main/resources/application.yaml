@@ -1,0 +1,24 @@
+fint:
+  application-id: fint-flyt-sourceapplication-instance-gateway
+  cache:
+    defaultCacheEntryTimeToLiveMillis: 518400000
+    defaultCacheHeapSize: 1000000
+  flyt:
+    sourceapplication:
+      retentionTimeInDays: 30
+logging:
+  level:
+    no.fintlabs.cache.ehcache.FintEhCacheEventLogger: WARN
+server:
+  error:
+    include-message: always
+  max-http-request-header-size: 40KB
+spring:
+  codec:
+    max-in-memory-size: 100MB
+  profiles:
+    include:
+      - flyt-kafka
+      - flyt-logging
+      - flyt-resource-server
+      - flyt-file-client

@@ -1,0 +1,22 @@
+fint:
+  org-id: fintlabs.no
+  flyt:
+    file-service-url: http://localhost:8091
+    resource-server:
+      security:
+        api:
+          external:
+            enabled: true
+            authorized-client-ids: 3
+    instance-gateway:
+      check-integration-exists: false
+  kafka:
+    default-replicas: 1
+spring:
+  kafka:
+    bootstrap-servers: localhost:9092
+server:
+  port: 8999
+logging:
+  level:
+    no.fintlabs.sourceapplicationInstanceController: DEBUG
