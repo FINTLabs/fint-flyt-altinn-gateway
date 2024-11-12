@@ -1,4 +1,4 @@
-package no.fintlabs.instance.gateway.example.collectionandfiles;
+package no.fintlabs.altinn.instance.gateway.example.collectionandfiles;
 
 import lombok.Builder;
 import lombok.EqualsAndHashCode;

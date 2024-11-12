@@ -18,5 +18,5 @@ ${Ansi.RED} 			F::::::::FF           I::::::::IN::::::N       N:::::::N      T::
 ${Ansi.RED} 			F::::::::FF           I::::::::IN::::::N        N::::::N      T:::::::::T
 ${Ansi.RED} 			FFFFFFFFFFF           IIIIIIIIIINNNNNNNN         NNNNNNN      TTTTTTTTTTT
 
-${Ansi.GREEN}              Greetings from FINTLabs! ${Ansi.DEFAULT}
+${Ansi.GREEN}              Greetings from Arkivlandslaget! ${Ansi.DEFAULT}
 

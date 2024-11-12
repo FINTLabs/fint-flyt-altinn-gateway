@@ -22,8 +22,7 @@ patches:
         value: "/beta"
       - op: replace
         path: "/spec/ingress/basePath"
-        value: "/beta/api/altinn/instances/999999999"
+        value: "/beta/api/altinn"
     target:
       kind: Application
       name: fint-flyt-altinn-gateway
-

@@ -9,7 +9,7 @@ metadata:
     app.kubernetes.io/version: latest
     app.kubernetes.io/component: backend
     app.kubernetes.io/part-of: fint-flyt
-    fintlabs.no/team: flyt
+    fintlabs.no/team: arkiv
     fintlabs.no/org-id: fintlabs.no
 spec:
   port: 8080
