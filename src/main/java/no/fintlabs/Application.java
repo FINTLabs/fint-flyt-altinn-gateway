@@ -1,4 +1,4 @@
-package no.fintlabs.altinn;
+package no.fintlabs;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
