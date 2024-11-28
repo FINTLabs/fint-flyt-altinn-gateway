@@ -19,10 +19,15 @@ patches:
         value: "fintlabs.no"
       - op: add
         path: "/spec/url/basePath"
-        value: "/beta"
+        value: "/beta/fintlabs-no"
       - op: replace
         path: "/spec/ingress/basePath"
-        value: "/beta/api/altinn"
+        value: "/beta/fintlabs-no/api/altinn"
+      - op: add
+        path: "/spec/env/-"
+        value:
+          name: "logging.level.no.fintlabs"
+          value: "DEBUG"
     target:
       kind: Application
       name: fint-flyt-altinn-gateway
