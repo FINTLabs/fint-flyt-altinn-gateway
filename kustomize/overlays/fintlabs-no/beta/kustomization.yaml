@@ -15,6 +15,9 @@ patches:
         path: "/spec/kafka/acls/0/topic"
         value: "fintlabs-no.flyt.*"
       - op: replace
+        path: "/spec/kafka/acls/1/topic"
+        value: "fintlabs-no.altinn.*"
+      - op: replace
         path: "/spec/orgId"
         value: "fintlabs.no"
       - op: add

@@ -20,7 +20,9 @@ spec:
     enabled: true
     acls:
       - permission: admin
-        topic: 'no-permission'
+        topic: 'flyt'
+      - permission: admin
+        topic: 'altinn'
   url:
     hostname: flyt.vigoiks.no
     basePath: ""
