@@ -1,6 +1,7 @@
 package no.fintlabs.altinn;
 
 import lombok.extern.slf4j.Slf4j;
+import no.fint.altinn.model.kafka.KafkaAltinnInstance;
 import no.fintlabs.kafka.entity.EntityConsumerFactoryService;
 import no.fintlabs.kafka.entity.topic.EntityTopicNameParameters;
 import no.fintlabs.kafka.entity.topic.EntityTopicService;
@@ -29,16 +30,19 @@ public class AltinnInstanceConsumer {
     }
 
     @Bean
-    public ConcurrentMessageListenerContainer<String, AltinnInstance> altinnInstanceConsumerConfiguration(
+    public ConcurrentMessageListenerContainer<String, KafkaAltinnInstance> altinnInstanceConsumerConfiguration(
             EntityConsumerFactoryService entityConsumerFactoryService) {
 
 
         return entityConsumerFactoryService
-                .createRecordConsumerFactory(AltinnInstance.class, this::process)
+                .createRecordConsumerFactory(KafkaAltinnInstance.class, this::process)
                 .createContainer(entityTopicNameParameters);
     }
 
-    private void process(ConsumerRecord<String, AltinnInstance> altinnInstanceRecord) {
-        log.info("Congratulations 🎉\n\n {}", altinnInstanceRecord.value());
+    private void process(ConsumerRecord<String, KafkaAltinnInstance> altinnInstanceRecord) {
+        log.info("Congratulations! 🎉 You received a new instance with instanceId {} from organizationName {} in county {}",
+                altinnInstanceRecord.value().getInstanceId(),
+                altinnInstanceRecord.value().getOrganizationName(),
+                altinnInstanceRecord.value().getCountyName());
     }
 }

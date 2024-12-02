@@ -1289,3 +1289,4 @@ out/
 /db-data/postmaster.pid
 /ldap-data/data.mdb
 /ldap-data/lock.mdb
+/.java-version
