@@ -2,7 +2,7 @@ fint:
   kafka:
     topic:
       org-id: ${fint.org-id}
-      domain-context: flyt
+      domain-context: altinn
     application-id: ${fint.application-id}
 spring:
   kafka:

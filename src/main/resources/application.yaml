@@ -1,5 +1,5 @@
 fint:
-  application-id: fint-flyt-sourceapplication-instance-gateway
+  application-id: fint-flyt-altinn-gateway
   cache:
     defaultCacheEntryTimeToLiveMillis: 518400000
     defaultCacheHeapSize: 1000000
