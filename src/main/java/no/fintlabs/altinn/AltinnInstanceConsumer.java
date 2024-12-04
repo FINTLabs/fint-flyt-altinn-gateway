@@ -6,6 +6,7 @@ import no.fintlabs.kafka.entity.EntityConsumerFactoryService;
 import no.fintlabs.kafka.entity.topic.EntityTopicNameParameters;
 import no.fintlabs.kafka.entity.topic.EntityTopicService;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.kafka.listener.ConcurrentMessageListenerContainer;
 import org.springframework.stereotype.Component;
@@ -14,6 +15,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class AltinnInstanceConsumer {
 
+    @Value("${fint.org-id}")
+    private String orgId;
+
     private final EntityTopicService entityTopicService;
     private final EntityTopicNameParameters entityTopicNameParameters;
 
@@ -21,9 +25,7 @@ public class AltinnInstanceConsumer {
         this.entityTopicService = entityTopicService;
 
         this.entityTopicNameParameters = EntityTopicNameParameters.builder()
-                .resource("instance-received")
-                .orgId("bfk-no")
-                .domainContext("altinn")
+                .orgId(orgId).domainContext("altinn").resource("instance-received")
                 .build();
 
         entityTopicService.ensureTopic(entityTopicNameParameters, 0);
