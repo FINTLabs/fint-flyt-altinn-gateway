@@ -22,6 +22,8 @@ public class AltinnInstanceConsumer {
 
         this.entityTopicNameParameters = EntityTopicNameParameters.builder()
                 .resource("instance-received")
+                .orgId("bfk-no")
+                .domainContext("altinn")
                 .build();
 
         entityTopicService.ensureTopic(entityTopicNameParameters, 0);
