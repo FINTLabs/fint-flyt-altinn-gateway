@@ -31,6 +31,10 @@ public class AltinnInstanceConsumer {
     public ConcurrentMessageListenerContainer<String, KafkaAltinnInstance> altinnInstanceConsumerConfiguration(
             EntityConsumerFactoryService entityConsumerFactoryService) {
 
+        log.info("Creating consumer with domainContext {}, orgId {}, and resource {}",
+                entityTopicNameParameters.getDomainContext(),
+                entityTopicNameParameters.getOrgId(),
+                entityTopicNameParameters.getResource());
 
         return entityConsumerFactoryService
                 .createRecordConsumerFactory(KafkaAltinnInstance.class, this::process)
