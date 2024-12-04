@@ -15,15 +15,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class AltinnInstanceConsumer {
 
-    @Value("${fint.org-id}")
-    private String orgId;
+
 
     private final EntityTopicService entityTopicService;
     private final EntityTopicNameParameters entityTopicNameParameters;
 
-    public AltinnInstanceConsumer(EntityTopicService entityTopicService) {
+    public AltinnInstanceConsumer(EntityTopicService entityTopicService, @Value("${fint.org-id}") String orgId) {
         this.entityTopicService = entityTopicService;
-
         this.entityTopicNameParameters = EntityTopicNameParameters.builder()
                 .orgId(orgId).domainContext("altinn").resource("instance-received")
                 .build();
@@ -35,17 +33,17 @@ public class AltinnInstanceConsumer {
     public ConcurrentMessageListenerContainer<String, KafkaAltinnInstance> altinnInstanceConsumerConfiguration(
             EntityConsumerFactoryService entityConsumerFactoryService) {
 
+        log.info("Creating consumer with domainContext {}, orgId {}, and resource {}",
+                entityTopicNameParameters.getDomainContext(),
+                entityTopicNameParameters.getOrgId(),
+                entityTopicNameParameters.getResource());
+
         return entityConsumerFactoryService
                 .createRecordConsumerFactory(KafkaAltinnInstance.class, this::process)
                 .createContainer(entityTopicNameParameters);
     }
 
     private void process(ConsumerRecord<String, KafkaAltinnInstance> altinnInstanceRecord) {
-
-        log.info("Creating consumer with domainContext {}, orgId {}, and resource {}",
-                entityTopicNameParameters.getDomainContext(),
-                entityTopicNameParameters.getOrgId(),
-                entityTopicNameParameters.getResource());
 
         log.info("Congratulations! 🎉 You received a new instance with instanceId {} from organizationName {} in county {}",
                 altinnInstanceRecord.value().getInstanceId(),
