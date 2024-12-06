@@ -27,10 +27,10 @@ import java.util.Collections;
 @Component
 public class AltinnInstanceConsumer {
 
-    @Value("${fint.flyt.altinn.sso.client-id}")
+    @Value("${fint.sso.client-id}")
     private String clientId;
 
-    @Value("${fint.flyt.altinn.sso.client-secret}")
+    @Value("${fint.sso.client-secret}")
     private String clientSecret;
 
     @Autowired
