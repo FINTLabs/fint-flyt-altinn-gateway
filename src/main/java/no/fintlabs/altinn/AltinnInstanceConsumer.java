@@ -79,7 +79,7 @@ public class AltinnInstanceConsumer {
             Authentication authentication = createAuthentication();
             SecurityContextHolder.getContext().setAuthentication(authentication);
             
-            instanceProcessor.processInstance(authentication, altinnInstanceRecord.value());
+            instanceProcessor.processInstance(authentication, altinnInstanceRecord.value()).block();
 
         } catch (Exception e) {
             log.error("Error processing Altinn instance with instanceId {}: {}",
