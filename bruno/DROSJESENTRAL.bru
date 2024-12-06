@@ -1,0 +1,71 @@
+meta {
+  name: DROSJESENTRAL
+  type: http
+  seq: 5
+}
+
+post {
+  url: https://flyt.vigoiks.no/{{env}}{{org}}/api/intern/metadata
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "sourceApplicationId": 5,
+    "sourceApplicationIntegrationId": "DROSJESENTRAL",
+    "sourceApplicationIntegrationUri": null,
+    "integrationDisplayName": "Søknad om å drive drosjesentral",
+    "version": "{{next-version}}",
+    "instanceMetadata": {
+      "instanceValueMetadata": [],
+      "instanceObjectCollectionMetadata": [],
+      "categories": [
+        {
+          "displayName": "Virksomhet",
+          "content": {
+            "instanceValueMetadata": [
+              { "displayName": "Organisasjonsnummer", "key": "virksomhetOrganisasjonsnummer", "type": "STRING" },
+              { "displayName": "Organisasjonsnavn", "key": "virksomhetOrganisasjonsnavn", "type": "STRING" },
+              { "displayName": "Epostadresse", "key": "virksomhetEpostadresse", "type": "STRING" },
+              { "displayName": "Telefonnummer", "key": "virksomhetTelefonnummer", "type": "STRING" },
+              { "displayName": "Fylke", "key": "virksomhetFylke", "type": "STRING" },
+              { "displayName": "Kommune", "key": "virksomhetKommune", "type": "STRING" },
+              { "displayName": "Gateadresse", "key": "virksomhetGateadresse", "type": "STRING" },
+              { "displayName": "Postnummer", "key": "virksomhetPostnummer", "type": "STRING" },
+              { "displayName": "Poststed", "key": "virksomhetPoststed", "type": "STRING" }
+            ],
+            "instanceObjectCollectionMetadata": [],
+            "categories": []
+          }
+        },
+        {
+          "displayName": "Postadresse",
+          "content": {
+            "instanceValueMetadata": [
+              { "displayName": "Gateadresse", "key": "postadresseGateadresse", "type": "STRING" },
+              { "displayName": "Postnummer", "key": "postadressePostnummer", "type": "STRING" },
+              { "displayName": "Poststed", "key": "postadressePoststed", "type": "STRING" }
+            ],
+            "instanceObjectCollectionMetadata": [],
+            "categories": []
+          }
+        },
+        {
+          "displayName": "Daglig leder",
+          "content": {
+            "instanceValueMetadata": [
+              { "displayName": "Fødselsnummer", "key": "dagligLederFødselsnummer", "type": "STRING" },
+              { "displayName": "Fornavn", "key": "dagligLederFornavn", "type": "STRING" },
+              { "displayName": "Etternavn", "key": "dagligLederEtternavn", "type": "STRING" },
+              { "displayName": "Epostadresse", "key": "dagligLederEpostadresse", "type": "STRING" },
+              { "displayName": "Telefonnummer", "key": "dagligLederTelefonnummer", "type": "STRING" }
+            ],
+            "instanceObjectCollectionMetadata": [],
+            "categories": []
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,17 @@
+meta {
+  name: Get METADATA
+  type: http
+  seq: 1
+}
+
+get {
+  url: https://flyt.vigoiks.no/{{env}}{{org}}/api/intern/metadata?kildeapplikasjonId=5&bareSisteVersjoner=true
+  body: none
+  auth: none
+}
+
+params:query {
+  kildeapplikasjonId: 5
+  bareSisteVersjoner: true
+  ~kildeapplikasjonIntegrasjonId: DROSJESENTRAL
+}

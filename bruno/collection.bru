@@ -1,0 +1,32 @@
+script:pre-request {
+  // To make this work, you need to disable 'Send Cookies automatically' in the settings.
+  
+  // SETT OPP AUTENTISERING
+  var cookie = [
+    `user_session=${bru.getEnvVar("user_session")}`,
+    `Expires=Tue, 19 Jan 2038 03:14:07 GMT`,
+    `Domain=flyt.vigoiks.no`,
+    `Path=/${bru.getEnvVar("env")}${bru.getEnvVar("org")}`
+  ].join("; ")
+  
+  req.setHeader("Cookie", cookie)
+  
+  // FINN NESTE VERSJON FØR POST
+  const fetch = require('node-fetch');
+  
+  if (req.getMethod() != 'POST') return;
+  
+  var integrationId = req.body.sourceApplicationIntegrationId;
+  console.log('🧣 IntegrationId: ', integrationId);
+  
+  const url = `https://flyt.vigoiks.no/${bru.getEnvVar("env")}${bru.getEnvVar("org")}/api/intern/metadata?kildeapplikasjonId=5&bareSisteVersjoner=true`;
+  const options = {  method: 'GET', headers: { Cookie: cookie } };
+  
+  const response = await fetch(url, options);
+  const data = await response.json()
+  const result = data.find(item => item.sourceApplicationIntegrationId == integrationId);
+  
+  bru.setVar('next-version', (result ? result.version + 1 : 1));
+  
+  console.log('🍿 Next version', bru.getVar('next-version'));
+}
