@@ -4,10 +4,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import lombok.extern.slf4j.Slf4j;
 import no.fint.altinn.model.kafka.KafkaAltinnInstance;
 import no.fintlabs.gateway.instance.InstanceProcessor;
-import no.fintlabs.kafka.entity.EntityConsumerConfiguration;
-import no.fintlabs.kafka.entity.EntityConsumerFactoryService;
-import no.fintlabs.kafka.entity.topic.EntityTopicNameParameters;
-import no.fintlabs.kafka.entity.topic.EntityTopicService;
+import no.fintlabs.kafka.event.EventConsumerConfiguration;
+import no.fintlabs.kafka.event.EventConsumerFactoryService;
+import no.fintlabs.kafka.event.topic.EventTopicNameParameters;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -36,15 +35,13 @@ public class AltinnInstanceConsumer {
     @Autowired
     private WebClient webClient;
 
-    private final EntityTopicNameParameters entityTopicNameParameters;
+    private final EventTopicNameParameters topicNameParameters;
     private final InstanceProcessor<KafkaAltinnInstance> instanceProcessor;
 
-    public AltinnInstanceConsumer(
-            EntityTopicService entityTopicService,
-            @Value("${fint.org-id}") String orgId,
-            InstanceProcessor<KafkaAltinnInstance> instanceProcessor) {
-        this.entityTopicNameParameters = EntityTopicNameParameters.builder()
-                .orgId(orgId).domainContext("altinn").resource("instance-received")
+    public AltinnInstanceConsumer(@Value("${fint.org-id}") String orgId,
+                                  InstanceProcessor<KafkaAltinnInstance> instanceProcessor) {
+        this.topicNameParameters = EventTopicNameParameters.builder()
+                .orgId(orgId).domainContext("altinn").eventName("instance-received")
                 .build();
         this.instanceProcessor = instanceProcessor;
     }
@@ -78,7 +75,7 @@ public class AltinnInstanceConsumer {
 
             Authentication authentication = createAuthentication();
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            
+
             instanceProcessor.processInstance(authentication, altinnInstanceRecord.value()).block();
 
         } catch (Exception e) {
@@ -93,21 +90,20 @@ public class AltinnInstanceConsumer {
 
     @Bean
     public ConcurrentMessageListenerContainer<String, KafkaAltinnInstance> altinnInstanceConsumerConfiguration(
-            EntityConsumerFactoryService entityConsumerFactoryService) {
+            EventConsumerFactoryService consumerFactoryService) {
 
         log.info("Creating consumer with domainContext {}, orgId {}, and resource {}",
-                entityTopicNameParameters.getDomainContext(),
-                entityTopicNameParameters.getOrgId(),
-                entityTopicNameParameters.getResource());
-        
-        return entityConsumerFactoryService
-                .createRecordConsumerFactory(
-                    KafkaAltinnInstance.class,
-                    this::process,
-                        EntityConsumerConfiguration.builder()
+                topicNameParameters.getDomainContext(),
+                topicNameParameters.getOrgId(),
+                topicNameParameters.getEventName());
+
+        return consumerFactoryService.createRecordConsumerFactory(
+                        KafkaAltinnInstance.class,
+                        this::process,
+                        EventConsumerConfiguration.builder()
                                 .ackMode(ContainerProperties.AckMode.RECORD)
                                 .build()
                 )
-                .createContainer(entityTopicNameParameters);
+                .createContainer(topicNameParameters);
     }
 }

@@ -32,10 +32,6 @@ spec:
   env:
     - name: JAVA_TOOL_OPTIONS
       value: '-XX:+ExitOnOutOfMemoryError -Xmx1840M'
-    - name: fint.flyt.resource-server.security.api.external.enabled
-      value: "true"
-    - name: fint.flyt.resource-server.security.api.external.authorized-client-ids
-      value: "5"
   envFrom:
     - secretRef:
         name: fint-flyt-file-oauth2-client
