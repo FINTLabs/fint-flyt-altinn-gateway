@@ -7,8 +7,8 @@ import no.fintlabs.gateway.instance.InstanceProcessor;
 import no.fintlabs.kafka.event.EventConsumerConfiguration;
 import no.fintlabs.kafka.event.EventConsumerFactoryService;
 import no.fintlabs.kafka.event.topic.EventTopicNameParameters;
+import no.fintlabs.kafka.event.topic.EventTopicService;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.kafka.listener.ConcurrentMessageListenerContainer;
@@ -32,18 +32,22 @@ public class AltinnInstanceConsumer {
     @Value("${fint.sso.client-secret}")
     private String clientSecret;
 
-    @Autowired
     private WebClient webClient;
 
     private final EventTopicNameParameters topicNameParameters;
     private final InstanceProcessor<KafkaAltinnInstance> instanceProcessor;
 
-    public AltinnInstanceConsumer(@Value("${fint.org-id}") String orgId,
+    public AltinnInstanceConsumer(EventTopicService entityTopicService, WebClient webClient,
+                                  @Value("${fint.org-id}") String orgId,
                                   InstanceProcessor<KafkaAltinnInstance> instanceProcessor) {
+        this.webClient = webClient;
+        this.instanceProcessor = instanceProcessor;
+
         this.topicNameParameters = EventTopicNameParameters.builder()
                 .orgId(orgId).domainContext("altinn").eventName("instance-received")
                 .build();
-        this.instanceProcessor = instanceProcessor;
+
+        entityTopicService.ensureTopic(topicNameParameters, 0);
     }
 
     private Authentication createAuthentication() {
