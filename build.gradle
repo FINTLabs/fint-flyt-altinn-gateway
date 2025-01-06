@@ -50,7 +50,7 @@ dependencies {
     implementation 'no.fintlabs:fint-flyt-instance-gateway:6.0.0'
     implementation 'no.fintlabs:fint-flyt-resource-server:5.0.0'
 
-    implementation 'no.fint:fint-altinn-model:2.0.2'
+    implementation 'no.fint:fint-altinn-model:2.0.3'
 
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
