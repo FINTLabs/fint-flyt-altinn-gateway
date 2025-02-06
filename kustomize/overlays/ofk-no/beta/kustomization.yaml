@@ -1,0 +1,41 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: ofk-no
+
+resources:
+  - ../../../base
+
+commonLabels:
+  app.kubernetes.io/instance: fint-flyt-altinn-gateway_ofk_no
+  fintlabs.no/org-id: ofk.no
+
+patches:
+  - patch: |-
+      - op: replace
+        path: "/spec/kafka/acls/0/topic"
+        value: "ofk-no.flyt.*"
+      - op: replace
+        path: "/spec/kafka/acls/1/topic"
+        value: "ofk-no.altinn.*"
+      - op: replace
+        path: "/spec/orgId"
+        value: "ofk.no"
+      - op: add
+        path: "/spec/url/basePath"
+        value: "/beta/ofk-no"
+      - op: replace
+        path: "/spec/ingress/basePath"
+        value: "/beta/ofk-no/api/altinn"
+      - op: add
+        path: "/spec/env/-"
+        value:
+          name: "fint.org-id"
+          value: "ofk-no"
+      - op: add
+        path: "/spec/env/-"
+        value:
+          name: "logging.level.no.fintlabs"
+          value: "DEBUG"
+    target:
+      kind: Application
+      name: fint-flyt-altinn-gateway
