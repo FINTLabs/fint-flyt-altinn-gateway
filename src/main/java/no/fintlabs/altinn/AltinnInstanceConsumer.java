@@ -3,6 +3,7 @@ package no.fintlabs.altinn;
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.extern.slf4j.Slf4j;
 import no.fint.altinn.model.kafka.KafkaAltinnInstance;
+import no.fintlabs.drosje.InstanceActorProducerService;
 import no.fintlabs.gateway.instance.InstanceProcessor;
 import no.fintlabs.kafka.event.EventConsumerConfiguration;
 import no.fintlabs.kafka.event.EventConsumerFactoryService;
@@ -32,20 +33,24 @@ public class AltinnInstanceConsumer {
     @Value("${fint.sso.client-secret}")
     private String clientSecret;
 
-    private WebClient webClient;
+    private final WebClient webClient;
 
     private final EventTopicNameParameters topicNameParameters;
     private final InstanceProcessor<KafkaAltinnInstance> instanceProcessor;
+    private final InstanceActorProducerService instanceActorProducerService;
 
     public AltinnInstanceConsumer(EventTopicService entityTopicService, WebClient webClient,
                                   @Value("${fint.org-id}") String orgId,
-                                  InstanceProcessor<KafkaAltinnInstance> instanceProcessor) {
+                                  InstanceProcessor<KafkaAltinnInstance> instanceProcessor,
+                                  InstanceActorProducerService instanceActorProducerService) {
+
         this.webClient = webClient;
         this.instanceProcessor = instanceProcessor;
 
         this.topicNameParameters = EventTopicNameParameters.builder()
                 .orgId(orgId).domainContext("altinn").eventName("instance-received")
                 .build();
+        this.instanceActorProducerService = instanceActorProducerService;
 
         entityTopicService.ensureTopic(topicNameParameters, 0);
     }
@@ -77,9 +82,18 @@ public class AltinnInstanceConsumer {
                     altinnInstanceRecord.value().getOrganizationName(),
                     altinnInstanceRecord.value().getCountyName());
 
+//            KafkaInstanceActor kafkaInstanceActor = KafkaInstanceActor.builder()
+//                    .altinnReference(altinnInstanceRecord.value().getInstanceId())
+//                    .organizationNumber(altinnInstanceRecord.value().getOrganizationName())
+//                    .socialSecurityNumber(altinnInstanceRecord.value().getManagerSocialSecurityNumber())
+//                    .build();
+
+
+            //instanceActorProducerService.publish(kafkaInstanceActor);
+
+            // Send til FLYT:
             Authentication authentication = createAuthentication();
             SecurityContextHolder.getContext().setAuthentication(authentication);
-
             instanceProcessor.processInstance(authentication, altinnInstanceRecord.value()).block();
 
         } catch (Exception e) {

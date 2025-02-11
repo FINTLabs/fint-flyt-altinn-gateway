@@ -5,7 +5,9 @@ import no.fint.altinn.model.kafka.KafkaAltinnInstance;
 import no.fintlabs.gateway.instance.InstanceMapper;
 import no.fintlabs.gateway.instance.model.File;
 import no.fintlabs.gateway.instance.model.instance.InstanceObject;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import java.util.*;
@@ -17,6 +19,11 @@ import java.util.stream.Collectors;
 public class IncomingInstanceMappingService implements InstanceMapper<KafkaAltinnInstance> {
 
     public static final String EMPTY_STRING = "";
+    private final WebClient webClient;
+
+    public IncomingInstanceMappingService(WebClient webClient) {
+        this.webClient = webClient;
+    }
 
     @Override
     public Mono<InstanceObject> map(
@@ -25,14 +32,26 @@ public class IncomingInstanceMappingService implements InstanceMapper<KafkaAltin
             Function<File, Mono<UUID>> persistFile
     ) {
         log.info("Mapping incoming instance: {}, sourceApplicationId={}", incomingInstance, sourceApplicationId);
-
-        return Mono.just(InstanceObject.builder()
-                .valuePerKey(toValuePerKey(incomingInstance))
-                .build());
+        return webClient.get()
+                .uri(String.format("http://localhost:8083/api/file/%s/ref-data-as-pdf", incomingInstance.getInstanceId()))
+                .exchangeToMono(response ->
+                        response.bodyToMono(byte[].class)
+                                .map(body -> File.builder()
+                                        .name("test.pdf")
+                                        .base64Contents(Base64.getEncoder().encodeToString(body))
+                                        .encoding("UTF-8")
+                                        .sourceApplicationId(sourceApplicationId)
+                                        .sourceApplicationInstanceId(incomingInstance.getInstanceId())
+                                        .type(response.headers().contentType().orElse(MediaType.APPLICATION_OCTET_STREAM))
+                                        .build())
+                                .flatMap(file -> persistFile.apply(file)
+                                        .map(uuid -> InstanceObject.builder()
+                                                .valuePerKey(toValuePerKey(incomingInstance, file, uuid))
+                                                .build())));
     }
 
-    private static Map<String, String> toValuePerKey(KafkaAltinnInstance incomingInstance) {
-        Set<Map.Entry<String, String>> entries = new HashSet<>();
+    private Map<String, String> toValuePerKey(KafkaAltinnInstance incomingInstance, File file, UUID uuid) {
+        List<Map.Entry<String, String>> entries = new ArrayList<>();
 
         entries.add(Map.entry("virksomhetOrganisasjonsnummer", incomingInstance.getOrganizationNumber()));
 
@@ -54,6 +73,10 @@ public class IncomingInstanceMappingService implements InstanceMapper<KafkaAltin
         entries.add(Map.entry("dagligLederEtternavn", Optional.ofNullable(incomingInstance.getPostalAdressPostplace()).orElse(EMPTY_STRING)));
         entries.add(Map.entry("dagligLederEpostadresse", Optional.ofNullable(incomingInstance.getPostalAdressPostplace()).orElse(EMPTY_STRING)));
         entries.add(Map.entry("dagligLederTelefonnummer", Optional.ofNullable(incomingInstance.getPostalAdressPostplace()).orElse(EMPTY_STRING)));
+
+        entries.add(Map.entry("soknadTittel", "Søknadsskjema"));
+        entries.add(Map.entry("soknadFormat", file.getType().toString()));
+        entries.add(Map.entry("soknadFil", uuid.toString()));
 
         return entries.stream().collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
