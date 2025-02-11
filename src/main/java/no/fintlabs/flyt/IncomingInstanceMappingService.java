@@ -33,7 +33,7 @@ public class IncomingInstanceMappingService implements InstanceMapper<KafkaAltin
     ) {
         log.info("Mapping incoming instance: {}, sourceApplicationId={}", incomingInstance, sourceApplicationId);
         return webClient.get()
-                .uri(String.format("http://localhost:8083/api/file/%s/ref-data-as-pdf", incomingInstance.getInstanceId()))
+                .uri(String.format("http://10.104.4.130:8080/api/file/%s/ref-data-as-pdf", incomingInstance.getInstanceId()))
                 .exchangeToMono(response ->
                         response.bodyToMono(byte[].class)
                                 .map(body -> File.builder()
