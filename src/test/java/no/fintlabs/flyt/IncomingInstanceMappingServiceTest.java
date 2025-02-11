@@ -79,7 +79,7 @@ class IncomingInstanceMappingServiceTest {
         Function<File, Mono<UUID>> persistFile = file -> Mono.just(uuid);
 
         when(webClient.get()).thenReturn(requestHeadersUriSpec);
-        when(requestHeadersUriSpec.uri(String.format("http://localhost:8083/api/file/%s/ref-data-as-pdf", instanceId)))
+        when(requestHeadersUriSpec.uri(String.format("http://10.104.4.130:8080/api/file/%s/ref-data-as-pdf", instanceId)))
                 .thenReturn(requestHeadersSpec);
         when(requestHeadersSpec.exchangeToMono(any())).thenAnswer(invocation -> {
             Function<ClientResponse, Mono<byte[]>> function = invocation.getArgument(0);
