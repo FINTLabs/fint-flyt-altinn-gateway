@@ -37,7 +37,7 @@ public class IncomingInstanceMappingService implements InstanceMapper<KafkaAltin
         return Flux.fromIterable(Arrays.asList("ref-data-as-pdf", "dom-forelegg", "beskrivelse-yrkestransportloven", "politiattest-foretak", "politiattest-dagligleder"))
                 .map(documentReference ->
                         webClient.get()
-                                .uri(String.format("http://10.104.4.130:8080/api/file/%s/%s", incomingInstance.getInstanceId(), documentReference))
+                                .uri(String.format("http://fint-altinn-service:8080/api/file/%s/%s", incomingInstance.getInstanceId(), documentReference))
                                 .exchangeToMono(response ->
                                         response.bodyToMono(byte[].class)
                                                 .map(body ->
