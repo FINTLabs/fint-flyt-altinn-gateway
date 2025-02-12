@@ -1,7 +1,7 @@
 meta {
   name: DROSJESENTRAL
   type: http
-  seq: 5
+  seq: 1
 }
 
 post {
@@ -60,6 +60,66 @@ body:json {
               { "displayName": "Etternavn", "key": "dagligLederEtternavn", "type": "STRING" },
               { "displayName": "Epostadresse", "key": "dagligLederEpostadresse", "type": "STRING" },
               { "displayName": "Telefonnummer", "key": "dagligLederTelefonnummer", "type": "STRING" }
+            ],
+            "instanceObjectCollectionMetadata": [],
+            "categories": []
+          }
+        },
+        {
+          "displayName": "Søknadsskjema",
+          "content": {
+            "instanceValueMetadata": [
+              { "displayName": "Tittel", "type": "STRING", "key": "soknadTittel" },
+              { "displayName": "Fil", "type": "FILE", "key": "soknadFil" },
+              { "displayName": "Format", "type": "STRING", "key": "soknadFormat" }
+            ],
+            "instanceObjectCollectionMetadata": [],
+            "categories": []
+          }
+        },
+        {
+          "displayName": "Politiattest for daglig leder",
+          "content": {
+            "instanceValueMetadata": [
+              { "displayName": "Tittel", "type": "STRING", "key": "politiattestLederTittel" },
+              { "displayName": "Fil", "type": "FILE", "key": "politiattestLederFil" },
+              { "displayName": "Format", "type": "STRING", "key": "politiattestLederFormat" }
+            ],
+            "instanceObjectCollectionMetadata": [],
+            "categories": []
+          }
+        },
+        {
+          "displayName": "Politiattest for foretaket",
+          "content": {
+            "instanceValueMetadata": [
+              { "displayName": "Tittel", "type": "STRING", "key": "politiattestForetakTittel" },
+              { "displayName": "Fil", "type": "FILE", "key": "politiattestForetakFil" },
+              { "displayName": "Format", "type": "STRING", "key": "politiattestForetakFormat" }
+            ],
+            "instanceObjectCollectionMetadata": [],
+            "categories": []
+          }
+        },
+        {
+          "displayName": "Kopi av eventuelle dom/forelegg",
+          "content": {
+            "instanceValueMetadata": [
+              { "displayName": "Tittel", "type": "STRING", "key": "domForeleggTittel" },
+              { "displayName": "Fil", "type": "FILE", "key": "domForeleggFil" },
+              { "displayName": "Format", "type": "STRING", "key": "domForeleggFormat" }
+            ],
+            "instanceObjectCollectionMetadata": [],
+            "categories": []
+          }
+        },
+        {
+          "displayName": "Håndtering av Yrkestransportloven § 9 c og d",
+          "content": {
+            "instanceValueMetadata": [
+              { "displayName": "Tittel", "type": "STRING", "key": "beskrivelseTittel" },
+              { "displayName": "Fil", "type": "FILE", "key": "beskrivelseFil" },
+              { "displayName": "Format", "type": "STRING", "key": "beskrivelseFormat" }
             ],
             "instanceObjectCollectionMetadata": [],
             "categories": []
