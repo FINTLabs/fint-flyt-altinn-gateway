@@ -8,6 +8,7 @@ import no.fintlabs.gateway.instance.model.instance.InstanceObject;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.*;
@@ -32,25 +33,33 @@ public class IncomingInstanceMappingService implements InstanceMapper<KafkaAltin
             Function<File, Mono<UUID>> persistFile
     ) {
         log.info("Mapping incoming instance: {}, sourceApplicationId={}", incomingInstance, sourceApplicationId);
-        return webClient.get()
-                .uri(String.format("http://10.104.4.130:8080/api/file/%s/ref-data-as-pdf", incomingInstance.getInstanceId()))
-                .exchangeToMono(response ->
-                        response.bodyToMono(byte[].class)
-                                .map(body -> File.builder()
-                                        .name("test.pdf")
-                                        .base64Contents(Base64.getEncoder().encodeToString(body))
-                                        .encoding("UTF-8")
-                                        .sourceApplicationId(sourceApplicationId)
-                                        .sourceApplicationInstanceId(incomingInstance.getInstanceId())
-                                        .type(response.headers().contentType().orElse(MediaType.APPLICATION_OCTET_STREAM))
-                                        .build())
-                                .flatMap(file -> persistFile.apply(file)
-                                        .map(uuid -> InstanceObject.builder()
-                                                .valuePerKey(toValuePerKey(incomingInstance, file, uuid))
-                                                .build())));
+
+        return Flux.fromIterable(Arrays.asList("ref-data-as-pdf", "dom-forelegg", "beskrivelse-yrkestransportloven", "politiattest-foretak", "politiattest-dagligleder"))
+                .map(documentReference ->
+                        webClient.get()
+                                .uri(String.format("http://10.104.4.130:8080/api/file/%s/%s", incomingInstance.getInstanceId(), documentReference))
+                                .exchangeToMono(response ->
+                                        response.bodyToMono(byte[].class)
+                                                .map(body ->
+                                                        File.builder()
+                                                                .name("test.pdf")
+                                                                .base64Contents(Base64.getEncoder().encodeToString(body))
+                                                                .encoding("UTF-8").sourceApplicationId(sourceApplicationId)
+                                                                .sourceApplicationInstanceId(incomingInstance.getInstanceId())
+                                                                .type(response.headers().contentType().orElse(MediaType.APPLICATION_OCTET_STREAM))
+                                                                .build()
+                                                )
+                                                .flatMap(file -> persistFile.apply(file)
+                                                        .map(uuid -> Map.entry(uuid.toString(), file)))))
+                .flatMap(x -> x)
+                .collectList()
+                .map(documents ->
+                        InstanceObject.builder()
+                                .valuePerKey(toValuePerKey(incomingInstance, documents))
+                                .build());
     }
 
-    private Map<String, String> toValuePerKey(KafkaAltinnInstance incomingInstance, File file, UUID uuid) {
+    private Map<String, String> toValuePerKey(KafkaAltinnInstance incomingInstance, List<Map.Entry<String, File>> documents) {
         List<Map.Entry<String, String>> entries = new ArrayList<>();
 
         entries.add(Map.entry("virksomhetOrganisasjonsnummer", incomingInstance.getOrganizationNumber()));
@@ -75,9 +84,27 @@ public class IncomingInstanceMappingService implements InstanceMapper<KafkaAltin
         entries.add(Map.entry("dagligLederTelefonnummer", Optional.ofNullable(incomingInstance.getPostalAdressPostplace()).orElse(EMPTY_STRING)));
 
         entries.add(Map.entry("soknadTittel", "Søknadsskjema"));
-        entries.add(Map.entry("soknadFormat", file.getType().toString()));
-        entries.add(Map.entry("soknadFil", uuid.toString()));
+        entries.add(Map.entry("soknadFormat", String.valueOf(documents.get(0).getValue().getType())));
+        entries.add(Map.entry("soknadFil", documents.get(0).getKey()));
+
+        entries.add(Map.entry("domForeleggTittel", "Kopi av eventuelle dom/forelegg"));
+        entries.add(Map.entry("domForeleggFormat", String.valueOf(documents.get(1).getValue().getType())));
+        entries.add(Map.entry("domForeleggFil", documents.get(1).getKey()));
+
+        entries.add(Map.entry("beskrivelseTittel", "Håndtering av Yrkestransportloven § 9 c og d"));
+        entries.add(Map.entry("beskrivelseFormat", String.valueOf(documents.get(2).getValue().getType())));
+        entries.add(Map.entry("beskrivelseFil", documents.get(2).getKey()));
+
+        entries.add(Map.entry("politiattestForetakTittel", "Politiattest for foretaket"));
+        entries.add(Map.entry("politiattestForetakFormat", String.valueOf(documents.get(3).getValue().getType())));
+        entries.add(Map.entry("politiattestForetakFil", documents.get(3).getKey()));
+
+        entries.add(Map.entry("politiattestLederTittel", "Politiattest for daglig leder"));
+        entries.add(Map.entry("politiattestLederFormat", String.valueOf(documents.get(4).getValue().getType())));
+        entries.add(Map.entry("politiattestLederFil", documents.get(4).getKey()));
 
         return entries.stream().collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
+
+
 }
