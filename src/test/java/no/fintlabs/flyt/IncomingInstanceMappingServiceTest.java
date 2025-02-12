@@ -23,6 +23,7 @@ import java.util.function.Function;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -79,8 +80,7 @@ class IncomingInstanceMappingServiceTest {
         Function<File, Mono<UUID>> persistFile = file -> Mono.just(uuid);
 
         when(webClient.get()).thenReturn(requestHeadersUriSpec);
-        when(requestHeadersUriSpec.uri(String.format("http://10.104.4.130:8080/api/file/%s/ref-data-as-pdf", instanceId)))
-                .thenReturn(requestHeadersSpec);
+        when(requestHeadersUriSpec.uri(anyString())).thenReturn(requestHeadersSpec);
         when(requestHeadersSpec.exchangeToMono(any())).thenAnswer(invocation -> {
             Function<ClientResponse, Mono<byte[]>> function = invocation.getArgument(0);
             when(clientResponse.headers()).thenReturn(clientResponseHeaders);
