@@ -68,7 +68,7 @@ public class IncomingInstanceMappingService implements InstanceMapper<KafkaAltin
                 .doOnError(throwable -> {
                     throw new RuntimeException("Ups!", throwable);
                 })
-                .collectList()
+                .collect(Collectors.toList())
                 .map(documentEntries -> InstanceObject.builder()
                         .valuePerKey(toValuePerKey(incomingInstance, documentEntries))
                         .build());
