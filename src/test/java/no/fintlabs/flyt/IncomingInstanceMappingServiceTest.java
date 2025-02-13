@@ -1,6 +1,7 @@
 package no.fintlabs.flyt;
 
 import no.fint.altinn.model.kafka.KafkaAltinnInstance;
+import no.fintlabs.altinn.AltinnFileService;
 import no.fintlabs.gateway.instance.model.File;
 import no.fintlabs.gateway.instance.model.instance.InstanceObject;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,19 +12,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import org.springframework.http.MediaType;
-import org.springframework.web.reactive.function.client.ClientResponse;
-import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Function;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -31,19 +27,7 @@ import static org.mockito.Mockito.when;
 class IncomingInstanceMappingServiceTest {
 
     @Mock
-    private WebClient webClient;
-
-    @Mock
-    private WebClient.RequestHeadersUriSpec requestHeadersUriSpec;
-
-    @Mock
-    private WebClient.RequestHeadersSpec requestHeadersSpec;
-
-    @Mock
-    private ClientResponse clientResponse;
-
-    @Mock
-    private ClientResponse.Headers clientResponseHeaders;
+    private AltinnFileService altinnFileService;
 
     private IncomingInstanceMappingService incomingInstanceMappingService;
 
@@ -51,7 +35,7 @@ class IncomingInstanceMappingServiceTest {
 
     @BeforeEach
     void setUp() {
-        incomingInstanceMappingService = new IncomingInstanceMappingService(webClient);
+        incomingInstanceMappingService = new IncomingInstanceMappingService(altinnFileService);
     }
 
     @Test
@@ -59,8 +43,6 @@ class IncomingInstanceMappingServiceTest {
         // Given
         Long sourceApplicationId = 5L;
         String instanceId = "test-instance-id";
-        byte[] pdfContent = "test pdf content".getBytes();
-
         KafkaAltinnInstance instance = KafkaAltinnInstance.builder()
                 .instanceId(instanceId)
                 .organizationNumber("123456789")
@@ -77,17 +59,27 @@ class IncomingInstanceMappingServiceTest {
                 .postalAdressPostplace("Postal City")
                 .build();
 
+        byte[] pdfContent = "test-pdf-content".getBytes();
+        File expectedFile = File.builder()
+                .name("test.pdf")
+                .sourceApplicationId(sourceApplicationId)
+                .type(MediaType.APPLICATION_PDF)
+                .encoding("base64")
+                .base64Contents(java.util.Base64.getEncoder().encodeToString(pdfContent))
+                .build();
+
         Function<File, Mono<UUID>> persistFile = file -> Mono.just(uuid);
 
-        when(webClient.get()).thenReturn(requestHeadersUriSpec);
-        when(requestHeadersUriSpec.uri(anyString())).thenReturn(requestHeadersSpec);
-        when(requestHeadersSpec.exchangeToMono(any())).thenAnswer(invocation -> {
-            Function<ClientResponse, Mono<byte[]>> function = invocation.getArgument(0);
-            when(clientResponse.headers()).thenReturn(clientResponseHeaders);
-            when(clientResponse.headers().contentType()).thenReturn(Optional.of(MediaType.APPLICATION_PDF));
-            when(clientResponse.bodyToMono(byte[].class)).thenReturn(Mono.just(pdfContent));
-            return function.apply(clientResponse);
-        });
+        when(altinnFileService.fetchFile(instanceId, "ref-data-as-pdf", sourceApplicationId))
+                .thenReturn(Mono.just(expectedFile));
+        when(altinnFileService.fetchFile(instanceId, "dom-forelegg", sourceApplicationId))
+                .thenReturn(Mono.just(expectedFile));
+        when(altinnFileService.fetchFile(instanceId, "beskrivelse-yrkestransportloven", sourceApplicationId))
+                .thenReturn(Mono.just(expectedFile));
+        when(altinnFileService.fetchFile(instanceId, "politiattest-foretak", sourceApplicationId))
+                .thenReturn(Mono.just(expectedFile));
+        when(altinnFileService.fetchFile(instanceId, "politiattest-dagligleder", sourceApplicationId))
+                .thenReturn(Mono.just(expectedFile));
 
         // When
         Mono<InstanceObject> result = incomingInstanceMappingService.map(sourceApplicationId, instance, persistFile);
