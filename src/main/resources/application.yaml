@@ -8,7 +8,7 @@ fint:
       retentionTimeInDays: 30
   altinn:
     api:
-      base-url: http://fint-altinn-service:8080/beta
+      base-url: http://fint-altinn-service.default:8080/beta
 logging:
   level:
     no.fintlabs.cache.ehcache.FintEhCacheEventLogger: WARN
