@@ -60,7 +60,10 @@ public class IncomingInstanceMappingService implements InstanceMapper<KafkaAltin
                                     .map(uuid -> {
                                         log.info("Persisted file {} to FLYT with uuid {}", ref, uuid);
                                         return new DocumentEntry(ref, uuid.toString(), file.getType());
-                                    });
+                                    })
+                                    .doOnError(throwable -> {
+                                        throw new RuntimeException(String.format("Ups! Not able to persist %s the FINT Flyt way.",
+                                                file.getName()), throwable);});
                         }))
                 .collectList()
                 .map(documentEntries -> InstanceObject.builder()
