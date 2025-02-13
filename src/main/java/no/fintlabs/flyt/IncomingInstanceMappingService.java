@@ -62,6 +62,8 @@ public class IncomingInstanceMappingService implements InstanceMapper<KafkaAltin
     }
 
     private Map<String, String> toValuePerKey(KafkaAltinnInstance incomingInstance, List<DocumentEntry> documents) {
+        log.info("Mapping incoming instance with {} documents: {}", documents.size(), documents);
+
         List<Map.Entry<String, String>> entries = new ArrayList<>();
 
         entries.add(Map.entry("virksomhetOrganisasjonsnummer", incomingInstance.getOrganizationNumber()));
