@@ -30,7 +30,10 @@ public class AltinnFileService {
                                     .encoding("base64")
                                     .base64Contents(Base64.getEncoder().encodeToString(body))
                                     .build();
-                        }));
+                        }))
+                .doOnError(throwable -> {
+                    throw new RuntimeException(String.format("Failed to fetch file with reference %s", documentReference),  throwable);
+                });
     }
 
     private String getFilenameFromHeaders(HttpHeaders headers) {
