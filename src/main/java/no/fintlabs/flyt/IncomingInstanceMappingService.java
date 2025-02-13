@@ -55,7 +55,7 @@ public class IncomingInstanceMappingService implements InstanceMapper<KafkaAltin
         return Flux.fromIterable(new ArrayList<>(DOCUMENT_MAPPINGS.keySet()))
                 .flatMap(ref -> altinnFileService.fetchFile(incomingInstance.getInstanceId(), ref, sourceApplicationId)
                         .flatMap(file -> {
-                            log.info("Downloaded file for {}", ref);
+                            log.info("Downloaded file ({}) for {}", file, ref);
                             return persistFile.apply(file)
                                     .map(uuid -> {
                                         log.info("Persisted file {} to FLYT with uuid {}", ref, uuid);
@@ -65,6 +65,9 @@ public class IncomingInstanceMappingService implements InstanceMapper<KafkaAltin
                                         throw new RuntimeException(String.format("Ups! Not able to persist %s the FINT Flyt way.",
                                                 file.getName()), throwable);});
                         }))
+                .doOnError(throwable -> {
+                    throw new RuntimeException("Ups!", throwable);
+                })
                 .collectList()
                 .map(documentEntries -> InstanceObject.builder()
                         .valuePerKey(toValuePerKey(incomingInstance, documentEntries))
