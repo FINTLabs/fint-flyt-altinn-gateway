@@ -26,19 +26,20 @@ public class IncomingInstanceMappingService implements InstanceMapper<KafkaAltin
     private static final Map<String, Map<String, String>> DOCUMENT_MAPPINGS = Map.of(
             "ref-data-as-pdf", Map.of(
                     "prefix", "soknad",
-                    "title", "Søknadsskjema"),
-            "dom-forelegg", Map.of(
-                    "prefix", "domForelegg",
-                    "title", "Kopi av eventuelle dom/forelegg"),
-            "beskrivelse-yrkestransportloven", Map.of(
-                    "prefix", "beskrivelse",
-                    "title", "Håndtering av Yrkestransportloven § 9 c og d"),
-            "politiattest-foretak", Map.of(
-                    "prefix", "politiattestForetak",
-                    "title", "Politiattest for foretaket"),
-            "politiattest-dagligleder", Map.of(
-                    "prefix", "politiattestLeder",
-                    "title", "Politiattest for daglig leder")
+                    "title", "Søknadsskjema")
+//            ,
+//            "dom-forelegg", Map.of(
+//                    "prefix", "domForelegg",
+//                    "title", "Kopi av eventuelle dom/forelegg"),
+//            "beskrivelse-yrkestransportloven", Map.of(
+//                    "prefix", "beskrivelse",
+//                    "title", "Håndtering av Yrkestransportloven § 9 c og d"),
+//            "politiattest-foretak", Map.of(
+//                    "prefix", "politiattestForetak",
+//                    "title", "Politiattest for foretaket"),
+//            "politiattest-dagligleder", Map.of(
+//                    "prefix", "politiattestLeder",
+//                    "title", "Politiattest for daglig leder")
     );
 
     private final AltinnFileService altinnFileService;
