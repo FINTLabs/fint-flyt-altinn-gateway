@@ -106,21 +106,21 @@ class IncomingInstanceMappingServiceTest {
                             .containsEntry("soknadFormat", "application/pdf")
                             .containsEntry("soknadFil", uuid.toString())
 
-//                            .containsEntry("domForeleggTittel", "Kopi av eventuelle dom/forelegg")
-//                            .containsEntry("domForeleggFormat", "application/pdf")
-//                            .containsEntry("domForeleggFil", uuid.toString())
-//
-//                            .containsEntry("beskrivelseTittel", "Håndtering av Yrkestransportloven § 9 c og d")
-//                            .containsEntry("beskrivelseFormat", "application/pdf")
-//                            .containsEntry("beskrivelseFil", uuid.toString())
-//
-//                            .containsEntry("politiattestForetakTittel", "Politiattest for foretaket")
-//                            .containsEntry("politiattestForetakFormat", "application/pdf")
-//                            .containsEntry("politiattestForetakFil", uuid.toString())
-//
-//                            .containsEntry("politiattestLederTittel", "Politiattest for daglig leder")
-//                            .containsEntry("politiattestLederFormat", "application/pdf")
-//                            .containsEntry("politiattestLederFil", uuid.toString())
+                            .containsEntry("domForeleggTittel", "Kopi av eventuelle dom/forelegg")
+                            .containsEntry("domForeleggFormat", "application/pdf")
+                            .containsEntry("domForeleggFil", uuid.toString())
+
+                            .containsEntry("beskrivelseTittel", "Håndtering av Yrkestransportloven § 9 c og d")
+                            .containsEntry("beskrivelseFormat", "application/pdf")
+                            .containsEntry("beskrivelseFil", uuid.toString())
+
+                            .containsEntry("politiattestForetakTittel", "Politiattest for foretaket")
+                            .containsEntry("politiattestForetakFormat", "application/pdf")
+                            .containsEntry("politiattestForetakFil", uuid.toString())
+
+                            .containsEntry("politiattestLederTittel", "Politiattest for daglig leder")
+                            .containsEntry("politiattestLederFormat", "application/pdf")
+                            .containsEntry("politiattestLederFil", uuid.toString())
                     ;
                 })
                 .verifyComplete();
