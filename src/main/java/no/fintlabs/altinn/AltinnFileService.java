@@ -26,6 +26,7 @@ public class AltinnFileService {
                             return File.builder()
                                     .name(getFilenameFromHeaders(httpHeaders))
                                     .sourceApplicationId(sourceApplicationId)
+                                    .sourceApplicationInstanceId(instanceId)
                                     .type(response.headers().contentType().orElse(MediaType.APPLICATION_OCTET_STREAM))
                                     .encoding("base64")
                                     .base64Contents(Base64.getEncoder().encodeToString(body))
