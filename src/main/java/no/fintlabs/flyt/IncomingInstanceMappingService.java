@@ -38,7 +38,13 @@ public class IncomingInstanceMappingService implements InstanceMapper<KafkaAltin
                     "title", "Politiattest for foretaket"),
             "politiattest-dagligleder", Map.of(
                     "prefix", "politiattestLeder",
-                    "title", "Politiattest for daglig leder")
+                    "title", "Politiattest for daglig leder"),
+            "skatteattest-dagligleder", Map.of(
+                    "prefix", "skatteattestLeder",
+                    "title", "Skatteattest for daglig leder"),
+            "konkursattest-dagligleder", Map.of(
+                    "prefix", "konkursattestLeder",
+                    "title", "Konkursattest for daglig leder")
     );
 
     private final AltinnFileService altinnFileService;

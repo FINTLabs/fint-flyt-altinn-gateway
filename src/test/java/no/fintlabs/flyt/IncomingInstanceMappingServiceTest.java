@@ -80,7 +80,10 @@ class IncomingInstanceMappingServiceTest {
                 .thenReturn(Mono.just(expectedFile));
         when(altinnFileService.fetchFile(instanceId, "politiattest-dagligleder", sourceApplicationId))
                 .thenReturn(Mono.just(expectedFile));
-
+        when(altinnFileService.fetchFile(instanceId, "skatteattest-dagligleder", sourceApplicationId))
+                .thenReturn(Mono.just(expectedFile));
+        when(altinnFileService.fetchFile(instanceId, "konkursattest-dagligleder", sourceApplicationId))
+                .thenReturn(Mono.just(expectedFile));
         // When
         Mono<InstanceObject> result = incomingInstanceMappingService.map(sourceApplicationId, instance, persistFile);
 
@@ -121,6 +124,14 @@ class IncomingInstanceMappingServiceTest {
                             .containsEntry("politiattestLederTittel", "Politiattest for daglig leder")
                             .containsEntry("politiattestLederFormat", "application/pdf")
                             .containsEntry("politiattestLederFil", uuid.toString())
+
+                            .containsEntry("skatteattestLederTittel", "Skatteattest for daglig leder")
+                            .containsEntry("skatteattestLederFormat", "application/pdf")
+                            .containsEntry("skatteattestLederFil", uuid.toString())
+
+                            .containsEntry("konkursattestLederTittel", "Konkursattest for daglig leder")
+                            .containsEntry("konkursattestLederFormat", "application/pdf")
+                            .containsEntry("konkursattestLederFil", uuid.toString())
                     ;
                 })
                 .verifyComplete();
