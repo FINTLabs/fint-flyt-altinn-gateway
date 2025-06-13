@@ -31,7 +31,7 @@ class IncomingInstanceMappingServiceTest {
 
     private IncomingInstanceMappingService incomingInstanceMappingService;
 
-    private UUID uuid = UUID.randomUUID();
+    private final UUID uuid = UUID.randomUUID();
 
     @BeforeEach
     void setUp() {
