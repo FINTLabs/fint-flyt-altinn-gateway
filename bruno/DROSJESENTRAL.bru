@@ -19,7 +19,34 @@ body:json {
     "version": "{{next-version}}",
     "instanceMetadata": {
       "instanceValueMetadata": [],
-      "instanceObjectCollectionMetadata": [],
+      "instanceObjectCollectionMetadata": [
+        {
+          "displayName": "Kopi av eventuelle dom/forelegg",
+          "objectMetadata": {
+            "instanceValueMetadata": [
+              { "displayName": "Tittel", "type": "STRING", "key": "domForeleggTittel" },
+              { "displayName": "Fil", "type": "FILE", "key": "domForeleggFil" },
+              { "displayName": "Format", "type": "STRING", "key": "domForeleggFormat" }
+            ],
+            "instanceObjectCollectionMetadata": [],
+            "categories": []
+          },
+          "key": "domForelegg"
+        },
+        {
+          "displayName": "Håndtering av Yrkestransportloven § 9 c og d",
+          "objectMetadata": {
+            "instanceValueMetadata": [
+              { "displayName": "Tittel", "type": "STRING", "key": "beskrivelseTittel" },
+              { "displayName": "Fil", "type": "FILE", "key": "beskrivelseFil" },
+              { "displayName": "Format", "type": "STRING", "key": "beskrivelseFormat" }
+            ],
+            "instanceObjectCollectionMetadata": [],
+            "categories": []
+          },
+          "key": "beskrivelse"
+        }
+      ],
       "categories": [
         {
           "displayName": "Virksomhet",
@@ -120,30 +147,6 @@ body:json {
               { "displayName": "Tittel", "type": "STRING", "key": "politiattestForetakTittel" },
               { "displayName": "Fil", "type": "FILE", "key": "politiattestForetakFil" },
               { "displayName": "Format", "type": "STRING", "key": "politiattestForetakFormat" }
-            ],
-            "instanceObjectCollectionMetadata": [],
-            "categories": []
-          }
-        },
-        {
-          "displayName": "Kopi av eventuelle dom/forelegg",
-          "content": {
-            "instanceValueMetadata": [
-              { "displayName": "Tittel", "type": "STRING", "key": "domForeleggTittel" },
-              { "displayName": "Fil", "type": "FILE", "key": "domForeleggFil" },
-              { "displayName": "Format", "type": "STRING", "key": "domForeleggFormat" }
-            ],
-            "instanceObjectCollectionMetadata": [],
-            "categories": []
-          }
-        },
-        {
-          "displayName": "Håndtering av Yrkestransportloven § 9 c og d",
-          "content": {
-            "instanceValueMetadata": [
-              { "displayName": "Tittel", "type": "STRING", "key": "beskrivelseTittel" },
-              { "displayName": "Fil", "type": "FILE", "key": "beskrivelseFil" },
-              { "displayName": "Format", "type": "STRING", "key": "beskrivelseFormat" }
             ],
             "instanceObjectCollectionMetadata": [],
             "categories": []
