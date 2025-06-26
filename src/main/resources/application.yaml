@@ -17,6 +17,9 @@ server:
     include-message: always
   max-http-request-header-size: 40KB
 spring:
+  http:
+    codecs:
+      max-in-memory-size: 50MB
   autoconfigure:
     exclude:
       - org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration
