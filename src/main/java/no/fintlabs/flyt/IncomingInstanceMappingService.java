@@ -141,6 +141,7 @@ public class IncomingInstanceMappingService implements InstanceMapper<KafkaAltin
                                                             entries.add(Map.entry(prefix + "Format", String.valueOf(documentEntry.type())));
                                                             entries.add(Map.entry(prefix + "Fil", documentEntry.id()));
 
+                                                            log.info("domForelegg: {}", documentEntry.id);
                                                             return InstanceObject.builder()
                                                                     .valuePerKey(entries.stream()
                                                                             .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)))
@@ -156,6 +157,7 @@ public class IncomingInstanceMappingService implements InstanceMapper<KafkaAltin
                                                     entries.add(Map.entry(prefix + "Format", String.valueOf(documentEntry.type())));
                                                     entries.add(Map.entry(prefix + "Fil", documentEntry.id()));
 
+                                                    log.info("beskrivelse: {}", documentEntry.id);
                                                     return InstanceObject.builder()
                                                             .valuePerKey(entries.stream()
                                                                     .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)))
