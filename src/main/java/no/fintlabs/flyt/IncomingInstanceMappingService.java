@@ -29,12 +29,6 @@ public class IncomingInstanceMappingService implements InstanceMapper<KafkaAltin
             "ref-data-as-pdf", Map.of(
                     "prefix", "soknad",
                     "title", "Søknadsskjema"),
-//            "dom-forelegg", Map.of(
-//                    "prefix", "domForelegg",
-//                    "title", "Kopi av eventuelle dom/forelegg"),
-//            "beskrivelse-yrkestransportloven", Map.of(
-//                    "prefix", "beskrivelse",
-//                    "title", "Håndtering av Yrkestransportloven § 9 c og d"),
             "politiattest-foretak", Map.of(
                     "prefix", "politiattestForetak",
                     "title", "Politiattest for foretaket"),
@@ -141,7 +135,6 @@ public class IncomingInstanceMappingService implements InstanceMapper<KafkaAltin
                                                             entries.add(Map.entry(prefix + "Format", String.valueOf(documentEntry.type())));
                                                             entries.add(Map.entry(prefix + "Fil", documentEntry.id()));
 
-                                                            log.info("domForelegg: {}", documentEntry.id);
                                                             return InstanceObject.builder()
                                                                     .valuePerKey(entries.stream()
                                                                             .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)))
@@ -157,7 +150,6 @@ public class IncomingInstanceMappingService implements InstanceMapper<KafkaAltin
                                                     entries.add(Map.entry(prefix + "Format", String.valueOf(documentEntry.type())));
                                                     entries.add(Map.entry(prefix + "Fil", documentEntry.id()));
 
-                                                    log.info("beskrivelse: {}", documentEntry.id);
                                                     return InstanceObject.builder()
                                                             .valuePerKey(entries.stream()
                                                                     .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)))
@@ -174,7 +166,6 @@ public class IncomingInstanceMappingService implements InstanceMapper<KafkaAltin
         List<Map.Entry<String, String>> entries = new ArrayList<>();
 
         entries.add(Map.entry("virksomhetOrganisasjonsnummer", incomingInstance.getOrganizationNumber()));
-
         entries.add(Map.entry("virksomhetOrganisasjonsnavn", incomingInstance.getOrganizationName()));
         entries.add(Map.entry("virksomhetEpostadresse", incomingInstance.getCompanyEmail()));
         entries.add(Map.entry("virksomhetTelefonnummer", emptyIfNull(incomingInstance.getCompanyPhone())));
