@@ -15,6 +15,7 @@ import org.springframework.http.MediaType;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.Function;
@@ -91,6 +92,8 @@ class IncomingInstanceMappingServiceTest {
         StepVerifier.create(result)
                 .assertNext(instanceObject -> {
                     Map<String, String> valuePerKey = instanceObject.getValuePerKey();
+                    Map<String, Collection<InstanceObject>> objectCollection = instanceObject.getObjectCollectionPerKey();
+
                     assertThat(valuePerKey)
                             .containsEntry("virksomhetOrganisasjonsnummer", "123456789")
                             .containsEntry("virksomhetOrganisasjonsnavn", "Test Org")
@@ -109,14 +112,6 @@ class IncomingInstanceMappingServiceTest {
                             .containsEntry("soknadFormat", "application/pdf")
                             .containsEntry("soknadFil", uuid.toString())
 
-                            .containsEntry("domForeleggTittel", "Kopi av eventuelle dom/forelegg")
-                            .containsEntry("domForeleggFormat", "application/pdf")
-                            .containsEntry("domForeleggFil", uuid.toString())
-
-                            .containsEntry("beskrivelseTittel", "Håndtering av Yrkestransportloven § 9 c og d")
-                            .containsEntry("beskrivelseFormat", "application/pdf")
-                            .containsEntry("beskrivelseFil", uuid.toString())
-
                             .containsEntry("politiattestForetakTittel", "Politiattest for foretaket")
                             .containsEntry("politiattestForetakFormat", "application/pdf")
                             .containsEntry("politiattestForetakFil", uuid.toString())
@@ -133,6 +128,8 @@ class IncomingInstanceMappingServiceTest {
                             .containsEntry("konkursattestLederFormat", "application/pdf")
                             .containsEntry("konkursattestLederFil", uuid.toString())
                     ;
+
+                    assertThat(objectCollection).hasSize(2);
                 })
                 .verifyComplete();
     }
