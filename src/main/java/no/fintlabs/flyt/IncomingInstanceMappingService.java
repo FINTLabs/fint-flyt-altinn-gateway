@@ -129,35 +129,29 @@ public class IncomingInstanceMappingService implements InstanceMapper<KafkaAltin
                                 Map.of("domForelegg", zip.getT2().stream()
                                                 .map(documentEntry -> {
                                                             Map<String, String> values = DOM_FORELEGG_COLLECTION_MAPPINGS.get(documentEntry.reference());
-                                                            String prefix = values.get("prefix");
-                                                            List<Map.Entry<String, String>> entries = new ArrayList<>();
-                                                            entries.add(Map.entry(prefix + "Tittel", values.get("title")));
-                                                            entries.add(Map.entry(prefix + "Format", String.valueOf(documentEntry.type())));
-                                                            entries.add(Map.entry(prefix + "Fil", documentEntry.id()));
-
-                                                            return InstanceObject.builder()
-                                                                    .valuePerKey(entries.stream()
-                                                                            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)))
-                                                                    .build();
-                                                        }
-                                                ).toList(),
+                                                            return getInstanceObject(documentEntry, values);
+                                                }).toList(),
                                         "beskrivelse", zip.getT3().stream()
                                                 .map(documentEntry -> {
                                                     Map<String, String> values = BESKRIVELSE_COLLECTION_MAPPINGS.get(documentEntry.reference());
-                                                    String prefix = values.get("prefix");
-                                                    List<Map.Entry<String, String>> entries = new ArrayList<>();
-                                                    entries.add(Map.entry(prefix + "Tittel", values.get("title")));
-                                                    entries.add(Map.entry(prefix + "Format", String.valueOf(documentEntry.type())));
-                                                    entries.add(Map.entry(prefix + "Fil", documentEntry.id()));
-
-                                                    return InstanceObject.builder()
-                                                            .valuePerKey(entries.stream()
-                                                                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)))
-                                                            .build();
+                                                    return getInstanceObject(documentEntry, values);
                                                 }).toList()
                                 ))
                         .build()
                 );
+    }
+
+    private InstanceObject getInstanceObject(DocumentEntry documentEntry, Map<String, String> values) {
+        String prefix = values.get("prefix");
+        List<Map.Entry<String, String>> entries = new ArrayList<>();
+        entries.add(Map.entry(prefix + "Tittel", values.get("title")));
+        entries.add(Map.entry(prefix + "Format", String.valueOf(documentEntry.type())));
+        entries.add(Map.entry(prefix + "Fil", documentEntry.id()));
+
+        return InstanceObject.builder()
+                .valuePerKey(entries.stream()
+                        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)))
+                .build();
     }
 
     private Map<String, String> toValuePerKey(KafkaAltinnInstance incomingInstance, List<DocumentEntry> documents) {
