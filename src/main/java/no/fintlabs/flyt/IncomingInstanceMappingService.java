@@ -15,6 +15,7 @@ import reactor.core.publisher.Mono;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @Slf4j
@@ -65,80 +66,49 @@ public class IncomingInstanceMappingService implements InstanceMapper<KafkaAltin
     public Mono<InstanceObject> map(Long sourceApplicationId, KafkaAltinnInstance incomingInstance, Function<File, Mono<UUID>> persistFile) {
         log.info("Mapping incoming instance: {}, sourceApplicationId={}", incomingInstance, sourceApplicationId);
 
-        Mono<List<DocumentEntry>> documents = Flux.fromIterable(new ArrayList<>(DOCUMENT_MAPPINGS.keySet()))
-                .flatMap(ref -> altinnFileService.fetchFile(incomingInstance.getInstanceId(), ref, sourceApplicationId)
-                        .flatMap(file -> {
-                            log.info("Downloaded file ({}) for {}", file, ref);
-                            return persistFile.apply(file)
-                                    .map(uuid -> {
-                                        log.info("Persisted file {} to FLYT with uuid {}", ref, uuid);
-                                        return new DocumentEntry(ref, uuid.toString(), file.getType());
-                                    })
-                                    .doOnError(throwable -> {
-                                        throw new RuntimeException(String.format("Ups! Not able to persist %s the FINT Flyt way.",
-                                                file.getName()), throwable);
-                                    });
-                        }))
-                .doOnError(throwable -> {
-                    throw new RuntimeException("Ups!", throwable);
-                })
-                .collect(Collectors.toList());
+        Mono<List<DocumentEntry>> mandatoryDocuments = mapDocuments(DOCUMENT_MAPPINGS.keySet(),
+                incomingInstance, sourceApplicationId,  persistFile);
+        Mono<List<DocumentEntry>> domForeleggDocuments = mapDocuments(DOM_FORELEGG_COLLECTION_MAPPINGS.keySet(),
+                incomingInstance, sourceApplicationId,  persistFile);
+        Mono<List<DocumentEntry>> beskrivelseDocuments = mapDocuments(BESKRIVELSE_COLLECTION_MAPPINGS.keySet(),
+                incomingInstance, sourceApplicationId,  persistFile);
 
-        Mono<List<DocumentEntry>> domForeleggCollection = Flux.fromIterable(new ArrayList<>(DOM_FORELEGG_COLLECTION_MAPPINGS.keySet()))
-                .flatMap(ref -> altinnFileService.fetchFile(incomingInstance.getInstanceId(), ref, sourceApplicationId)
-                        .flatMap(file -> {
-                            log.info("Downloaded file ({}) for {}", file, ref);
-                            return persistFile.apply(file)
-                                    .map(uuid -> {
-                                        log.info("Persisted file {} to FLYT with uuid {}", ref, uuid);
-                                        return new DocumentEntry(ref, uuid.toString(), file.getType());
-                                    })
-                                    .doOnError(throwable -> {
-                                        throw new RuntimeException(String.format("Ups! Not able to persist %s the FINT Flyt way.",
-                                                file.getName()), throwable);
-                                    });
-                        }))
-                .doOnError(throwable -> {
-                    throw new RuntimeException("Ups!", throwable);
-                })
-                .collect(Collectors.toList());
-
-        Mono<List<DocumentEntry>> beskrivelseCollection = Flux.fromIterable(new ArrayList<>(BESKRIVELSE_COLLECTION_MAPPINGS.keySet()))
-                .flatMap(ref -> altinnFileService.fetchFile(incomingInstance.getInstanceId(), ref, sourceApplicationId)
-                        .flatMap(file -> {
-                            log.info("Downloaded file ({}) for {}", file, ref);
-                            return persistFile.apply(file)
-                                    .map(uuid -> {
-                                        log.info("Persisted file {} to FLYT with uuid {}", ref, uuid);
-                                        return new DocumentEntry(ref, uuid.toString(), file.getType());
-                                    })
-                                    .doOnError(throwable -> {
-                                        throw new RuntimeException(String.format("Ups! Not able to persist %s the FINT Flyt way.",
-                                                file.getName()), throwable);
-                                    });
-                        }))
-                .doOnError(throwable -> {
-                    throw new RuntimeException("Ups!", throwable);
-                })
-                .collect(Collectors.toList());
-
-        return Mono.zip(documents, domForeleggCollection, beskrivelseCollection)
+        return Mono.zip(mandatoryDocuments, domForeleggDocuments, beskrivelseDocuments)
                 .map(zip -> InstanceObject.builder()
                         .valuePerKey(toValuePerKey(incomingInstance, zip.getT1()))
                         .objectCollectionPerKey(
-                                Map.of("domForelegg", zip.getT2().stream()
-                                                .map(documentEntry -> {
-                                                            Map<String, String> values = DOM_FORELEGG_COLLECTION_MAPPINGS.get(documentEntry.reference());
-                                                            return getInstanceObject(documentEntry, values);
-                                                }).toList(),
-                                        "beskrivelse", zip.getT3().stream()
-                                                .map(documentEntry -> {
-                                                    Map<String, String> values = BESKRIVELSE_COLLECTION_MAPPINGS.get(documentEntry.reference());
-                                                    return getInstanceObject(documentEntry, values);
-                                                }).toList()
+                                Map.of("domForelegg", mapCollections(zip.getT2(), DOM_FORELEGG_COLLECTION_MAPPINGS),
+                                        "beskrivelse", mapCollections(zip.getT3(), BESKRIVELSE_COLLECTION_MAPPINGS)
                                 ))
                         .build()
                 );
+    }
+
+    private Mono<List<DocumentEntry>> mapDocuments(Set<String> refs, KafkaAltinnInstance incomingInstance,
+                                                   Long sourceApplicationId,
+                                                   Function<File, Mono<UUID>> persistFile) {
+        return Flux.fromIterable(refs)
+                .flatMap(ref -> altinnFileService.fetchFile(incomingInstance.getInstanceId(), ref, sourceApplicationId)
+                        .flatMap(file -> persistFile.apply(file)
+                                .map(uuid -> {
+                                    log.info("Persisted file {} to FLYT with uuid {}", ref, uuid);
+                                    return new DocumentEntry(ref, uuid.toString(), file.getType());
+                                })
+                                .doOnError(e -> {
+                                    throw new RuntimeException("Failed to persist " + file.getName(), e);
+                                }))
+                        .doOnNext(file -> log.info("Downloaded file ({}) for {}", file, ref))
+                )
+                .doOnError(e -> {
+                    throw new RuntimeException("Error mapping files", e);
+                })
+                .collect(Collectors.toList());
+    }
+
+    private List<InstanceObject> mapCollections(List<DocumentEntry> entries, Map<String, Map<String, String>> mapping) {
+        return entries.stream()
+                .map(entry -> getInstanceObject(entry, mapping.get(entry.reference())))
+                .toList();
     }
 
     private InstanceObject getInstanceObject(DocumentEntry documentEntry, Map<String, String> values) {
@@ -157,37 +127,49 @@ public class IncomingInstanceMappingService implements InstanceMapper<KafkaAltin
     private Map<String, String> toValuePerKey(KafkaAltinnInstance incomingInstance, List<DocumentEntry> documents) {
         log.info("Mapping incoming instance with {} documents: {}", documents.size(), documents);
 
-        List<Map.Entry<String, String>> entries = new ArrayList<>();
+        Stream<Map.Entry<String, String>> virksomhet = Stream.of(
+                entry("virksomhetOrganisasjonsnummer", incomingInstance.getOrganizationNumber()),
+                entry("virksomhetOrganisasjonsnavn", incomingInstance.getOrganizationName()),
+                entry("virksomhetEpostadresse", incomingInstance.getCompanyEmail()),
+                entry("virksomhetTelefonnummer", emptyIfNull(incomingInstance.getCompanyPhone())),
+                entry("virksomhetFylke", incomingInstance.getCountyName()),
+                entry("virksomhetKommune", emptyIfNull(incomingInstance.getMunicipalityName())),
+                entry("virksomhetGateadresse", incomingInstance.getCompanyAdressStreet()),
+                entry("virksomhetPostnummer", incomingInstance.getCompanyAdressPostcode()),
+                entry("virksomhetPoststed", incomingInstance.getCompanyAdressPostplace())
+        );
 
-        entries.add(Map.entry("virksomhetOrganisasjonsnummer", incomingInstance.getOrganizationNumber()));
-        entries.add(Map.entry("virksomhetOrganisasjonsnavn", incomingInstance.getOrganizationName()));
-        entries.add(Map.entry("virksomhetEpostadresse", incomingInstance.getCompanyEmail()));
-        entries.add(Map.entry("virksomhetTelefonnummer", emptyIfNull(incomingInstance.getCompanyPhone())));
-        entries.add(Map.entry("virksomhetFylke", incomingInstance.getCountyName()));
-        entries.add(Map.entry("virksomhetKommune", emptyIfNull(incomingInstance.getMunicipalityName())));
-        entries.add(Map.entry("virksomhetGateadresse", incomingInstance.getCompanyAdressStreet()));
-        entries.add(Map.entry("virksomhetPostnummer", incomingInstance.getCompanyAdressPostcode()));
-        entries.add(Map.entry("virksomhetPoststed", incomingInstance.getCompanyAdressPostplace()));
+        Stream<Map.Entry<String, String>> postadresse = Stream.of(
+                entry("postadresseGateadresse", emptyIfNull(incomingInstance.getPostalAdressStreet())),
+                entry("postadressePostnummer", emptyIfNull(incomingInstance.getPostalAdressPostcode())),
+                entry("postadressePoststed", emptyIfNull(incomingInstance.getPostalAdressPostplace()))
+        );
 
-        entries.add(Map.entry("postadresseGateadresse", emptyIfNull(incomingInstance.getPostalAdressStreet())));
-        entries.add(Map.entry("postadressePostnummer", emptyIfNull(incomingInstance.getPostalAdressPostcode())));
-        entries.add(Map.entry("postadressePoststed", emptyIfNull(incomingInstance.getPostalAdressPostplace())));
+        Stream<Map.Entry<String, String>> dagligLeder = Stream.of(
+                entry("dagligLederFødselsnummer", emptyIfNull(incomingInstance.getManagerSocialSecurityNumber())),
+                entry("dagligLederFornavn", emptyIfNull(incomingInstance.getManagerFirstName())),
+                entry("dagligLederEtternavn", emptyIfNull(incomingInstance.getManagerLastName())),
+                entry("dagligLederEpostadresse", emptyIfNull(incomingInstance.getManagerEmail())),
+                entry("dagligLederTelefonnummer", emptyIfNull(incomingInstance.getManagerPhone()))
+        );
 
-        entries.add(Map.entry("dagligLederFødselsnummer", emptyIfNull(incomingInstance.getManagerSocialSecurityNumber())));
-        entries.add(Map.entry("dagligLederFornavn", emptyIfNull(incomingInstance.getManagerFirstName())));
-        entries.add(Map.entry("dagligLederEtternavn", emptyIfNull(incomingInstance.getManagerLastName())));
-        entries.add(Map.entry("dagligLederEpostadresse", emptyIfNull(incomingInstance.getManagerEmail())));
-        entries.add(Map.entry("dagligLederTelefonnummer", emptyIfNull(incomingInstance.getManagerPhone())));
+        Stream<Map.Entry<String, String>> dokumenter = documents.stream()
+                .flatMap(doc -> {
+                    Map<String, String> values = DOCUMENT_MAPPINGS.get(doc.reference());
+                    String prefix = values.get("prefix");
+                    return Stream.of(
+                            entry(prefix + "Tittel", values.get("title")),
+                            entry(prefix + "Format", String.valueOf(doc.type())),
+                            entry(prefix + "Fil", doc.id())
+                    );
+                });
 
-        documents.forEach(documentEntry -> {
-            Map<String, String> values = DOCUMENT_MAPPINGS.get(documentEntry.reference());
-            String prefix = values.get("prefix");
-            entries.add(Map.entry(prefix + "Tittel", values.get("title")));
-            entries.add(Map.entry(prefix + "Format", String.valueOf(documentEntry.type())));
-            entries.add(Map.entry(prefix + "Fil", documentEntry.id()));
-        });
+        return Stream.concat(Stream.concat(Stream.concat(virksomhet, postadresse), dagligLeder), dokumenter)
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
 
-        return entries.stream().collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    private Map.Entry<String, String> entry(String key, String value) {
+        return Map.entry(key, value);
     }
 
     private String emptyIfNull(String value) {
