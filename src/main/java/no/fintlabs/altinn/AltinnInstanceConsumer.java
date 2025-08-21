@@ -3,6 +3,7 @@ package no.fintlabs.altinn;
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.extern.slf4j.Slf4j;
 import no.fint.altinn.model.kafka.KafkaAltinnInstance;
+import no.fint.altinn.model.kafka.KafkaEvidenceConsentRequest;
 import no.fintlabs.drosje.InstanceActorProducerService;
 import no.fintlabs.gateway.instance.InstanceProcessor;
 import no.fintlabs.kafka.event.EventConsumerConfiguration;
@@ -21,7 +22,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.util.AbstractMap;
 import java.util.Collections;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Slf4j
 @Component
@@ -38,6 +43,7 @@ public class AltinnInstanceConsumer {
     private final EventTopicNameParameters topicNameParameters;
     private final InstanceProcessor<KafkaAltinnInstance> instanceProcessor;
     private final InstanceActorProducerService instanceActorProducerService;
+    private final String orgId;
 
     public AltinnInstanceConsumer(EventTopicService entityTopicService, WebClient webClient,
                                   @Value("${fint.org-id}") String orgId,
@@ -50,7 +56,9 @@ public class AltinnInstanceConsumer {
         this.topicNameParameters = EventTopicNameParameters.builder()
                 .orgId(orgId).domainContext("altinn").eventName("instance-received")
                 .build();
+
         this.instanceActorProducerService = instanceActorProducerService;
+        this.orgId = orgId;
 
         entityTopicService.ensureTopic(topicNameParameters, 0);
     }
@@ -82,19 +90,20 @@ public class AltinnInstanceConsumer {
                     altinnInstanceRecord.value().getOrganizationName(),
                     altinnInstanceRecord.value().getCountyName());
 
-//            KafkaInstanceActor kafkaInstanceActor = KafkaInstanceActor.builder()
-//                    .altinnReference(altinnInstanceRecord.value().getInstanceId())
-//                    .organizationNumber(altinnInstanceRecord.value().getOrganizationName())
-//                    .socialSecurityNumber(altinnInstanceRecord.value().getManagerSocialSecurityNumber())
-//                    .build();
+            KafkaEvidenceConsentRequest kafkaEvidenceRequest = KafkaEvidenceConsentRequest.builder()
+                    .altinnReference(altinnInstanceRecord.value().getInstanceId()
+                            .replace("/", "-"))
+                    .organizationNumber(altinnInstanceRecord.value().getOrganizationNumber())
+                    .fintOrgId(orgId)
+                    .countyOrganizationNumber(countyOrganizationMapping.get(orgId))
+                    .build();
 
+            instanceActorProducerService.publish(kafkaEvidenceRequest);
 
-            //instanceActorProducerService.publish(kafkaInstanceActor);
-
-            // Send til FLYT:
-            Authentication authentication = createAuthentication();
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            instanceProcessor.processInstance(authentication, altinnInstanceRecord.value()).block();
+            // Send til FLYT -> Arkiv:
+            //Authentication authentication = createAuthentication();
+            //SecurityContextHolder.getContext().setAuthentication(authentication);
+            //instanceProcessor.processInstance(authentication, altinnInstanceRecord.value()).block();
 
         } catch (Exception e) {
             log.error("Error processing Altinn instance with instanceId {}: {}",
@@ -124,4 +133,22 @@ public class AltinnInstanceConsumer {
                 )
                 .createContainer(topicNameParameters);
     }
+
+    private static final Map<String, String> countyOrganizationMapping = Stream.of(
+                    new AbstractMap.SimpleImmutableEntry<>("ofk.no", "930580783"), //Østfold: 930580694
+                    new AbstractMap.SimpleImmutableEntry<>("afk.no", "930580783"), //Akershus
+                    new AbstractMap.SimpleImmutableEntry<>("bfk.no", "930580260"), //Buskerud
+                    new AbstractMap.SimpleImmutableEntry<>("bym.oslo.kommune.no", "958935420"), //Oslo
+                    new AbstractMap.SimpleImmutableEntry<>("innlandetfylke.no", "920717152"), //Innlandet
+                    new AbstractMap.SimpleImmutableEntry<>("vestfoldfylke.no", "929882385"), //Vestfold
+                    new AbstractMap.SimpleImmutableEntry<>("telefmarkfylke.no", "929882989"), //Telemark
+                    new AbstractMap.SimpleImmutableEntry<>("agderfk.no", "921707134"), //Agder
+                    new AbstractMap.SimpleImmutableEntry<>("rogfk.no", "971045698"), //Rogaland
+                    new AbstractMap.SimpleImmutableEntry<>("vlfk.no", "821311632"), //Vestland
+                    new AbstractMap.SimpleImmutableEntry<>("mrfylke.no", "944183779"), //Møre og Romsdal
+                    new AbstractMap.SimpleImmutableEntry<>("trondelagfylke.no", "817920632"), //Trøndelang
+                    new AbstractMap.SimpleImmutableEntry<>("nfk.no", "964982953"), //Nordland
+                    new AbstractMap.SimpleImmutableEntry<>("tromsfylke.no", "930068128"), //Troms
+                    new AbstractMap.SimpleImmutableEntry<>("ffk.no", "830090282")) //Finnmark
+            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 }

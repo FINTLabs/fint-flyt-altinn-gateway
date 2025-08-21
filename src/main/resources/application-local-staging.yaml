@@ -1,5 +1,5 @@
 fint:
-  org-id: fintlabs.no
+  org-id: innlandetfylke.no
   flyt:
     file-service-url: http://localhost:8091
     resource-server:
