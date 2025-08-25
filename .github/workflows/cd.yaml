@@ -12,7 +12,7 @@ jobs:
       DOCKER_BUILDKIT: 1
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Limit branch name
         id: branch
@@ -61,7 +61,7 @@ jobs:
           - cluster: aks-api-fint-2022-02-08
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Get environment
         id: environment
