@@ -1,5 +1,5 @@
 fint:
-  org-id: innlandetfylke.no
+  org-id: ofk.no
   flyt:
     file-service-url: http://localhost:8091
     resource-server:
@@ -15,6 +15,8 @@ fint:
 spring:
   kafka:
     bootstrap-servers: localhost:9092
+    consumer:
+      auto-offset-reset: earliest
 server:
   port: 8999
 logging:

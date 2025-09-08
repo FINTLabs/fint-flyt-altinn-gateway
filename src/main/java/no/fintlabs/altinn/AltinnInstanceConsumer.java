@@ -3,8 +3,6 @@ package no.fintlabs.altinn;
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.extern.slf4j.Slf4j;
 import no.fint.altinn.model.kafka.KafkaAltinnInstance;
-import no.fint.altinn.model.kafka.KafkaEvidenceConsentRequest;
-import no.fintlabs.drosje.InstanceActorProducerService;
 import no.fintlabs.gateway.instance.InstanceProcessor;
 import no.fintlabs.kafka.event.EventConsumerConfiguration;
 import no.fintlabs.kafka.event.EventConsumerFactoryService;
@@ -42,13 +40,11 @@ public class AltinnInstanceConsumer {
 
     private final EventTopicNameParameters topicNameParameters;
     private final InstanceProcessor<KafkaAltinnInstance> instanceProcessor;
-    private final InstanceActorProducerService instanceActorProducerService;
     private final String orgId;
 
     public AltinnInstanceConsumer(EventTopicService entityTopicService, WebClient webClient,
                                   @Value("${fint.org-id}") String orgId,
-                                  InstanceProcessor<KafkaAltinnInstance> instanceProcessor,
-                                  InstanceActorProducerService instanceActorProducerService) {
+                                  InstanceProcessor<KafkaAltinnInstance> instanceProcessor) {
 
         this.webClient = webClient;
         this.instanceProcessor = instanceProcessor;
@@ -57,7 +53,6 @@ public class AltinnInstanceConsumer {
                 .orgId(orgId).domainContext("altinn").eventName("instance-received")
                 .build();
 
-        this.instanceActorProducerService = instanceActorProducerService;
         this.orgId = orgId;
 
         entityTopicService.ensureTopic(topicNameParameters, 0);
@@ -90,19 +85,10 @@ public class AltinnInstanceConsumer {
                     altinnInstanceRecord.value().getOrganizationName(),
                     altinnInstanceRecord.value().getCountyName());
 
-            KafkaEvidenceConsentRequest kafkaEvidenceRequest = KafkaEvidenceConsentRequest.builder()
-                    .altinnReference(altinnInstanceRecord.value().getInstanceId()
-                            .replace("/", "-"))
-                    .organizationNumber(altinnInstanceRecord.value().getOrganizationNumber())
-                    .fintOrgId(orgId)
-                    .countyOrganizationNumber(countyOrganizationMapping.get(orgId))
-                    .build();
-
-            instanceActorProducerService.publish(kafkaEvidenceRequest);
 
             // Send til FLYT -> Arkiv:
-            //Authentication authentication = createAuthentication();
-            //SecurityContextHolder.getContext().setAuthentication(authentication);
+            Authentication authentication = createAuthentication();
+            SecurityContextHolder.getContext().setAuthentication(authentication);
             //instanceProcessor.processInstance(authentication, altinnInstanceRecord.value()).block();
 
         } catch (Exception e) {
