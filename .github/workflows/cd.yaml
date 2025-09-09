@@ -52,7 +52,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        org: [ fintlabs-no, bfk-no, ofk-no ]
+        org: [ bfk-no, ofk-no ]
         cluster: [ aks-beta-fint-2021-11-23, aks-api-fint-2022-02-08 ]
         include:
           - org: ofk-no

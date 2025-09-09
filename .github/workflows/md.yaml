@@ -17,7 +17,8 @@ on:
         default: 'warning'
         type: choice
         options:
-          - fintlabs-no
+          - ofk-no
+          - bfk-no
 
 env:
   REGISTRY: ghcr.io
