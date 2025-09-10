@@ -85,6 +85,10 @@ class IncomingInstanceMappingServiceTest {
                 .thenReturn(Mono.just(expectedFile));
         when(altinnFileService.fetchFile(instanceId, "konkursattest-dagligleder", sourceApplicationId))
                 .thenReturn(Mono.just(expectedFile));
+        when(altinnFileService.fetchEbevisFile(instanceId, "RestanserV2", sourceApplicationId))
+                .thenReturn(Mono.just(expectedFile));
+        when(altinnFileService.fetchEbevisFile(instanceId, "KonkursDrosje", sourceApplicationId))
+                .thenReturn(Mono.just(expectedFile));
         // When
         Mono<InstanceObject> result = incomingInstanceMappingService.map(sourceApplicationId, instance, persistFile);
 

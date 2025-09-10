@@ -58,10 +58,10 @@ public class IncomingInstanceMappingService implements InstanceMapper<KafkaAltin
 
     private static final Map<String, Map<String, String>> EBEVIS_MAPPINGS = Map.of(
             "KonkursDrosje", Map.of(
-                    "prefix", "konkursattest",
+                    "prefix", "konkursattestForetak",
                     "title", "Konkursattest"),
             "RestanserV2", Map.of(
-                    "prefix", "skattattest",
+                    "prefix", "skattattestForetak",
                     "title", "Skatteattest")
     );
 
@@ -190,7 +190,11 @@ public class IncomingInstanceMappingService implements InstanceMapper<KafkaAltin
 
         Stream<Map.Entry<String, String>> dokumenter = altinnDocuments.stream()
                 .flatMap(doc -> {
-                    Map<String, String> values = DOCUMENT_MAPPINGS.get(doc.reference());
+
+                    Map<String, String> values = DOCUMENT_MAPPINGS.get(doc.reference()) != null ?
+                            DOCUMENT_MAPPINGS.get(doc.reference()) :
+                            EBEVIS_MAPPINGS.get(doc.reference());
+
                     String prefix = values.get("prefix");
                     return Stream.of(
                             entry(prefix + "Tittel", values.get("title")),
