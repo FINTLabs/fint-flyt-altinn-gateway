@@ -41,4 +41,24 @@ public class AltinnFileService {
         return headers.getContentDisposition().getFilename();
     }
 
+    public Mono<File> fetchEbevisFile(String instanceId, String evidenceCodeName, Long sourceApplicationId) {
+        return webClient.get()
+                .uri(String.format("/api/file/ebevis/%s/%s", instanceId, evidenceCodeName))
+                .exchangeToMono(response -> response.bodyToMono(byte[].class)
+                        .map(body -> {
+                            HttpHeaders httpHeaders = HttpHeaders.writableHttpHeaders(response.headers().asHttpHeaders());
+                            return File.builder()
+                                    .name(getFilenameFromHeaders(httpHeaders))
+                                    .sourceApplicationId(sourceApplicationId)
+                                    .sourceApplicationInstanceId(instanceId)
+                                    .type(response.headers().contentType().orElse(MediaType.APPLICATION_OCTET_STREAM))
+                                    .encoding("base64")
+                                    .base64Contents(Base64.getEncoder().encodeToString(body))
+                                    .build();
+                                }))
+                .doOnError(throwable -> {
+                    throw new RuntimeException(String.format("Failed to fetch file with instanceId %s and evidence code name %s",
+                            instanceId, evidenceCodeName),  throwable);
+                });
+    }
 }

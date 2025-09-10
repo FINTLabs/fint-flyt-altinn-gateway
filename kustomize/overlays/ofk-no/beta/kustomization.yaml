@@ -34,6 +34,11 @@ patches:
           value: "ofk-no"
       - op: add
         path: "/spec/env/-"
+        value: 
+          name: "fint.altinn.ebevis.api.base-url"
+          value: "http://fint-altinn-service:8080/beta"
+      - op: add
+        path: "/spec/env/-"
         value:
           name: "logging.level.no.fintlabs"
           value: "DEBUG"

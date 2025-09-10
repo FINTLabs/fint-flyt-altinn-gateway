@@ -56,6 +56,15 @@ public class IncomingInstanceMappingService implements InstanceMapper<KafkaAltin
                     "title", "Håndtering av Yrkestransportloven § 9 c og d")
     );
 
+    private static final Map<String, Map<String, String>> EBEVIS_MAPPINGS = Map.of(
+            "KonkursDrosje", Map.of(
+                    "prefix", "konkursattest",
+                    "title", "Konkursattest"),
+            "RestanserV2", Map.of(
+                    "prefix", "skattattest",
+                    "title", "Skatteattest")
+    );
+
     private final AltinnFileService altinnFileService;
 
     public IncomingInstanceMappingService(AltinnFileService altinnFileService) {
@@ -66,27 +75,33 @@ public class IncomingInstanceMappingService implements InstanceMapper<KafkaAltin
     public Mono<InstanceObject> map(Long sourceApplicationId, KafkaAltinnInstance incomingInstance, Function<File, Mono<UUID>> persistFile) {
         log.info("Mapping incoming instance: {}, sourceApplicationId={}", incomingInstance, sourceApplicationId);
 
-        Mono<List<DocumentEntry>> mandatoryDocuments = mapDocuments(DOCUMENT_MAPPINGS.keySet(),
+        Mono<List<DocumentEntry>> mandatoryDocuments = mapAltinnDocuments(DOCUMENT_MAPPINGS.keySet(),
                 incomingInstance, sourceApplicationId,  persistFile);
-        Mono<List<DocumentEntry>> domForeleggDocuments = mapDocuments(DOM_FORELEGG_COLLECTION_MAPPINGS.keySet(),
+        Mono<List<DocumentEntry>> domForeleggDocuments = mapAltinnDocuments(DOM_FORELEGG_COLLECTION_MAPPINGS.keySet(),
                 incomingInstance, sourceApplicationId,  persistFile);
-        Mono<List<DocumentEntry>> beskrivelseDocuments = mapDocuments(BESKRIVELSE_COLLECTION_MAPPINGS.keySet(),
+        Mono<List<DocumentEntry>> beskrivelseDocuments = mapAltinnDocuments(BESKRIVELSE_COLLECTION_MAPPINGS.keySet(),
                 incomingInstance, sourceApplicationId,  persistFile);
+        Mono<List<DocumentEntry>> ebevisDocuments = mapEbevisDocuments(EBEVIS_MAPPINGS.keySet(),
+                incomingInstance, sourceApplicationId, persistFile);
 
-        return Mono.zip(mandatoryDocuments, domForeleggDocuments, beskrivelseDocuments)
-                .map(zip -> InstanceObject.builder()
-                        .valuePerKey(toValuePerKey(incomingInstance, zip.getT1()))
-                        .objectCollectionPerKey(
-                                Map.of("domForelegg", mapCollections(zip.getT2(), DOM_FORELEGG_COLLECTION_MAPPINGS),
-                                        "beskrivelse", mapCollections(zip.getT3(), BESKRIVELSE_COLLECTION_MAPPINGS)
-                                ))
-                        .build()
+        return Mono.zip(mandatoryDocuments, domForeleggDocuments, beskrivelseDocuments, ebevisDocuments)
+                .map(zip -> {
+                    List<DocumentEntry> allMandatoryDocuments = Stream.of(zip.getT1(), zip.getT4()).flatMap(List::stream).toList();
+
+                    return InstanceObject.builder()
+                                    .valuePerKey(toValuePerKey(incomingInstance, allMandatoryDocuments))
+                                    .objectCollectionPerKey(
+                                            Map.of("domForelegg", mapCollections(zip.getT2(), DOM_FORELEGG_COLLECTION_MAPPINGS),
+                                                    "beskrivelse", mapCollections(zip.getT3(), BESKRIVELSE_COLLECTION_MAPPINGS)
+                                            ))
+                                    .build();
+                        }
                 );
     }
 
-    private Mono<List<DocumentEntry>> mapDocuments(Set<String> refs, KafkaAltinnInstance incomingInstance,
-                                                   Long sourceApplicationId,
-                                                   Function<File, Mono<UUID>> persistFile) {
+    private Mono<List<DocumentEntry>> mapAltinnDocuments(Set<String> refs, KafkaAltinnInstance incomingInstance,
+                                                         Long sourceApplicationId,
+                                                         Function<File, Mono<UUID>> persistFile) {
         return Flux.fromIterable(refs)
                 .flatMap(ref -> altinnFileService.fetchFile(incomingInstance.getInstanceId(), ref, sourceApplicationId)
                         .flatMap(file -> persistFile.apply(file)
@@ -103,6 +118,26 @@ public class IncomingInstanceMappingService implements InstanceMapper<KafkaAltin
                     throw new RuntimeException("Error mapping files", e);
                 })
                 .collect(Collectors.toList());
+    }
+
+    private Mono<List<DocumentEntry>> mapEbevisDocuments(Set<String> refs, KafkaAltinnInstance incomingInstance,
+                                                         Long sourceApplicationId, Function<File, Mono<UUID>> persistFile) {
+        return Flux.fromIterable(refs)
+                .flatMap(ref -> altinnFileService.fetchEbevisFile(incomingInstance.getInstanceId(), ref, sourceApplicationId)
+                        .flatMap(file -> persistFile.apply(file)
+                                .map(uuid -> {
+                                    log.info("Persisted file {} to FLYT with uuid {}", ref, uuid);
+                                    return new DocumentEntry(ref, uuid.toString(), file.getType());
+                                })
+                                .doOnError(e -> {
+                                    throw new RuntimeException("Failed to persist " + file.getName(), e);
+                                })).doOnNext(file -> log.info("Downloaded file ({}) for {}", file, ref))
+                )
+                .doOnError(e -> {
+                    throw new RuntimeException("Error mapping files", e);
+                })
+                .collect(Collectors.toList());
+
     }
 
     private List<InstanceObject> mapCollections(List<DocumentEntry> entries, Map<String, Map<String, String>> mapping) {
@@ -124,8 +159,8 @@ public class IncomingInstanceMappingService implements InstanceMapper<KafkaAltin
                 .build();
     }
 
-    private Map<String, String> toValuePerKey(KafkaAltinnInstance incomingInstance, List<DocumentEntry> documents) {
-        log.info("Mapping incoming instance with {} documents: {}", documents.size(), documents);
+    private Map<String, String> toValuePerKey(KafkaAltinnInstance incomingInstance, List<DocumentEntry> altinnDocuments) {
+        log.info("Mapping incoming instance with {} documents: {}", altinnDocuments.size(), altinnDocuments);
 
         Stream<Map.Entry<String, String>> virksomhet = Stream.of(
                 entry("virksomhetOrganisasjonsnummer", incomingInstance.getOrganizationNumber()),
@@ -153,7 +188,7 @@ public class IncomingInstanceMappingService implements InstanceMapper<KafkaAltin
                 entry("dagligLederTelefonnummer", emptyIfNull(incomingInstance.getManagerPhone()))
         );
 
-        Stream<Map.Entry<String, String>> dokumenter = documents.stream()
+        Stream<Map.Entry<String, String>> dokumenter = altinnDocuments.stream()
                 .flatMap(doc -> {
                     Map<String, String> values = DOCUMENT_MAPPINGS.get(doc.reference());
                     String prefix = values.get("prefix");
