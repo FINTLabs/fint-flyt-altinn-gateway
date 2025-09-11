@@ -26,8 +26,8 @@ public class AltinnFileService {
                 .uri(String.format("/api/file/%s/%s", instanceId, documentReference))
                 .exchangeToMono(response -> response.bodyToMono(byte[].class)
                         .map(body -> {
-                            log.debug("Response: {}", response.headers());
                             HttpHeaders httpHeaders = HttpHeaders.writableHttpHeaders(response.headers().asHttpHeaders());
+                            log.debug("Response headers: {}", httpHeaders);
                             return File.builder()
                                     .name(getFilenameFromHeaders(httpHeaders))
                                     .sourceApplicationId(sourceApplicationId)
@@ -52,6 +52,7 @@ public class AltinnFileService {
                 .exchangeToMono(response -> response.bodyToMono(byte[].class)
                         .map(body -> {
                             HttpHeaders httpHeaders = HttpHeaders.writableHttpHeaders(response.headers().asHttpHeaders());
+                            log.debug("Response ebevis headers: {}", httpHeaders);
                             return File.builder()
                                     .name(getFilenameFromHeaders(httpHeaders))
                                     .sourceApplicationId(sourceApplicationId)
