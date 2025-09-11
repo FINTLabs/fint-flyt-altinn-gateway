@@ -107,6 +107,7 @@ public class IncomingInstanceMappingService implements InstanceMapper<KafkaAltin
                                                          Long sourceApplicationId,
                                                          Function<File, Mono<UUID>> persistFile) {
         log.debug("Mapping altinn documents: {}", refs);
+
         return Flux.fromIterable(refs)
                 .flatMap(ref -> altinnFileService.fetchFile(incomingInstance.getInstanceId(), ref, sourceApplicationId)
                         .flatMap(file -> persistFile.apply(file)
@@ -127,7 +128,8 @@ public class IncomingInstanceMappingService implements InstanceMapper<KafkaAltin
 
     private Mono<List<DocumentEntry>> mapEbevisDocuments(Set<String> refs, KafkaAltinnInstance incomingInstance,
                                                          Long sourceApplicationId, Function<File, Mono<UUID>> persistFile) {
-        log.debug("Mapping altinn documents: {}", refs);
+        log.debug("Mapping altinn ebevis documents: {}", refs);
+
         return Flux.fromIterable(refs)
                 .flatMap(ref -> altinnFileService.fetchEbevisFile(incomingInstance.getInstanceId(), ref, sourceApplicationId)
                         .flatMap(file -> persistFile.apply(file)

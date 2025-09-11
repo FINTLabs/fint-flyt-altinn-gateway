@@ -1,5 +1,6 @@
 package no.fintlabs.altinn;
 
+import lombok.extern.slf4j.Slf4j;
 import no.fintlabs.gateway.instance.model.File;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -9,6 +10,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.Base64;
 
+@Slf4j
 @Service
 public class AltinnFileService {
     private final WebClient webClient;
@@ -18,10 +20,13 @@ public class AltinnFileService {
     }
 
     public Mono<File> fetchFile(String instanceId, String documentReference, Long sourceApplicationId) {
+        log.debug("Fetching file with reference {}", documentReference);
+
         return webClient.get()
                 .uri(String.format("/api/file/%s/%s", instanceId, documentReference))
                 .exchangeToMono(response -> response.bodyToMono(byte[].class)
                         .map(body -> {
+                            log.debug("Response: {}", response.headers());
                             HttpHeaders httpHeaders = HttpHeaders.writableHttpHeaders(response.headers().asHttpHeaders());
                             return File.builder()
                                     .name(getFilenameFromHeaders(httpHeaders))
