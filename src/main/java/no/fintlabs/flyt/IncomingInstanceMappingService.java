@@ -208,6 +208,7 @@ public class IncomingInstanceMappingService implements InstanceMapper<KafkaAltin
     }
 
     private Map.Entry<String, String> entry(String key, String value) {
+        log.debug("Document entry: {}, {}", key, value);
         return Map.entry(key, value);
     }
 
