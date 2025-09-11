@@ -20,12 +20,15 @@ public class AltinnFileService {
     }
 
     public Mono<File> fetchFile(String instanceId, String documentReference, Long sourceApplicationId) {
-        log.debug("Fetching file with reference {}", documentReference);
+
+        String uri = String.format("/api/file/%s/%s", instanceId, documentReference);
+        log.debug("Fetching file with uri {}", uri);
 
         return webClient.get()
-                .uri(String.format("/api/file/%s/%s", instanceId, documentReference))
+                .uri(uri)
                 .exchangeToMono(response -> response.bodyToMono(byte[].class)
                         .map(body -> {
+                            log.debug("Response status code: {}", response.statusCode());
                             HttpHeaders httpHeaders = HttpHeaders.writableHttpHeaders(response.headers().asHttpHeaders());
                             log.debug("Response headers filename: {}", httpHeaders.getContentDisposition().getFilename());
                             return File.builder()
