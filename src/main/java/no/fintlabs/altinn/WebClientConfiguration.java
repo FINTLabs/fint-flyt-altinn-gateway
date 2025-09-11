@@ -15,7 +15,7 @@ public class WebClientConfiguration {
     private String altinnApiBaseUrl;
 
     @Bean
-    public WebClient webClient() {
+    public WebClient altinnWebClient() {
         ExchangeStrategies strategies = ExchangeStrategies.builder()
                 .codecs(clientCodecConfigurer ->
                         clientCodecConfigurer.defaultCodecs().maxInMemorySize(MAX_IN_MEMORY_SIZE))

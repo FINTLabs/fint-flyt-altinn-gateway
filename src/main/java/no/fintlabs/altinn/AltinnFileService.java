@@ -13,10 +13,10 @@ import java.util.Base64;
 @Slf4j
 @Service
 public class AltinnFileService {
-    private final WebClient webClient;
+    private final WebClient altinnWebClient;
 
-    public AltinnFileService(WebClient webClient) {
-        this.webClient = webClient;
+    public AltinnFileService(WebClient altinnWebClient) {
+        this.altinnWebClient = altinnWebClient;
     }
 
     public Mono<File> fetchFile(String instanceId, String documentReference, Long sourceApplicationId) {
@@ -24,7 +24,7 @@ public class AltinnFileService {
         String uri = String.format("/api/file/%s/%s", instanceId, documentReference);
         log.debug("Fetching file with uri {}", uri);
 
-        return webClient.get()
+        return altinnWebClient.get()
                 .uri(uri)
                 .exchangeToMono(response -> response.bodyToMono(byte[].class)
                         .map(body -> {
@@ -50,7 +50,7 @@ public class AltinnFileService {
     }
 
     public Mono<File> fetchEbevisFile(String instanceId, String evidenceCodeName, Long sourceApplicationId) {
-        return webClient.get()
+        return altinnWebClient.get()
                 .uri(String.format("/api/file/ebevis/%s/%s", instanceId, evidenceCodeName))
                 .exchangeToMono(response -> response.bodyToMono(byte[].class)
                         .map(body -> {

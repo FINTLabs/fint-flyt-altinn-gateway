@@ -1,5 +1,8 @@
 fint:
   org-id: ofk.no
+  altinn:
+    api:
+      base-url: http://localhost:8080/
   flyt:
     file-service-url: http://localhost:8091
     resource-server:

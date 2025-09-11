@@ -6,9 +6,6 @@ fint:
   flyt:
     sourceapplication:
       retentionTimeInDays: 30
-  altinn:
-    api:
-      base-url: http://fint-altinn-service:8080/
 logging:
   level:
     no.fintlabs.cache.ehcache.FintEhCacheEventLogger: WARN
