@@ -86,7 +86,11 @@ public class IncomingInstanceMappingService implements InstanceMapper<KafkaAltin
 
         return Mono.zip(mandatoryDocuments, domForeleggDocuments, beskrivelseDocuments, ebevisDocuments)
                 .map(zip -> {
+
+                    log.debug("Mandatory documents: {}", zip.getT1());
+                    log.debug("Ebevis documents: {}", zip.getT4());
                     List<DocumentEntry> allMandatoryDocuments = Stream.of(zip.getT1(), zip.getT4()).flatMap(List::stream).toList();
+                    log.debug("All mandatory documents: {}", allMandatoryDocuments);
 
                     return InstanceObject.builder()
                                     .valuePerKey(toValuePerKey(incomingInstance, allMandatoryDocuments))
