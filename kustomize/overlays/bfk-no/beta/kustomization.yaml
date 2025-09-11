@@ -15,31 +15,45 @@ patches:
       - op: replace
         path: "/spec/kafka/acls/0/topic"
         value: "bfk-no.flyt.*"
+        
       - op: replace
         path: "/spec/kafka/acls/1/topic"
         value: "bfk-no.altinn.*"
+        
       - op: replace
         path: "/spec/orgId"
         value: "bfk.no"
+        
       - op: add
         path: "/spec/url/basePath"
         value: "/beta/bfk-no"
+        
       - op: replace
         path: "/spec/ingress/basePath"
         value: "/beta/bfk-no/api/altinn"
+      
       - op: add
         path: "/spec/env/-"
         value:
           name: "fint.org-id"
           value: "bfk-no"
+          
+      - op: add
+        path: "/spec/env/-"
+        value:
+          name: "fint.altinn.api.base-url"
+          value: "http://fint-altinn-service:8080/beta"
+      
       - op: add
         path: "/spec/env/-"
         value:
           name: "logging.level.no.fintlabs"
           value: "DEBUG"
+          
       - op: replace
         path: "/spec/probes/readiness/path"
         value: "/beta/bfk-no/actuator/health"
+
     target:
       kind: Application
       name: fint-flyt-altinn-gateway
