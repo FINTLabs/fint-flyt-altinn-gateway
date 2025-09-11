@@ -27,7 +27,7 @@ public class AltinnFileService {
                 .exchangeToMono(response -> response.bodyToMono(byte[].class)
                         .map(body -> {
                             HttpHeaders httpHeaders = HttpHeaders.writableHttpHeaders(response.headers().asHttpHeaders());
-                            log.debug("Response headers: {}", httpHeaders);
+                            log.debug("Response headers filename: {}", httpHeaders.getContentDisposition().getFilename());
                             return File.builder()
                                     .name(getFilenameFromHeaders(httpHeaders))
                                     .sourceApplicationId(sourceApplicationId)
@@ -52,7 +52,7 @@ public class AltinnFileService {
                 .exchangeToMono(response -> response.bodyToMono(byte[].class)
                         .map(body -> {
                             HttpHeaders httpHeaders = HttpHeaders.writableHttpHeaders(response.headers().asHttpHeaders());
-                            log.debug("Response ebevis headers: {}", httpHeaders);
+                            log.debug("Response ebevis filename: {}", httpHeaders.getContentDisposition().getFilename());
                             return File.builder()
                                     .name(getFilenameFromHeaders(httpHeaders))
                                     .sourceApplicationId(sourceApplicationId)
