@@ -47,7 +47,7 @@ dependencies {
     implementation 'no.fintlabs:fint-flyt-kafka:3.1.1'
     implementation 'org.springframework.kafka:spring-kafka'
 
-    implementation 'no.fintlabs:fint-flyt-instance-gateway:6.0.4'
+    implementation 'no.fintlabs:fint-flyt-instance-gateway:6.0.5'
     implementation 'no.fintlabs:fint-flyt-resource-server:5.1.0'
 
     implementation 'no.fint:fint-altinn-model:3.0.0-rc-8'
