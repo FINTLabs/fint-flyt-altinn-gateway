@@ -59,10 +59,10 @@ public class IncomingInstanceMappingService implements InstanceMapper<KafkaAltin
     private static final Map<String, Map<String, String>> EBEVIS_MAPPINGS = Map.of(
             "KonkursDrosje", Map.of(
                     "prefix", "konkursattestForetak",
-                    "title", "Konkursattest"),
+                    "title", "Konkursattest for foretaket"),
             "RestanserV2", Map.of(
                     "prefix", "skattattestForetak",
-                    "title", "Skatteattest")
+                    "title", "Skatteattest for foretaket")
     );
 
     private final AltinnFileService altinnFileService;
