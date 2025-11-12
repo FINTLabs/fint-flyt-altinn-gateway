@@ -30,19 +30,19 @@ public class IncomingInstanceMappingService implements InstanceMapper<KafkaAltin
             "ref-data-as-pdf", Map.of(
                     "prefix", "soknad",
                     "title", "Søknadsskjema"),
-            "politiattest-foretak", Map.of(
-                    "prefix", "politiattestForetak",
-                    "title", "Politiattest for foretaket"),
             "politiattest-dagligleder", Map.of(
                     "prefix", "politiattestLeder",
-                    "title", "Politiattest for daglig leder"),
+                    "title", "Politiattest for daglig leder"));
+
+    private static final Map<String, Map<String, String>> SKATTEATTEST_DAGLIGLEDER_COLLECTION_MAPPINGS = Map.of(
             "skatteattest-dagligleder", Map.of(
                     "prefix", "skatteattestLeder",
-                    "title", "Skatteattest for daglig leder"),
+                    "title", "Skatteattest for daglig leder"));
+
+    private static final Map<String, Map<String, String>> KONKURSATTEST_DAGLIGLEDER_COLLECTION_MAPPINGS = Map.of(
             "konkursattest-dagligleder", Map.of(
                     "prefix", "konkursattestLeder",
-                    "title", "Konkursattest for daglig leder")
-    );
+                    "title", "Konkursattest for daglig leder"));
 
     private static final Map<String, Map<String, String>> DOM_FORELEGG_COLLECTION_MAPPINGS = Map.of(
             "dom-forelegg", Map.of(
@@ -77,26 +77,35 @@ public class IncomingInstanceMappingService implements InstanceMapper<KafkaAltin
 
         Mono<List<DocumentEntry>> mandatoryDocuments = mapAltinnDocuments(DOCUMENT_MAPPINGS.keySet(),
                 incomingInstance, sourceApplicationId,  persistFile);
+
+        Mono<List<DocumentEntry>> skatteattestDagliglederDocuments = mapAltinnDocuments(SKATTEATTEST_DAGLIGLEDER_COLLECTION_MAPPINGS.keySet(),
+                incomingInstance, sourceApplicationId,  persistFile);
+        Mono<List<DocumentEntry>> konkursattestDagliglederDocuments = mapAltinnDocuments(KONKURSATTEST_DAGLIGLEDER_COLLECTION_MAPPINGS.keySet(),
+                incomingInstance, sourceApplicationId,  persistFile);
         Mono<List<DocumentEntry>> domForeleggDocuments = mapAltinnDocuments(DOM_FORELEGG_COLLECTION_MAPPINGS.keySet(),
                 incomingInstance, sourceApplicationId,  persistFile);
         Mono<List<DocumentEntry>> beskrivelseDocuments = mapAltinnDocuments(BESKRIVELSE_COLLECTION_MAPPINGS.keySet(),
                 incomingInstance, sourceApplicationId,  persistFile);
+
         Mono<List<DocumentEntry>> ebevisDocuments = mapEbevisDocuments(EBEVIS_MAPPINGS.keySet(),
                 incomingInstance, sourceApplicationId, persistFile);
 
-        return Mono.zip(mandatoryDocuments, domForeleggDocuments, beskrivelseDocuments, ebevisDocuments)
+        return Mono.zip(mandatoryDocuments, ebevisDocuments, skatteattestDagliglederDocuments, konkursattestDagliglederDocuments,
+                        domForeleggDocuments, beskrivelseDocuments)
                 .map(zip -> {
 
                     log.debug("Mandatory documents: {}", zip.getT1());
-                    log.debug("Ebevis documents: {}", zip.getT4());
-                    List<DocumentEntry> allMandatoryDocuments = Stream.of(zip.getT1(), zip.getT4()).flatMap(List::stream).toList();
+                    log.debug("Ebevis documents: {}", zip.getT2());
+                    List<DocumentEntry> allMandatoryDocuments = Stream.of(zip.getT1(), zip.getT2()).flatMap(List::stream).toList();
                     log.debug("All mandatory documents: {}", allMandatoryDocuments);
 
                     return InstanceObject.builder()
                                     .valuePerKey(toValuePerKey(incomingInstance, allMandatoryDocuments))
                                     .objectCollectionPerKey(
-                                            Map.of("domForelegg", mapCollections(zip.getT2(), DOM_FORELEGG_COLLECTION_MAPPINGS),
-                                                    "beskrivelse", mapCollections(zip.getT3(), BESKRIVELSE_COLLECTION_MAPPINGS)
+                                            Map.of("skatteattestLeder", mapCollections(zip.getT3(), SKATTEATTEST_DAGLIGLEDER_COLLECTION_MAPPINGS),
+                                                   "konkursattestLeder", mapCollections(zip.getT4(), KONKURSATTEST_DAGLIGLEDER_COLLECTION_MAPPINGS),
+                                                   "domForelegg", mapCollections(zip.getT5(), DOM_FORELEGG_COLLECTION_MAPPINGS),
+                                                   "beskrivelse", mapCollections(zip.getT6(), BESKRIVELSE_COLLECTION_MAPPINGS)
                                             ))
                                     .build();
                         }
