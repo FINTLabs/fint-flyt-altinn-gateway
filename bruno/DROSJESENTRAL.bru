@@ -78,30 +78,6 @@ body:json {
           }
         },
         {
-          "displayName": "Skatteattest for daglig leder",
-          "content": {
-            "instanceValueMetadata": [
-              { "displayName": "Tittel", "type": "STRING", "key": "skatteattestLederTittel" },
-              { "displayName": "Fil", "type": "FILE", "key": "skatteattestLederFil" },
-              { "displayName": "Format", "type": "STRING", "key": "skatteattestLederFormat" }
-            ],
-            "instanceObjectCollectionMetadata": [],
-            "categories": []
-          }
-        },
-        {
-          "displayName": "Konkursattest for daglig leder",
-          "content": {
-            "instanceValueMetadata": [
-              { "displayName": "Tittel", "type": "STRING", "key": "konkursattestLederTittel" },
-              { "displayName": "Fil", "type": "FILE", "key": "konkursattestLederFil" },
-              { "displayName": "Format", "type": "STRING", "key": "konkursattestLederFormat" }
-            ],
-            "instanceObjectCollectionMetadata": [],
-            "categories": []
-          }
-        },
-        {
           "displayName": "Politiattest for daglig leder",
           "content": {
             "instanceValueMetadata": [
@@ -114,24 +90,12 @@ body:json {
           }
         },
         {
-          "displayName": "Politiattest for foretaket",
-          "content": {
-            "instanceValueMetadata": [
-              { "displayName": "Tittel", "type": "STRING", "key": "politiattestForetakTittel" },
-              { "displayName": "Fil", "type": "FILE", "key": "politiattestForetakFil" },
-              { "displayName": "Format", "type": "STRING", "key": "politiattestForetakFormat" }
-            ],
-            "instanceObjectCollectionMetadata": [],
-            "categories": []
-          }
-        },
-        {
           "displayName": "Skatteattest for foretaket",
           "content": {
             "instanceValueMetadata": [
-              { "displayName": "Tittel", "type": "STRING", "key": "skattattestForetakTittel" },
-              { "displayName": "Fil", "type": "FILE", "key": "skattattestForetakFil" },
-              { "displayName": "Format", "type": "STRING", "key": "skattattestForetakFormat" }
+              { "displayName": "Tittel", "type": "STRING", "key": "skatteattestForetakTittel" },
+              { "displayName": "Fil", "type": "FILE", "key": "skatteattestForetakFil" },
+              { "displayName": "Format", "type": "STRING", "key": "skatteattestForetakFormat" }
             ],
             "instanceObjectCollectionMetadata": [],
             "categories": []
@@ -146,6 +110,50 @@ body:json {
               { "displayName": "Format", "type": "STRING", "key": "konkursattestForetakFormat" }
             ],
             "instanceObjectCollectionMetadata": [],
+            "categories": []
+          }
+        },
+        {
+          "displayName": "Skatteattest for daglig leder",
+          "content": {
+            "instanceValueMetadata": [],
+            "instanceObjectCollectionMetadata": [
+              {
+                "displayName": "Skatteattest for daglig leder",
+                "objectMetadata": {
+                  "instanceValueMetadata": [
+                    { "displayName": "Tittel", "type": "STRING", "key": "skatteattestLederTittel" },
+                    { "displayName": "Fil", "type": "FILE", "key": "skatteattestLederFil" },
+                    { "displayName": "Format", "type": "STRING", "key": "skatteattestLederFormat" }
+                  ],
+                  "instanceObjectCollectionMetadata": [],
+                  "categories": []
+                },
+                "key": "skatteattestLeder"
+              }
+            ],
+            "categories": []
+          }
+        },
+        {
+          "displayName": "Konkursattest for daglig leder",
+          "content": {
+            "instanceValueMetadata": [],
+            "instanceObjectCollectionMetadata": [
+              {
+                "displayName": "Konkursattest for daglig leder",
+                "objectMetadata": {
+                  "instanceValueMetadata": [
+                    { "displayName": "Tittel", "type": "STRING", "key": "konkursattestLederTittel" },
+                    { "displayName": "Fil", "type": "FILE", "key": "konkursattestLederFil" },
+                    { "displayName": "Format", "type": "STRING", "key": "konkursattestLederFormat" }
+                  ],
+                  "instanceObjectCollectionMetadata": [],
+                  "categories": []
+                },
+                "key": "konkursattestLeder"
+              }
+            ],
             "categories": []
           }
         },
