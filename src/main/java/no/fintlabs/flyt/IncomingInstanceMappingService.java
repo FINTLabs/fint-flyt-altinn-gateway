@@ -61,7 +61,7 @@ public class IncomingInstanceMappingService implements InstanceMapper<KafkaAltin
                     "prefix", "konkursattestForetak",
                     "title", "Konkursattest for foretaket"),
             "RestanserV2", Map.of(
-                    "prefix", "skattattestForetak",
+                    "prefix", "skatteattestForetak",
                     "title", "Skatteattest for foretaket")
     );
 
