@@ -47,14 +47,12 @@ public class IncomingInstanceMappingService implements InstanceMapper<KafkaAltin
     private static final Map<String, Map<String, String>> DOM_FORELEGG_COLLECTION_MAPPINGS = Map.of(
             "dom-forelegg", Map.of(
                     "prefix", "domForelegg",
-                    "title", "Kopi av eventuelle dom/forelegg")
-    );
+                    "title", "Kopi av eventuelle dom/forelegg"));
 
     private static final Map<String, Map<String, String>> BESKRIVELSE_COLLECTION_MAPPINGS = Map.of(
             "beskrivelse-yrkestransportloven", Map.of(
                     "prefix", "beskrivelse",
-                    "title", "Håndtering av Yrkestransportloven § 9 c og d")
-    );
+                    "title", "Håndtering av Yrkestransportloven § 9 c og d"));
 
     private static final Map<String, Map<String, String>> EBEVIS_MAPPINGS = Map.of(
             "KonkursDrosje", Map.of(
@@ -62,8 +60,7 @@ public class IncomingInstanceMappingService implements InstanceMapper<KafkaAltin
                     "title", "Konkursattest for foretaket"),
             "RestanserV2", Map.of(
                     "prefix", "skatteattestForetak",
-                    "title", "Skatteattest for foretaket")
-    );
+                    "title", "Skatteattest for foretaket"));
 
     private final AltinnFileService altinnFileService;
 
@@ -77,6 +74,7 @@ public class IncomingInstanceMappingService implements InstanceMapper<KafkaAltin
 
         Mono<List<DocumentEntry>> mandatoryDocuments = mapAltinnDocuments(DOCUMENT_MAPPINGS.keySet(),
                 incomingInstance, sourceApplicationId,  persistFile);
+        log.debug("The DOCUMENT_MAPPINGS contains these keys right now: {}", DOCUMENT_MAPPINGS.keySet());
 
         Mono<List<DocumentEntry>> skatteattestDagliglederDocuments = mapAltinnDocuments(SKATTEATTEST_DAGLIGLEDER_COLLECTION_MAPPINGS.keySet(),
                 incomingInstance, sourceApplicationId,  persistFile);
