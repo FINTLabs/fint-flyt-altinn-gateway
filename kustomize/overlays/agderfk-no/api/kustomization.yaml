@@ -1,0 +1,59 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: agderfk-no
+
+resources:
+  - ../../../base
+
+labels:
+  - pairs:
+      app.kubernetes.io/instance: fint-flyt-altinn-gateway_agderfk_no
+      fintlabs.no/org-id: agderfk.no
+
+patches:
+  - patch: |-
+      - op: replace
+        path: "/spec/kafka/acls/0/topic"
+        value: "agderfk-no.flyt.*"
+        
+      - op: replace
+        path: "/spec/kafka/acls/1/topic"
+        value: "agderfk-no.altinn.*"
+        
+      - op: replace
+        path: "/spec/orgId"
+        value: "agderfk.no"
+        
+      - op: add
+        path: "/spec/url/basePath"
+        value: "/agderfk-no"
+        
+      - op: replace
+        path: "/spec/ingress/basePath"
+        value: "/agderfk-no/api/altinn"
+      
+      - op: add
+        path: "/spec/env/-"
+        value:
+          name: "fint.org-id"
+          value: "agderfk-no"
+          
+      - op: add
+        path: "/spec/env/-"
+        value:
+          name: "fint.altinn.api.base-url"
+          value: "http://fint-altinn-service:8080/"
+      
+      - op: add
+        path: "/spec/env/-"
+        value:
+          name: "logging.level.no.fintlabs"
+          value: "INFO"
+          
+      - op: replace
+        path: "/spec/probes/readiness/path"
+        value: "/agderfk-no/actuator/health"
+
+    target:
+      kind: Application
+      name: fint-flyt-altinn-gateway
