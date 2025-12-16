@@ -1,0 +1,59 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: trondelagfylke-no
+
+resources:
+  - ../../../base
+
+labels:
+  - pairs:
+      app.kubernetes.io/instance: fint-flyt-altinn-gateway_trondelagfylke_no
+      fintlabs.no/org-id: trondelagfylke.no
+
+patches:
+  - patch: |-
+      - op: replace
+        path: "/spec/kafka/acls/0/topic"
+        value: "trondelagfylke-no.flyt.*"
+        
+      - op: replace
+        path: "/spec/kafka/acls/1/topic"
+        value: "trondelagfylke-no.altinn.*"
+        
+      - op: replace
+        path: "/spec/orgId"
+        value: "trondelagfylke.no"
+        
+      - op: add
+        path: "/spec/url/basePath"
+        value: "/trondelagfylke-no"
+        
+      - op: replace
+        path: "/spec/ingress/basePath"
+        value: "/trondelagfylke-no/api/altinn"
+      
+      - op: add
+        path: "/spec/env/-"
+        value:
+          name: "fint.org-id"
+          value: "trondelagfylke-no"
+          
+      - op: add
+        path: "/spec/env/-"
+        value:
+          name: "fint.altinn.api.base-url"
+          value: "http://fint-altinn-service:8080/"
+      
+      - op: add
+        path: "/spec/env/-"
+        value:
+          name: "logging.level.no.fintlabs"
+          value: "INFO"
+          
+      - op: replace
+        path: "/spec/probes/readiness/path"
+        value: "/trondelagfylke-no/actuator/health"
+
+    target:
+      kind: Application
+      name: fint-flyt-altinn-gateway
