@@ -1,0 +1,244 @@
+meta {
+  name: DROSJELOYVE
+  type: http
+  seq: 4
+}
+
+post {
+  url: https://flyt.vigoiks.no/{{env}}{{org}}/api/intern/metadata
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "sourceApplicationId": 5,
+    "sourceApplicationIntegrationId": "DROSJELOYVE",
+    "sourceApplicationIntegrationUri": null,
+    "integrationDisplayName": "Søknad om å drive drosjetransport",
+    "version": "{{next-version}}",
+    "instanceMetadata": {
+      "instanceValueMetadata": [],
+      "instanceObjectCollectionMetadata": [],
+      "categories": [
+        {
+          "displayName": "Foretak",
+          "content": {
+            "instanceValueMetadata": [
+              { "displayName": "Organisasjonsnummer", "key": "foretakOrganisasjonsnummer", "type": "STRING" },
+              { "displayName": "Organisasjonsnavn", "key": "foretakOrganisasjonsnavn", "type": "STRING" },
+              { "displayName": "Epostadresse", "key": "foretakEpostadresse", "type": "STRING" },
+              { "displayName": "Telefonnummer", "key": "foretakTelefonnummer", "type": "STRING" },
+              { "displayName": "Fylke", "key": "foretakFylke", "type": "STRING" },
+              { "displayName": "Kommune", "key": "foretakKommune", "type": "STRING" },
+              { "displayName": "Gateadresse", "key": "foretakGateadresse", "type": "STRING" },
+              { "displayName": "Postnummer", "key": "foretakPostnummer", "type": "STRING" },
+              { "displayName": "Poststed", "key": "foretakPoststed", "type": "STRING" }
+            ],
+            "instanceObjectCollectionMetadata": [],
+            "categories": []
+          }
+        },
+        {
+          "displayName": "Postadresse",
+          "content": {
+            "instanceValueMetadata": [
+              { "displayName": "Gateadresse", "key": "postadresseGateadresse", "type": "STRING" },
+              { "displayName": "Postnummer", "key": "postadressePostnummer", "type": "STRING" },
+              { "displayName": "Poststed", "key": "postadressePoststed", "type": "STRING" }
+            ],
+            "instanceObjectCollectionMetadata": [],
+            "categories": []
+          }
+        },
+        {
+          "displayName": "Daglig leder",
+          "content": {
+            "instanceValueMetadata": [
+              { "displayName": "Fødselsnummer", "key": "dagligLederFødselsnummer", "type": "STRING" },
+              { "displayName": "Fornavn", "key": "dagligLederFornavn", "type": "STRING" },
+              { "displayName": "Etternavn", "key": "dagligLederEtternavn", "type": "STRING" },
+              { "displayName": "Epostadresse", "key": "dagligLederEpostadresse", "type": "STRING" },
+              { "displayName": "Telefonnummer", "key": "dagligLederTelefonnummer", "type": "STRING" }
+            ],
+            "instanceObjectCollectionMetadata": [],
+            "categories": []
+          }
+        },
+        {
+          "displayName": "Transportleder",
+          "content": {
+            "instanceValueMetadata": [],
+            "instanceObjectCollectionMetadata": [
+              {
+                "displayName": "Transportleder",
+                "objectMetadata": {
+                  "instanceValueMetadata": [
+                    { "displayName": "Fødselsnummer", "key": "transportLederFødselsnummer", "type": "STRING" },
+                    { "displayName": "Fornavn", "key": "transportLederFornavn", "type": "STRING" },
+                    { "displayName": "Etternavn", "key": "transportLederEtternavn", "type": "STRING" },
+                    { "displayName": "Epostadresse", "key": "transportLederEpostadresse", "type": "STRING" },
+                    { "displayName": "Telefonnummer", "key": "transportLederTelefonnummer", "type": "STRING" },
+                    { "displayName": "Tilknytning", "key": "transportLederTilknytning", "type": "STRING" }
+                  ],
+                  "instanceObjectCollectionMetadata": [],
+                  "categories": []
+                },
+                "key": "transportleder"
+              }
+            ],
+            "categories": []
+          }
+        },
+        {
+          "displayName": "Søknadsskjema",
+          "content": {
+            "instanceValueMetadata": [
+              { "displayName": "Tittel", "type": "STRING", "key": "soknadTittel" },
+              { "displayName": "Fil", "type": "FILE", "key": "soknadFil" },
+              { "displayName": "Format", "type": "STRING", "key": "soknadFormat" }
+            ],
+            "instanceObjectCollectionMetadata": [],
+            "categories": []
+          }
+        },
+        {
+          "displayName": "Politiattest for foretaket",
+          "content": {
+            "instanceValueMetadata": [
+              { "displayName": "Tittel", "type": "STRING", "key": "politiattestForetakTittel" },
+              { "displayName": "Fil", "type": "FILE", "key": "politiattestForetakFil" },
+              { "displayName": "Format", "type": "STRING", "key": "politiattestForetakFormat" }
+            ],
+            "instanceObjectCollectionMetadata": [],
+            "categories": []
+          }
+        },
+        {
+          "displayName": "Politiattest for daglig leder",
+          "content": {
+            "instanceValueMetadata": [
+              { "displayName": "Tittel", "type": "STRING", "key": "politiattestLederTittel" },
+              { "displayName": "Fil", "type": "FILE", "key": "politiattestLederFil" },
+              { "displayName": "Format", "type": "STRING", "key": "politiattestLederFormat" }
+            ],
+            "instanceObjectCollectionMetadata": [],
+            "categories": []
+          }
+        },
+        {
+          "displayName": "Skatteattest for foretaket",
+          "content": {
+            "instanceValueMetadata": [
+              { "displayName": "Tittel", "type": "STRING", "key": "skatteattestForetakTittel" },
+              { "displayName": "Fil", "type": "FILE", "key": "skatteattestForetakFil" },
+              { "displayName": "Format", "type": "STRING", "key": "skatteattestForetakFormat" }
+            ],
+            "instanceObjectCollectionMetadata": [],
+            "categories": []
+          }
+        },
+        {
+          "displayName": "Konkursattest for foretaket",
+          "content": {
+            "instanceValueMetadata": [
+              { "displayName": "Tittel", "type": "STRING", "key": "konkursattestForetakTittel" },
+              { "displayName": "Fil", "type": "FILE", "key": "konkursattestForetakFil" },
+              { "displayName": "Format", "type": "STRING", "key": "konkursattestForetakFormat" }
+            ],
+            "instanceObjectCollectionMetadata": [],
+            "categories": []
+          }
+        },
+        {
+          "displayName": "Skatteattest for daglig leder",
+          "content": {
+            "instanceValueMetadata": [],
+            "instanceObjectCollectionMetadata": [
+              {
+                "displayName": "Skatteattest for daglig leder",
+                "objectMetadata": {
+                  "instanceValueMetadata": [
+                    { "displayName": "Tittel", "type": "STRING", "key": "skatteattestLederTittel" },
+                    { "displayName": "Fil", "type": "FILE", "key": "skatteattestLederFil" },
+                    { "displayName": "Format", "type": "STRING", "key": "skatteattestLederFormat" }
+                  ],
+                  "instanceObjectCollectionMetadata": [],
+                  "categories": []
+                },
+                "key": "skatteattestLeder"
+              }
+            ],
+            "categories": []
+          }
+        },
+        {
+          "displayName": "Konkursattest for daglig leder",
+          "content": {
+            "instanceValueMetadata": [],
+            "instanceObjectCollectionMetadata": [
+              {
+                "displayName": "Konkursattest for daglig leder",
+                "objectMetadata": {
+                  "instanceValueMetadata": [
+                    { "displayName": "Tittel", "type": "STRING", "key": "konkursattestLederTittel" },
+                    { "displayName": "Fil", "type": "FILE", "key": "konkursattestLederFil" },
+                    { "displayName": "Format", "type": "STRING", "key": "konkursattestLederFormat" }
+                  ],
+                  "instanceObjectCollectionMetadata": [],
+                  "categories": []
+                },
+                "key": "konkursattestLeder"
+              }
+            ],
+            "categories": []
+          }
+        },
+        {
+          "displayName": "Kopi av eventuelle dom/forelegg",
+          "content": {
+            "instanceValueMetadata": [],
+            "instanceObjectCollectionMetadata": [
+              {
+                "displayName": "Kopi av eventuelle dom/forelegg",
+                "objectMetadata": {
+                  "instanceValueMetadata": [
+                    { "displayName": "Tittel", "type": "STRING", "key": "domForeleggTittel" },
+                    { "displayName": "Fil", "type": "FILE", "key": "domForeleggFil" },
+                    { "displayName": "Format", "type": "STRING", "key": "domForeleggFormat" }
+                  ],
+                  "instanceObjectCollectionMetadata": [],
+                  "categories": []
+                },
+                "key": "domForelegg"
+              }
+            ],
+            "categories": []
+          }
+        },
+        {
+          "displayName": "Krav om tilstrekkelig faglig kompetanse",
+          "content": {
+            "instanceValueMetadata": [],
+            "instanceObjectCollectionMetadata": [
+              {
+                "displayName": "Krav om tilstrekkelig faglig kompetanse",
+                "objectMetadata": {
+                  "instanceValueMetadata": [
+                    { "displayName": "Tittel", "type": "STRING", "key": "kompetanseTittel" },
+                    { "displayName": "Fil", "type": "FILE", "key": "kompetanseFil" },
+                    { "displayName": "Format", "type": "STRING", "key": "kompetanseFormat" }
+                  ],
+                  "instanceObjectCollectionMetadata": [],
+                  "categories": []
+                },
+                "key": "kompetanse"
+              }
+            ],
+            "categories": []
+          }
+        }
+      ]
+    }
+  }
+}
