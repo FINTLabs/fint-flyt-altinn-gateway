@@ -17,7 +17,7 @@ public class InstanceProcessorConfiguration {
             IncomingInstanceMappingService incomingInstanceMappingService
     ) {
         return instanceProcessorFactoryService.createInstanceProcessor(
-                incomingInstance -> Optional.of("DROSJESENTRAL"),  // Source Application Integration ID from metadata
+                incomingInstance -> Optional.of(incomingInstance.getAppId().replace("vigo/", "").toUpperCase()),
                 incomingInstance -> Optional.ofNullable(incomingInstance.getInstanceId()),
                 incomingInstanceMappingService
         );
