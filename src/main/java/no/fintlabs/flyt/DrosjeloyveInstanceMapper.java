@@ -96,6 +96,15 @@ public class DrosjeloyveInstanceMapper extends AbstractInstanceMapper {
                 entry("dagligLederTelefonnummer", emptyIfNull(incomingInstance.getManagerPhone()))
         );
 
+        Stream<Map.Entry<String, String>> transportLeder = Stream.of(
+                entry("transportLederFødselsnummer", emptyIfNull(incomingInstance.getTransportmanagerSocialSecurityNumber())),
+                entry("transportLederFornavn", emptyIfNull(incomingInstance.getTransportmanagerFirstName())),
+                entry("transportLederEtternavn", emptyIfNull(incomingInstance.getTransportmanagerLastName())),
+                entry("transportLederEpostadresse", emptyIfNull(incomingInstance.getTransportmanagerEmail())),
+                entry("transportLederTelefonnummer", emptyIfNull(incomingInstance.getTransportmanagerPhone())),
+                entry("transportLederTilknytning", emptyIfNull(incomingInstance.getTransportmanagerAffiliation()))
+        );
+
         Stream<Map.Entry<String, String>> dokumenter = altinnDocuments.stream()
                 .flatMap(doc -> {
                     Map<String, String> values = DOCUMENT_MAPPINGS.get(doc.reference());
