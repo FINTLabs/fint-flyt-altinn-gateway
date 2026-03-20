@@ -106,19 +106,24 @@ public abstract class AbstractInstanceMapper implements ApplicationInstanceMappe
 
         return Flux.fromIterable(refs)
                 .flatMap(ref -> fetchFile.apply(ref)
-                        .flatMap(file -> persistFile.apply(file)
-                                .map(uuid -> {
-                                    log.info("Persisted file {} to FLYT with uuid {}", ref, uuid);
-                                    return new DocumentEntry(ref, uuid.toString(), file.getType());
-                                })
-                                .doOnError(e -> {
-                                    throw new RuntimeException("Failed to persist " + file.getName(), e);
-                                }))
+                        .flatMap(file -> {
+                            if (file.getName() == null || file.getType() == null) {
+                                log.warn("Skipping invalid file for ref {} from {}: {}", ref, sourceName, file);
+                                return Mono.empty();
+                            }
+
+                            return persistFile.apply(file)
+                                    .map(uuid -> {
+                                        log.info("Persisted file {} to FLYT with uuid {}", ref, uuid);
+                                        return new DocumentEntry(ref, uuid.toString(), file.getType());
+                                    });
+                        })
                         .doOnNext(file -> log.info("Downloaded file ({}) for {}", file, ref))
+                        .onErrorResume(e -> {
+                            log.warn("Skipping file {} from {} due to error: {}", ref, sourceName, e.getMessage());
+                            return Mono.empty();
+                        })
                 )
-                .doOnError(e -> {
-                    throw new RuntimeException("Error mapping files", e);
-                })
                 .collect(Collectors.toList());
     }
 
