@@ -103,7 +103,7 @@ jobs:
           creds: "${{ secrets[format('AKS_{0}_FINT_GITHUB', steps.environment.outputs.result)] }}"
 
       - name: Set the target cluster
-        uses: azure/aks-set-context@v4
+        uses: azure/aks-set-context@v5
         with:
           cluster-name: ${{ env.CLUSTER_NAME }}
           resource-group: ${{ steps.rg.outputs.result }}
