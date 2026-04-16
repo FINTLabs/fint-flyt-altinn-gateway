@@ -7,7 +7,12 @@ plugins {
 
 group = 'no.fintlabs'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '17'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
 
 configurations {
     compileOnly {
@@ -23,7 +28,7 @@ repositories {
     mavenCentral()
     repositories {
         maven {
-            url "https://repo.fintlabs.no/releases"
+            url = "https://repo.fintlabs.no/releases"
         }
     }
     mavenLocal()
