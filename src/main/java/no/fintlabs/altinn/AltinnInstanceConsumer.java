@@ -2,7 +2,7 @@ package no.fintlabs.altinn;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.extern.slf4j.Slf4j;
-import no.fint.altinn.model.kafka.KafkaAltinnInstance;
+import no.novari.fint.altinn.model.kafka.KafkaAltinnInstance;
 import no.fintlabs.gateway.instance.InstanceProcessor;
 import no.fintlabs.kafka.event.EventConsumerConfiguration;
 import no.fintlabs.kafka.event.EventConsumerFactoryService;

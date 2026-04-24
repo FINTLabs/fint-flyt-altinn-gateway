@@ -34,7 +34,7 @@ jobs:
       packages: write
 
     steps:
-      - uses: actions/github-script@v8
+      - uses: actions/github-script@v9
         name: Get resource group name
         id: rg
         with:
@@ -43,7 +43,7 @@ jobs:
             return `rg-${a[0]}-${a[1]}`
           result-encoding: string
 
-      - uses: actions/github-script@v8
+      - uses: actions/github-script@v9
         name: Get environment
         id: environment
         with:
@@ -51,7 +51,7 @@ jobs:
             const a = '${{ inputs.cluster }}'.split('-')
             return `${a[1]}`
           result-encoding: string
-      - uses: actions/github-script@v8
+      - uses: actions/github-script@v9
         name: Get auth
         id: auth
         with:
@@ -69,7 +69,7 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Log in to the Container registry
-        uses: docker/login-action@v3
+        uses: docker/login-action@v4
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
@@ -77,14 +77,14 @@ jobs:
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
-        uses: docker/metadata-action@v5
+        uses: docker/metadata-action@v6
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
             type=sha,enable=true,priority=100,prefix=sha-,suffix=,format=short
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: .
           push: true
@@ -98,12 +98,12 @@ jobs:
           kustomizationPath: 'kustomize/overlays/${{ env.ORG}}/${{ steps.environment.outputs.result }}'
         id: bake
 
-      - uses: azure/login@v2
+      - uses: azure/login@v3
         with:
           creds: "${{ secrets[format('AKS_{0}_FINT_GITHUB', steps.environment.outputs.result)] }}"
 
       - name: Set the target cluster
-        uses: azure/aks-set-context@v4
+        uses: azure/aks-set-context@v5
         with:
           cluster-name: ${{ env.CLUSTER_NAME }}
           resource-group: ${{ steps.rg.outputs.result }}

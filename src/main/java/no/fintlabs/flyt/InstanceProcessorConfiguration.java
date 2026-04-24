@@ -1,6 +1,6 @@
 package no.fintlabs.flyt;
 
-import no.fint.altinn.model.kafka.KafkaAltinnInstance;
+import no.novari.fint.altinn.model.kafka.KafkaAltinnInstance;
 import no.fintlabs.gateway.instance.InstanceProcessor;
 import no.fintlabs.gateway.instance.InstanceProcessorFactoryService;
 import org.springframework.context.annotation.Bean;
@@ -17,7 +17,7 @@ public class InstanceProcessorConfiguration {
             IncomingInstanceMappingService incomingInstanceMappingService
     ) {
         return instanceProcessorFactoryService.createInstanceProcessor(
-                incomingInstance -> Optional.of("DROSJESENTRAL"),  // Source Application Integration ID from metadata
+                incomingInstance -> Optional.of(incomingInstance.getAppId().replace("vigo/", "").toUpperCase()),
                 incomingInstance -> Optional.ofNullable(incomingInstance.getInstanceId()),
                 incomingInstanceMappingService
         );
