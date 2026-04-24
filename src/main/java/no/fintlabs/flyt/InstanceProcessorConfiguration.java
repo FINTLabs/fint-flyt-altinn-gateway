@@ -1,6 +1,6 @@
 package no.fintlabs.flyt;
 
-import no.fint.altinn.model.kafka.KafkaAltinnInstance;
+import no.novari.fint.altinn.model.kafka.KafkaAltinnInstance;
 import no.fintlabs.gateway.instance.InstanceProcessor;
 import no.fintlabs.gateway.instance.InstanceProcessorFactoryService;
 import org.springframework.context.annotation.Bean;

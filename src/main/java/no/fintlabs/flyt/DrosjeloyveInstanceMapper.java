@@ -1,7 +1,7 @@
 package no.fintlabs.flyt;
 
 import lombok.extern.slf4j.Slf4j;
-import no.fint.altinn.model.kafka.KafkaAltinnInstance;
+import no.novari.fint.altinn.model.kafka.KafkaAltinnInstance;
 import no.fintlabs.altinn.AltinnFileService;
 import no.fintlabs.gateway.instance.model.File;
 import no.fintlabs.gateway.instance.model.instance.InstanceObject;
