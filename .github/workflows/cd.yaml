@@ -65,7 +65,7 @@ jobs:
           - telemarkfylke-no
           - tromsfylke-no
           - trondelagfylke-no
-          - vestfoldfylke.no
+          - vestfoldfylke-no
           - vlfk-no
         cluster: [ aks-beta-fint-2021-11-23, aks-api-fint-2022-02-08 ]
         include:
