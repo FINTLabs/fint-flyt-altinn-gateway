@@ -298,12 +298,10 @@ class IncomingInstanceMappingServiceTest {
                             .containsEntry("soknadFil", uuid.toString())
                             .containsEntry("politiattestLederTittel", "Politiattest for daglig leder")
                             .containsEntry("politiattestLederFormat", "application/pdf")
-                            .containsEntry("politiattestLederFil", uuid.toString())
-                            .containsEntry("politiattestForetakTittel", "Politiattest for foretaket")
-                            .containsEntry("politiattestForetakFormat", "application/pdf")
-                            .containsEntry("politiattestForetakFil", uuid.toString());
+                            .containsEntry("politiattestLederFil", uuid.toString());
 
-                    assertThat(objectCollection).hasSize(4);
+                    assertThat(objectCollection).hasSize(5);
+                    assertThat(objectCollection.get("politiattestForetak")).hasSize(1);
                     assertThat(objectCollection.get("domForelegg")).hasSize(1);
                     assertThat(objectCollection.get("skatteattestLeder")).hasSize(1);
                     assertThat(objectCollection.get("konkursattestLeder")).hasSize(1);

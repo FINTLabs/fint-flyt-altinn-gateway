@@ -35,8 +35,7 @@ public class DrosjeloyveInstanceMapper extends AbstractInstanceMapper {
 
         Mono<List<DocumentEntry>> mandatoryDocuments = mapAltinnDocuments(List.of(
                 SOKNAD,
-                POLITIATTTEST_DAGLIGLEDER_REF,
-                POLITIATTEST_FORETAK_REF
+                POLITIATTTEST_DAGLIGLEDER_REF
         ), incomingInstance, sourceApplicationId, persistFile);
 
         Mono<List<DocumentEntry>> ebevisDocuments = mapEbevisDocuments(List.of(
@@ -47,6 +46,7 @@ public class DrosjeloyveInstanceMapper extends AbstractInstanceMapper {
         List<String> collectionDocumentRefs = List.of(
                 SKATTEATTEST_DAGLIGLEDER_REF,
                 KONKURSATTEST_DAGLIGLEDER_REF,
+                POLITIATTEST_FORETAK_REF,
                 DOM_FORELEGG_REF,
                 DOKUMENTASJON_FAGKOMPETANSE_REF
         );
