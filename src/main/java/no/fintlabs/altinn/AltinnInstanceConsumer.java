@@ -73,7 +73,7 @@ public class AltinnInstanceConsumer {
                     Collections.singletonList(new SimpleGrantedAuthority("SOURCE_APPLICATION_ID_5")));
 
         } catch (Exception e) {
-            log.error("Failed to create authentication: {}", e.getMessage(), e);
+            log.error("Failed to create authentication: {}. Guru meditation: {}", e.getMessage(), clientId, e);
             throw new IllegalStateException("Failed to create authentication", e);
         }
     }
