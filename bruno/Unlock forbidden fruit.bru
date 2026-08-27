@@ -1,0 +1,16 @@
+meta {
+  name: Unlock forbidden fruit
+  type: http
+  seq: 2
+}
+
+get {
+  url: https://flyt.vigoiks.no/{{env}}{{org}}/api/intern/authorization/me
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

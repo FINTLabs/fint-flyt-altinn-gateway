@@ -1,13 +1,13 @@
 meta {
   name: DROSJESENTRAL
   type: http
-  seq: 1
+  seq: 4
 }
 
 post {
   url: https://flyt.vigoiks.no/{{env}}{{org}}/api/intern/metadata
   body: json
-  auth: none
+  auth: inherit
 }
 
 body:json {

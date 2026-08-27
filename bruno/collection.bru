@@ -1,32 +1,46 @@
+auth {
+  mode: oauth2
+}
+
+auth:oauth2 {
+  grant_type: password
+  access_token_url: https://idp.felleskomponent.no/nidp/oauth/nam/token
+  refresh_token_url:
+  username: {{username}}
+  password: {{password}}
+  client_id: {{clientId}}
+  client_secret: {{clientSecret}}
+  scope: end-user-profile
+  credentials_placement: body
+  credentials_id: credentials
+  token_source: access_token
+  token_placement: header
+  token_header_prefix: Bearer
+  auto_fetch_token: true
+  auto_refresh_token: false
+}
+
 script:pre-request {
-  // To make this work, you need to disable 'Send Cookies automatically' in the settings.
-  
-  // SETT OPP AUTENTISERING
-  var cookie = [
-    `user_session=${bru.getEnvVar("user_session")}`,
-    `Expires=Tue, 19 Jan 2038 03:14:07 GMT`,
-    `Domain=flyt.vigoiks.no`,
-    `Path=/${bru.getEnvVar("env")}${bru.getEnvVar("org")}`
-  ].join("; ")
-  
-  req.setHeader("Cookie", cookie)
-  
-  // FINN NESTE VERSJON FØR POST
-  const fetch = require('node-fetch');
-  
-  if (req.getMethod() != 'POST') return;
-  
-  var integrationId = req.body.sourceApplicationIntegrationId;
-  console.log('🧣 IntegrationId: ', integrationId);
-  
-  const url = `https://flyt.vigoiks.no/${bru.getEnvVar("env")}${bru.getEnvVar("org")}/api/intern/metadata?kildeapplikasjonId=5&bareSisteVersjoner=true`;
-  const options = {  method: 'GET', headers: { Cookie: cookie } };
-  
-  const response = await fetch(url, options);
-  const data = await response.json()
-  const result = data.find(item => item.sourceApplicationIntegrationId == integrationId);
-  
-  bru.setVar('next-version', (result ? result.version + 1 : 1));
-  
-  console.log('🍿 Next version', bru.getVar('next-version'));
+    // FINN NESTE VERSJON FØR POST
+    const kildeapplikasjonId = '5'
+    
+    if (req.getMethod() !== 'POST') return;
+    
+    const integrationId = req.body.sourceApplicationIntegrationId;
+    
+    const url = `https://flyt.vigoiks.no/${bru.getEnvVar("env")}${bru.getEnvVar("org")}/api/intern/metadata?kildeapplikasjonId=${kildeapplikasjonId}&bareSisteVersjoner=true`;
+    
+    const token = bru.interpolate('{{$oauth2.credentials.access_token}}');
+    const options = { headers: { Authorization: `Bearer ${token}` } };
+    
+    const response = await fetch(url, options);
+    
+    const data = await response.json()
+    const current = data.find(item => item.sourceApplicationIntegrationId === integrationId);
+    
+    const nextVersion = current?.version + 1 || 1
+    
+    bru.setVar('next-version', nextVersion);
+    
+    console.log('🍿 Next version', nextVersion);
 }

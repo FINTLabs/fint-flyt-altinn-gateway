@@ -1,13 +1,13 @@
 meta {
   name: Get METADATA
   type: http
-  seq: 1
+  seq: 3
 }
 
 get {
   url: https://flyt.vigoiks.no/{{env}}{{org}}/api/intern/metadata?kildeapplikasjonId=5&bareSisteVersjoner=true
   body: none
-  auth: none
+  auth: inherit
 }
 
 params:query {
