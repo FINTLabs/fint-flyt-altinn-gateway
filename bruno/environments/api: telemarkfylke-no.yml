@@ -1,0 +1,5 @@
+variables:
+  - name: org
+    value: telemarkfylke-no
+  - name: env
+    value: ""

@@ -1,0 +1,27 @@
+info:
+  name: Get METADATA
+  type: http
+  seq: 3
+
+http:
+  method: GET
+  url: https://flyt.vigoiks.no/{{env}}{{org}}/api/intern/metadata?kildeapplikasjonId=5&bareSisteVersjoner=true
+  params:
+    - name: kildeapplikasjonId
+      value: "5"
+      type: query
+    - name: bareSisteVersjoner
+      value: "true"
+      type: query
+    - name: kildeapplikasjonIntegrasjonId
+      value: DROSJESENTRAL
+      type: query
+      disabled: true
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: true

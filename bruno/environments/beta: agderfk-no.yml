@@ -1,0 +1,5 @@
+variables:
+  - name: org
+    value: agderfk-no
+  - name: env
+    value: beta/

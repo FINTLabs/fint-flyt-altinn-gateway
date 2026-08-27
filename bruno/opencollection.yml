@@ -1,0 +1,57 @@
+opencollection: 1.0.0
+
+info:
+  name: fint-flyt-altinn-gateway
+
+request:
+  auth:
+    type: oauth2
+    flow: resource_owner_password_credentials
+    accessTokenUrl: https://idp.felleskomponent.no/nidp/oauth/nam/token
+    credentials:
+      clientId: "{{clientId}}"
+      clientSecret: "{{clientSecret}}"
+      placement: body
+    resourceOwner:
+      username: "{{username}}"
+      password: "{{password}}"
+    scope: end-user-profile
+    tokenConfig:
+      id: credentials
+      placement:
+        header: Bearer
+      source: access_token
+    settings:
+      autoFetchToken: true
+      autoRefreshToken: false
+  scripts:
+    - type: before-request
+      code: |-
+        // FINN NESTE VERSJON FØR POST
+          const kildeapplikasjonId = '5'
+          
+          if (req.getMethod() !== 'POST') return;
+          
+          const integrationId = req.body.sourceApplicationIntegrationId;
+          
+          const url = `https://flyt.vigoiks.no/${bru.getEnvVar("env")}${bru.getEnvVar("org")}/api/intern/metadata?kildeapplikasjonId=${kildeapplikasjonId}&bareSisteVersjoner=true`;
+          
+          const token = bru.interpolate('{{$oauth2.credentials.access_token}}');
+          const options = { headers: { Authorization: `Bearer ${token}` } };
+          
+          const response = await fetch(url, options);
+          
+          const data = await response.json()
+          const current = data.find(item => item.sourceApplicationIntegrationId === integrationId);
+          
+          const nextVersion = current?.version + 1 || 1
+          
+          bru.setVar('next-version', nextVersion);
+          
+          console.log('🍿 Next version', nextVersion);
+bundled: false
+extensions:
+  bruno:
+    ignore:
+      - node_modules
+      - .git

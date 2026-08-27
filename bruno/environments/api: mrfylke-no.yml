@@ -1,0 +1,5 @@
+variables:
+  - name: org
+    value: mrfylke-no
+  - name: env
+    value: ""

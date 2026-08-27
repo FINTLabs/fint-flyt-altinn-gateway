@@ -1,0 +1,5 @@
+variables:
+  - name: org
+    value: rogfk-no
+  - name: env
+    value: beta/

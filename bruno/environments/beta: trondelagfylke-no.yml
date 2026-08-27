@@ -1,0 +1,5 @@
+variables:
+  - name: org
+    value: trondelagfylke-no
+  - name: env
+    value: beta/

@@ -1,16 +1,16 @@
-meta {
+info:
   name: Unlock forbidden fruit
   type: http
   seq: 2
-}
 
-get {
+http:
+  method: GET
   url: https://flyt.vigoiks.no/{{env}}{{org}}/api/intern/authorization/me
-  body: none
   auth: inherit
-}
 
-settings {
+settings:
   encodeUrl: true
   timeout: 0
-}
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: true

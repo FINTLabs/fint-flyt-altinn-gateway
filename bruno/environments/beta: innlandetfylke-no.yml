@@ -1,0 +1,5 @@
+variables:
+  - name: org
+    value: innlandetfylke-no
+  - name: env
+    value: beta/

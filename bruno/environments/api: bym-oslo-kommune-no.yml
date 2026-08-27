@@ -1,0 +1,5 @@
+variables:
+  - name: org
+    value: bym-oslo-kommune-no
+  - name: env
+    value: ""

@@ -1,0 +1,212 @@
+info:
+  name: DROSJESENTRAL
+  type: http
+  seq: 4
+
+http:
+  method: POST
+  url: https://flyt.vigoiks.no/{{env}}{{org}}/api/intern/metadata
+  body:
+    type: json
+    data: |-
+      {
+        "sourceApplicationId": 5,
+        "sourceApplicationIntegrationId": "DROSJESENTRAL",
+        "sourceApplicationIntegrationUri": null,
+        "integrationDisplayName": "Søknad om å drive drosjesentral",
+        "version": "{{next-version}}",
+        "instanceMetadata": {
+          "instanceValueMetadata": [],
+          "instanceObjectCollectionMetadata": [],
+          "categories": [
+            {
+              "displayName": "Virksomhet",
+              "content": {
+                "instanceValueMetadata": [
+                  { "displayName": "Organisasjonsnummer", "key": "virksomhetOrganisasjonsnummer", "type": "STRING" },
+                  { "displayName": "Organisasjonsnavn", "key": "virksomhetOrganisasjonsnavn", "type": "STRING" },
+                  { "displayName": "Epostadresse", "key": "virksomhetEpostadresse", "type": "STRING" },
+                  { "displayName": "Telefonnummer", "key": "virksomhetTelefonnummer", "type": "STRING" },
+                  { "displayName": "Fylke", "key": "virksomhetFylke", "type": "STRING" },
+                  { "displayName": "Kommune", "key": "virksomhetKommune", "type": "STRING" },
+                  { "displayName": "Gateadresse", "key": "virksomhetGateadresse", "type": "STRING" },
+                  { "displayName": "Postnummer", "key": "virksomhetPostnummer", "type": "STRING" },
+                  { "displayName": "Poststed", "key": "virksomhetPoststed", "type": "STRING" }
+                ],
+                "instanceObjectCollectionMetadata": [],
+                "categories": []
+              }
+            },
+            {
+              "displayName": "Postadresse",
+              "content": {
+                "instanceValueMetadata": [
+                  { "displayName": "Gateadresse", "key": "postadresseGateadresse", "type": "STRING" },
+                  { "displayName": "Postnummer", "key": "postadressePostnummer", "type": "STRING" },
+                  { "displayName": "Poststed", "key": "postadressePoststed", "type": "STRING" }
+                ],
+                "instanceObjectCollectionMetadata": [],
+                "categories": []
+              }
+            },
+            {
+              "displayName": "Daglig leder",
+              "content": {
+                "instanceValueMetadata": [
+                  { "displayName": "Fødselsnummer", "key": "dagligLederFødselsnummer", "type": "STRING" },
+                  { "displayName": "Fornavn", "key": "dagligLederFornavn", "type": "STRING" },
+                  { "displayName": "Etternavn", "key": "dagligLederEtternavn", "type": "STRING" },
+                  { "displayName": "Epostadresse", "key": "dagligLederEpostadresse", "type": "STRING" },
+                  { "displayName": "Telefonnummer", "key": "dagligLederTelefonnummer", "type": "STRING" }
+                ],
+                "instanceObjectCollectionMetadata": [],
+                "categories": []
+              }
+            },
+            {
+              "displayName": "Søknadsskjema",
+              "content": {
+                "instanceValueMetadata": [
+                  { "displayName": "Tittel", "type": "STRING", "key": "soknadTittel" },
+                  { "displayName": "Fil", "type": "FILE", "key": "soknadFil" },
+                  { "displayName": "Format", "type": "STRING", "key": "soknadFormat" }
+                ],
+                "instanceObjectCollectionMetadata": [],
+                "categories": []
+              }
+            },
+            {
+              "displayName": "Politiattest for daglig leder",
+              "content": {
+                "instanceValueMetadata": [
+                  { "displayName": "Tittel", "type": "STRING", "key": "politiattestLederTittel" },
+                  { "displayName": "Fil", "type": "FILE", "key": "politiattestLederFil" },
+                  { "displayName": "Format", "type": "STRING", "key": "politiattestLederFormat" }
+                ],
+                "instanceObjectCollectionMetadata": [],
+                "categories": []
+              }
+            },
+            {
+              "displayName": "Skatteattest for foretaket",
+              "content": {
+                "instanceValueMetadata": [
+                  { "displayName": "Tittel", "type": "STRING", "key": "skatteattestForetakTittel" },
+                  { "displayName": "Fil", "type": "FILE", "key": "skatteattestForetakFil" },
+                  { "displayName": "Format", "type": "STRING", "key": "skatteattestForetakFormat" }
+                ],
+                "instanceObjectCollectionMetadata": [],
+                "categories": []
+              }
+            },
+            {
+              "displayName": "Konkursattest for foretaket",
+              "content": {
+                "instanceValueMetadata": [
+                  { "displayName": "Tittel", "type": "STRING", "key": "konkursattestForetakTittel" },
+                  { "displayName": "Fil", "type": "FILE", "key": "konkursattestForetakFil" },
+                  { "displayName": "Format", "type": "STRING", "key": "konkursattestForetakFormat" }
+                ],
+                "instanceObjectCollectionMetadata": [],
+                "categories": []
+              }
+            },
+            {
+              "displayName": "Skatteattest for daglig leder",
+              "content": {
+                "instanceValueMetadata": [],
+                "instanceObjectCollectionMetadata": [
+                  {
+                    "displayName": "Skatteattest for daglig leder",
+                    "objectMetadata": {
+                      "instanceValueMetadata": [
+                        { "displayName": "Tittel", "type": "STRING", "key": "skatteattestLederTittel" },
+                        { "displayName": "Fil", "type": "FILE", "key": "skatteattestLederFil" },
+                        { "displayName": "Format", "type": "STRING", "key": "skatteattestLederFormat" }
+                      ],
+                      "instanceObjectCollectionMetadata": [],
+                      "categories": []
+                    },
+                    "key": "skatteattestLeder"
+                  }
+                ],
+                "categories": []
+              }
+            },
+            {
+              "displayName": "Konkursattest for daglig leder",
+              "content": {
+                "instanceValueMetadata": [],
+                "instanceObjectCollectionMetadata": [
+                  {
+                    "displayName": "Konkursattest for daglig leder",
+                    "objectMetadata": {
+                      "instanceValueMetadata": [
+                        { "displayName": "Tittel", "type": "STRING", "key": "konkursattestLederTittel" },
+                        { "displayName": "Fil", "type": "FILE", "key": "konkursattestLederFil" },
+                        { "displayName": "Format", "type": "STRING", "key": "konkursattestLederFormat" }
+                      ],
+                      "instanceObjectCollectionMetadata": [],
+                      "categories": []
+                    },
+                    "key": "konkursattestLeder"
+                  }
+                ],
+                "categories": []
+              }
+            },
+            {
+              "displayName": "Kopi av eventuelle dom/forelegg",
+              "content": {
+                "instanceValueMetadata": [],
+                "instanceObjectCollectionMetadata": [
+                  {
+                    "displayName": "Kopi av eventuelle dom/forelegg",
+                    "objectMetadata": {
+                      "instanceValueMetadata": [
+                        { "displayName": "Tittel", "type": "STRING", "key": "domForeleggTittel" },
+                        { "displayName": "Fil", "type": "FILE", "key": "domForeleggFil" },
+                        { "displayName": "Format", "type": "STRING", "key": "domForeleggFormat" }
+                      ],
+                      "instanceObjectCollectionMetadata": [],
+                      "categories": []
+                    },
+                    "key": "domForelegg"
+                  }
+                ],
+                "categories": []
+              }
+            },
+            {
+              "displayName": "Håndtering av Yrkestransportloven § 9 c og d",
+              "content": {
+                "instanceValueMetadata": [],
+                "instanceObjectCollectionMetadata": [
+                  {
+                    "displayName": "Håndtering av Yrkestransportloven § 9 c og d",
+                    "objectMetadata": {
+                      "instanceValueMetadata": [
+                        { "displayName": "Tittel", "type": "STRING", "key": "beskrivelseTittel" },
+                        { "displayName": "Fil", "type": "FILE", "key": "beskrivelseFil" },
+                        { "displayName": "Format", "type": "STRING", "key": "beskrivelseFormat" }
+                      ],
+                      "instanceObjectCollectionMetadata": [],
+                      "categories": []
+                    },
+                    "key": "beskrivelse"
+                  }
+                ],
+                "categories": []
+              }
+            }
+          ]
+        }
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: true

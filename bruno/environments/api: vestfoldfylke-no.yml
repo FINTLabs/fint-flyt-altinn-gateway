@@ -1,0 +1,5 @@
+variables:
+  - name: org
+    value: vestfoldfylke-no
+  - name: env
+    value: ""

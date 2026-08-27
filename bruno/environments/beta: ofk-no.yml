@@ -1,0 +1,5 @@
+variables:
+  - name: org
+    value: ofk-no
+  - name: env
+    value: beta/

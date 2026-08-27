@@ -1,0 +1,5 @@
+variables:
+  - name: org
+    value: afk-no
+  - name: env
+    value: beta/
