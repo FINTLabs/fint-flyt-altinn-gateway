@@ -47,28 +47,28 @@ jobs:
       deploy-every-branch: true
     secrets: inherit
 
-#  prod:
-#    needs: [ build-push, beta ]
-#    uses: fintlabs/shared-workflows/.github/workflows/kustomize-deploy.yaml@v0
-#    strategy:
-#      matrix:
-#        org:
-#          - afk-no
-#          - agderfk-no
-#          - bfk-no
-#          - bym-oslo-kommune-no
-#          - ffk-no
-#          - innlandetfylke-no
-#          - mrfylke-no
-#          - ofk-no
-#          - rogfk-no
-#          - telemarkfylke-no
-#          - tromsfylke-no
-#          - trondelagfylke-no
-#          - vestfoldfylke-no
-#          - vlfk-no
-#    with:
-#      tags: ${{ needs.build-push.outputs.tags }}
-#      environment: api
-#      org: ${{ matrix.org }}
-#    secrets: inherit
+  prod:
+    needs: [ build-push, beta ]
+    uses: fintlabs/shared-workflows/.github/workflows/kustomize-deploy.yaml@v0
+    strategy:
+      matrix:
+        org:
+          - afk-no
+          - agderfk-no
+          - bfk-no
+          - bym-oslo-kommune-no
+          - ffk-no
+          - innlandetfylke-no
+          - mrfylke-no
+          - ofk-no
+          - rogfk-no
+          - telemarkfylke-no
+          - tromsfylke-no
+          - trondelagfylke-no
+          - vestfoldfylke-no
+          - vlfk-no
+    with:
+      tags: ${{ needs.build-push.outputs.tags }}
+      environment: api
+      org: ${{ matrix.org }}
+    secrets: inherit
