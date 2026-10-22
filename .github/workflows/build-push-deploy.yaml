@@ -1,0 +1,74 @@
+name: Build, Push and Deploy
+
+on:
+  push:
+    paths-ignore:
+      - 'bruno/**'
+      - 'README.md'
+
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  packages: write
+  contents: read
+
+jobs:
+
+  build-push:
+    uses: fintlabs/shared-workflows/.github/workflows/java-gradle-build-push.yaml@v0
+    with:
+      java-version: '17'
+
+  beta:
+    needs: build-push
+    uses: fintlabs/shared-workflows/.github/workflows/kustomize-deploy.yaml@v0
+    strategy:
+      matrix:
+        org:
+          - afk-no
+          - agderfk-no
+          - bfk-no
+          - ffk-no
+          - innlandetfylke-no
+          - ofk-no
+          - rogfk-no
+          - telemarkfylke-no
+          - tromsfylke-no
+          - trondelagfylke-no
+          - vestfoldfylke-no
+          - vlfk-no
+    with:
+      tags: ${{ needs.build-push.outputs.tags }}
+      environment: beta
+      org: ${{ matrix.org }}
+      deploy-every-branch: true
+    secrets: inherit
+
+#  prod:
+#    needs: [ build-push, beta ]
+#    uses: fintlabs/shared-workflows/.github/workflows/kustomize-deploy.yaml@v0
+#    strategy:
+#      matrix:
+#        org:
+#          - afk-no
+#          - agderfk-no
+#          - bfk-no
+#          - bym-oslo-kommune-no
+#          - ffk-no
+#          - innlandetfylke-no
+#          - mrfylke-no
+#          - ofk-no
+#          - rogfk-no
+#          - telemarkfylke-no
+#          - tromsfylke-no
+#          - trondelagfylke-no
+#          - vestfoldfylke-no
+#          - vlfk-no
+#    with:
+#      tags: ${{ needs.build-push.outputs.tags }}
+#      environment: api
+#      org: ${{ matrix.org }}
+#    secrets: inherit
