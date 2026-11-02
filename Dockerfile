@@ -1,4 +1,4 @@
-FROM gradle:8.14.6-jdk17-alpine AS builder
+FROM gradle:9.8.2-jdk17-alpine AS builder
 USER root
 COPY . .
 RUN gradle --no-daemon build
