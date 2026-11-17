@@ -25,8 +25,10 @@ patches:
         value: "ofk.no"
         
       - op: add
-        path: "/spec/url/basePath"
-        value: "/beta/ofk-no"
+        path: "/spec/env/-"
+        value:
+          name: "server.servlet.context-path"
+          value: "/beta/ofk-no"
         
       - op: replace
         path: "/spec/ingress/basePath"

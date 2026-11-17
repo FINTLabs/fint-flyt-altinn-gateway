@@ -25,8 +25,10 @@ patches:
         value: "telemarkfylke.no"
         
       - op: add
-        path: "/spec/url/basePath"
-        value: "/beta/telemarkfylke-no"
+        path: "/spec/env/-"
+        value:
+          name: "server.servlet.context-path"
+          value: "/beta/telemarkfylke-no"
         
       - op: replace
         path: "/spec/ingress/basePath"
