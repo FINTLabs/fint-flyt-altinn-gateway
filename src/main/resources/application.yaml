@@ -30,3 +30,4 @@ spring:
       - flyt-kafka
       - flyt-logging
       - flyt-file-client
+      - flyt-authorization-client
