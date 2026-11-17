@@ -4,8 +4,8 @@ import no.fintlabs.altinn.AltinnFileService;
 import no.fintlabs.flyt.DrosjeloyveInstanceMapper;
 import no.fintlabs.flyt.DrosjesentralInstanceMapper;
 import no.fintlabs.flyt.IncomingInstanceMappingService;
-import no.fintlabs.gateway.instance.model.File;
-import no.fintlabs.gateway.instance.model.instance.InstanceObject;
+import no.novari.flyt.gateway.instance.model.File;
+import no.novari.flyt.gateway.instance.model.instance.InstanceObject;
 import no.novari.fint.altinn.model.kafka.KafkaAltinnInstance;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -132,7 +132,7 @@ class InstanceMappingGoldenTest {
     }
 
     private Map<String, Object> map(KafkaAltinnInstance instance) {
-        InstanceObject instanceObject = service.map(SOURCE_APPLICATION_ID, instance, file -> Mono.fromSupplier(() -> persist(file))).block();
+        InstanceObject instanceObject = service.map(SOURCE_APPLICATION_ID, instance, this::persist);
 
         Map<String, Object> result = new LinkedHashMap<>();
         result.put("altinnRequests", sorted(altinnRequests));

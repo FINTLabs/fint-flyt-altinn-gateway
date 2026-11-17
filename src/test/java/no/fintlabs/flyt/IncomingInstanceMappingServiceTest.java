@@ -1,9 +1,10 @@
 package no.fintlabs.flyt;
 
+import kotlin.jvm.functions.Function1;
 import no.novari.fint.altinn.model.kafka.KafkaAltinnInstance;
 import no.fintlabs.altinn.AltinnFileService;
-import no.fintlabs.gateway.instance.model.File;
-import no.fintlabs.gateway.instance.model.instance.InstanceObject;
+import no.novari.flyt.gateway.instance.model.File;
+import no.novari.flyt.gateway.instance.model.instance.InstanceObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,7 +20,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.function.Function;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -66,15 +66,16 @@ class IncomingInstanceMappingServiceTest {
                 .build();
 
         byte[] pdfContent = "test-pdf-content".getBytes();
-        File expectedFile = File.builder()
-                .name("test.pdf")
-                .sourceApplicationId(sourceApplicationId)
-                .type(MediaType.APPLICATION_PDF)
-                .encoding("base64")
-                .base64Contents(java.util.Base64.getEncoder().encodeToString(pdfContent))
-                .build();
+        File expectedFile = new File(
+                "test.pdf",
+                sourceApplicationId,
+                instanceId,
+                MediaType.APPLICATION_PDF,
+                "base64",
+                java.util.Base64.getEncoder().encodeToString(pdfContent)
+        );
 
-        Function<File, Mono<UUID>> persistFile = file -> Mono.just(uuid);
+        Function1<File, UUID> persistFile = file -> uuid;
 
         when(altinnFileService.fetchFile(instanceId, "ref-data-as-pdf", sourceApplicationId))
                 .thenReturn(Mono.just(expectedFile));
@@ -93,7 +94,7 @@ class IncomingInstanceMappingServiceTest {
         when(altinnFileService.fetchEbevisFile(instanceId, "KonkursDrosje", sourceApplicationId))
                 .thenReturn(Mono.just(expectedFile));
         // When
-        Mono<InstanceObject> result = incomingInstanceMappingService.map(sourceApplicationId, instance, persistFile);
+        Mono<InstanceObject> result = Mono.fromCallable(() -> incomingInstanceMappingService.map(sourceApplicationId, instance, persistFile));
 
         // Then
         StepVerifier.create(result)
@@ -155,15 +156,16 @@ class IncomingInstanceMappingServiceTest {
                 .build();
 
         byte[] pdfContent = "test-pdf-content".getBytes();
-        File expectedFile = File.builder()
-                .name("test.pdf")
-                .sourceApplicationId(sourceApplicationId)
-                .type(MediaType.APPLICATION_PDF)
-                .encoding("base64")
-                .base64Contents(java.util.Base64.getEncoder().encodeToString(pdfContent))
-                .build();
+        File expectedFile = new File(
+                "test.pdf",
+                sourceApplicationId,
+                instanceId,
+                MediaType.APPLICATION_PDF,
+                "base64",
+                java.util.Base64.getEncoder().encodeToString(pdfContent)
+        );
 
-        Function<File, Mono<UUID>> persistFile = file -> Mono.just(uuid);
+        Function1<File, UUID> persistFile = file -> uuid;
 
         when(altinnFileService.fetchFile(instanceId, "ref-data-as-pdf", sourceApplicationId))
                 .thenReturn(Mono.just(expectedFile));
@@ -182,7 +184,7 @@ class IncomingInstanceMappingServiceTest {
         when(altinnFileService.fetchEbevisFile(instanceId, "KonkursDrosje", sourceApplicationId))
                 .thenReturn(Mono.just(expectedFile));
 
-        Mono<InstanceObject> result = incomingInstanceMappingService.map(sourceApplicationId, instance, persistFile);
+        Mono<InstanceObject> result = Mono.fromCallable(() -> incomingInstanceMappingService.map(sourceApplicationId, instance, persistFile));
 
         StepVerifier.create(result)
                 .assertNext(instanceObject -> {
@@ -243,15 +245,16 @@ class IncomingInstanceMappingServiceTest {
                 .build();
 
         byte[] pdfContent = "test-pdf-content".getBytes();
-        File expectedFile = File.builder()
-                .name("test.pdf")
-                .sourceApplicationId(sourceApplicationId)
-                .type(MediaType.APPLICATION_PDF)
-                .encoding("base64")
-                .base64Contents(java.util.Base64.getEncoder().encodeToString(pdfContent))
-                .build();
+        File expectedFile = new File(
+                "test.pdf",
+                sourceApplicationId,
+                instanceId,
+                MediaType.APPLICATION_PDF,
+                "base64",
+                java.util.Base64.getEncoder().encodeToString(pdfContent)
+        );
 
-        Function<File, Mono<UUID>> persistFile = file -> Mono.just(uuid);
+        Function1<File, UUID> persistFile = file -> uuid;
 
         when(altinnFileService.fetchFile(instanceId, "ref-data-as-pdf", sourceApplicationId))
                 .thenReturn(Mono.just(expectedFile));
@@ -273,7 +276,7 @@ class IncomingInstanceMappingServiceTest {
                 .thenReturn(Mono.just(expectedFile));
 
 
-        Mono<InstanceObject> result = incomingInstanceMappingService.map(sourceApplicationId, instance, persistFile);
+        Mono<InstanceObject> result = Mono.fromCallable(() -> incomingInstanceMappingService.map(sourceApplicationId, instance, persistFile));
 
         StepVerifier.create(result)
                 .assertNext(instanceObject -> {

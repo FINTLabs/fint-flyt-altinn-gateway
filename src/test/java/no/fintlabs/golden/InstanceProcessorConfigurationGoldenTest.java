@@ -1,8 +1,9 @@
 package no.fintlabs.golden;
 
+import kotlin.jvm.functions.Function1;
 import no.fintlabs.flyt.IncomingInstanceMappingService;
 import no.fintlabs.flyt.InstanceProcessorConfiguration;
-import no.fintlabs.gateway.instance.InstanceProcessorFactoryService;
+import no.novari.flyt.gateway.instance.InstanceProcessorFactoryService;
 import no.novari.fint.altinn.model.kafka.KafkaAltinnInstance;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -10,8 +11,6 @@ import org.mockito.ArgumentCaptor;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.function.Function;
 
 import static no.fintlabs.golden.GoldenFiles.assertMatchesGolden;
 import static org.mockito.ArgumentMatchers.eq;
@@ -31,8 +30,8 @@ class InstanceProcessorConfigurationGoldenTest {
 
         new InstanceProcessorConfiguration().incomingInstanceProcessor(factory, mappingService);
 
-        ArgumentCaptor<Function<KafkaAltinnInstance, Optional<String>>> integrationId = ArgumentCaptor.forClass(Function.class);
-        ArgumentCaptor<Function<KafkaAltinnInstance, Optional<String>>> instanceId = ArgumentCaptor.forClass(Function.class);
+        ArgumentCaptor<Function1<KafkaAltinnInstance, String>> integrationId = ArgumentCaptor.forClass(Function1.class);
+        ArgumentCaptor<Function1<KafkaAltinnInstance, String>> instanceId = ArgumentCaptor.forClass(Function1.class);
         verify(factory).createInstanceProcessor(integrationId.capture(), instanceId.capture(), eq(mappingService));
 
         Map<String, Object> result = new LinkedHashMap<>();
@@ -42,8 +41,8 @@ class InstanceProcessorConfigurationGoldenTest {
                 KafkaAltinnInstance.builder().appId("vigo/drosjeloyve").build()
         )) {
             Map<String, Object> ids = new LinkedHashMap<>();
-            ids.put("sourceApplicationIntegrationId", integrationId.getValue().apply(instance).orElse(null));
-            ids.put("sourceApplicationInstanceId", instanceId.getValue().apply(instance).orElse(null));
+            ids.put("sourceApplicationIntegrationId", integrationId.getValue().invoke(instance));
+            ids.put("sourceApplicationInstanceId", instanceId.getValue().invoke(instance));
             result.put(instance.getAppId() + " " + instance.getInstanceId(), ids);
         }
         assertMatchesGolden("altinn-instance-processor-ids", result);

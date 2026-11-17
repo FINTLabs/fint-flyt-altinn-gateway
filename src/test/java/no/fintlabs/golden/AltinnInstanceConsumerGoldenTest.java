@@ -1,11 +1,12 @@
 package no.fintlabs.golden;
 
 import no.fintlabs.altinn.AltinnInstanceConsumer;
-import no.fintlabs.gateway.instance.InstanceProcessor;
-import no.fintlabs.kafka.common.ListenerContainerFactory;
-import no.fintlabs.kafka.event.EventConsumerConfiguration;
-import no.fintlabs.kafka.event.EventConsumerFactoryService;
-import no.fintlabs.kafka.event.topic.EventTopicService;
+import no.novari.flyt.gateway.instance.InstanceProcessor;
+import no.novari.kafka.consuming.ErrorHandlerFactory;
+import no.novari.kafka.consuming.ListenerConfiguration;
+import no.novari.kafka.consuming.ParameterizedListenerContainerFactory;
+import no.novari.kafka.consuming.ParameterizedListenerContainerFactoryService;
+import no.novari.kafka.topic.EventTopicService;
 import no.novari.fint.altinn.model.kafka.KafkaAltinnInstance;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,6 +15,7 @@ import org.mockito.ArgumentCaptor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.kafka.listener.CommonErrorHandler;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -57,13 +59,15 @@ class AltinnInstanceConsumerGoldenTest {
         ReflectionTestUtils.setField(consumer, "clientId", "client-id");
         ReflectionTestUtils.setField(consumer, "clientSecret", "client-secret");
 
-        EventConsumerFactoryService consumerFactoryService = mock(EventConsumerFactoryService.class);
-        when(consumerFactoryService.createRecordConsumerFactory(eq(KafkaAltinnInstance.class), any(Consumer.class), any(EventConsumerConfiguration.class)))
-                .thenReturn(mock(ListenerContainerFactory.class));
-        consumer.altinnInstanceConsumerConfiguration(consumerFactoryService);
+        ParameterizedListenerContainerFactoryService factoryService = mock(ParameterizedListenerContainerFactoryService.class);
+        when(factoryService.createRecordListenerContainerFactory(eq(KafkaAltinnInstance.class), any(Consumer.class),
+                any(ListenerConfiguration.class), any(CommonErrorHandler.class), any(Consumer.class)))
+                .thenReturn(mock(ParameterizedListenerContainerFactory.class));
+        consumer.altinnInstanceConsumerConfiguration(factoryService, new ErrorHandlerFactory());
 
         ArgumentCaptor<Consumer<ConsumerRecord<String, KafkaAltinnInstance>>> captor = ArgumentCaptor.forClass(Consumer.class);
-        verify(consumerFactoryService).createRecordConsumerFactory(eq(KafkaAltinnInstance.class), captor.capture(), any(EventConsumerConfiguration.class));
+        verify(factoryService).createRecordListenerContainerFactory(eq(KafkaAltinnInstance.class), captor.capture(),
+                any(ListenerConfiguration.class), any(CommonErrorHandler.class), any(Consumer.class));
         listener = captor.getValue();
     }
 
@@ -71,7 +75,7 @@ class AltinnInstanceConsumerGoldenTest {
     void recordIsProcessedAsSourceApplicationFive() throws Exception {
         KafkaAltinnInstance instance = InstanceMappingGoldenTest.fullInstance("vigo/drosjeloyve");
         when(instanceProcessor.processInstance(any(Authentication.class), eq(instance)))
-                .thenReturn(Mono.just(ResponseEntity.accepted().build()));
+                .thenReturn(ResponseEntity.accepted().build());
 
         listener.accept(new ConsumerRecord<>("ofk-no.altinn.event.instance-received", 0, 0, instance.getInstanceId(), instance));
 
@@ -87,7 +91,7 @@ class AltinnInstanceConsumerGoldenTest {
     void processingErrorIsRethrownToTheContainer() throws Exception {
         KafkaAltinnInstance instance = InstanceMappingGoldenTest.fullInstance("vigo/drosjeloyve");
         when(instanceProcessor.processInstance(any(Authentication.class), eq(instance)))
-                .thenReturn(Mono.error(new IllegalStateException("intgr-conf-service unavailable")));
+                .thenThrow(new IllegalStateException("intgr-conf-service unavailable"));
 
         RuntimeException exception = assertThrows(RuntimeException.class, () ->
                 listener.accept(new ConsumerRecord<>("ofk-no.altinn.event.instance-received", 0, 0, instance.getInstanceId(), instance)));

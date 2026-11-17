@@ -3,11 +3,16 @@ package no.fintlabs.altinn;
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.extern.slf4j.Slf4j;
 import no.novari.fint.altinn.model.kafka.KafkaAltinnInstance;
-import no.fintlabs.gateway.instance.InstanceProcessor;
-import no.fintlabs.kafka.event.EventConsumerConfiguration;
-import no.fintlabs.kafka.event.EventConsumerFactoryService;
-import no.fintlabs.kafka.event.topic.EventTopicNameParameters;
-import no.fintlabs.kafka.event.topic.EventTopicService;
+import no.novari.flyt.gateway.instance.InstanceProcessor;
+import no.novari.kafka.consuming.ErrorHandlerConfiguration;
+import no.novari.kafka.consuming.ErrorHandlerFactory;
+import no.novari.kafka.consuming.ListenerConfiguration;
+import no.novari.kafka.consuming.ParameterizedListenerContainerFactoryService;
+import no.novari.kafka.topic.EventTopicService;
+import no.novari.kafka.topic.configuration.EventCleanupFrequency;
+import no.novari.kafka.topic.configuration.EventTopicConfiguration;
+import no.novari.kafka.topic.name.EventTopicNameParameters;
+import no.novari.kafka.topic.name.TopicNamePrefixParameters;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -20,6 +25,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.time.Duration;
 import java.util.AbstractMap;
 import java.util.Collections;
 import java.util.Map;
@@ -50,12 +56,21 @@ public class AltinnInstanceConsumer {
         this.instanceProcessor = instanceProcessor;
 
         this.topicNameParameters = EventTopicNameParameters.builder()
-                .orgId(orgId).domainContext("altinn").eventName("instance-received")
+                .topicNamePrefixParameters(TopicNamePrefixParameters.stepBuilder()
+                        .orgId(orgId)
+                        .domainContext("altinn")
+                        .build())
+                .eventName("instance-received")
                 .build();
 
         this.orgId = orgId;
 
-        entityTopicService.ensureTopic(topicNameParameters, 0);
+        // Same as ensureTopic(..., 0) in fint-kafka 4: its defaults were 1 partition, 1 day retention and delete.
+        entityTopicService.createOrModifyTopic(topicNameParameters, EventTopicConfiguration.stepBuilder()
+                .partitions(1)
+                .retentionTime(Duration.ofDays(1))
+                .cleanupFrequency(EventCleanupFrequency.NORMAL)
+                .build());
     }
 
     private Authentication createAuthentication() {
@@ -89,7 +104,7 @@ public class AltinnInstanceConsumer {
             // Send til FLYT -> Arkiv:
             Authentication authentication = createAuthentication();
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            instanceProcessor.processInstance(authentication, altinnInstanceRecord.value()).block();
+            instanceProcessor.processInstance(authentication, altinnInstanceRecord.value());
 
         } catch (Exception e) {
             log.error("Error processing Altinn instance with instanceId {}: {}",
@@ -103,19 +118,31 @@ public class AltinnInstanceConsumer {
 
     @Bean
     public ConcurrentMessageListenerContainer<String, KafkaAltinnInstance> altinnInstanceConsumerConfiguration(
-            EventConsumerFactoryService consumerFactoryService) {
+            ParameterizedListenerContainerFactoryService listenerContainerFactoryService,
+            ErrorHandlerFactory errorHandlerFactory) {
 
         log.info("Creating consumer with domainContext {}, orgId {}, and resource {}",
-                topicNameParameters.getDomainContext(),
-                topicNameParameters.getOrgId(),
+                topicNameParameters.getTopicNamePrefixParameters().getDomainContext(),
+                topicNameParameters.getTopicNamePrefixParameters().getOrgId(),
                 topicNameParameters.getEventName());
 
-        return consumerFactoryService.createRecordConsumerFactory(
+        return listenerContainerFactoryService.createRecordListenerContainerFactory(
                         KafkaAltinnInstance.class,
                         this::process,
-                        EventConsumerConfiguration.builder()
-                                .ackMode(ContainerProperties.AckMode.RECORD)
-                                .build()
+                        ListenerConfiguration.stepBuilder()
+                                .groupIdApplicationDefault()
+                                .maxPollRecordsKafkaDefault()
+                                .maxPollIntervalKafkaDefault()
+                                .continueFromPreviousOffsetOnAssignment()
+                                .build(),
+                        // Same as the spring-kafka default that fint-kafka 4 used: 10 attempts, then skip.
+                        errorHandlerFactory.createErrorHandler(ErrorHandlerConfiguration.<KafkaAltinnInstance>stepBuilder()
+                                .retryWithFixedInterval(Duration.ZERO, 9)
+                                .useDefaultRetryClassification()
+                                .continueRetryOnExceptionChange()
+                                .skipFailedRecords()
+                                .build()),
+                        container -> container.getContainerProperties().setAckMode(ContainerProperties.AckMode.RECORD)
                 )
                 .createContainer(topicNameParameters);
     }
