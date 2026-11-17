@@ -1,0 +1,52 @@
+{
+  "altinnRequests" : [ "GET /api/file/50001234/0b8a6c2e-1f3d-4b5a-9c7e-2d4f6a8b0c1d/dokumentasjon-fagkompetanse", "GET /api/file/50001234/0b8a6c2e-1f3d-4b5a-9c7e-2d4f6a8b0c1d/dom-forelegg", "GET /api/file/50001234/0b8a6c2e-1f3d-4b5a-9c7e-2d4f6a8b0c1d/konkursattest-dagligleder", "GET /api/file/50001234/0b8a6c2e-1f3d-4b5a-9c7e-2d4f6a8b0c1d/politiattest-dagligleder", "GET /api/file/50001234/0b8a6c2e-1f3d-4b5a-9c7e-2d4f6a8b0c1d/politiattest-foretak", "GET /api/file/50001234/0b8a6c2e-1f3d-4b5a-9c7e-2d4f6a8b0c1d/ref-data-as-pdf", "GET /api/file/50001234/0b8a6c2e-1f3d-4b5a-9c7e-2d4f6a8b0c1d/skatteattest-dagligleder", "GET /api/file/ebevis/50001234/0b8a6c2e-1f3d-4b5a-9c7e-2d4f6a8b0c1d/KonkursDrosje", "GET /api/file/ebevis/50001234/0b8a6c2e-1f3d-4b5a-9c7e-2d4f6a8b0c1d/RestanserV2" ],
+  "instanceObject" : {
+    "objectCollectionPerKey" : {
+      "domForelegg" : [ ],
+      "kompetanse" : [ ],
+      "konkursattestLeder" : [ ],
+      "politiattestForetak" : [ ],
+      "skatteattestLeder" : [ ]
+    },
+    "valuePerKey" : {
+      "dagligLederEpostadresse" : "",
+      "dagligLederEtternavn" : "",
+      "dagligLederFornavn" : "",
+      "dagligLederFødselsnummer" : "",
+      "dagligLederTelefonnummer" : "",
+      "foretakEpostadresse" : "post@drosje.no",
+      "foretakFylke" : "Østfold",
+      "foretakGateadresse" : "Storgata 1",
+      "foretakKommune" : "",
+      "foretakOrganisasjonsnavn" : "Drosje AS",
+      "foretakOrganisasjonsnummer" : "912345678",
+      "foretakPostnummer" : "1601",
+      "foretakPoststed" : "Fredrikstad",
+      "foretakTelefonnummer" : "",
+      "politiattestLederFil" : "028347fc-186f-3b09-be72-622a0c600754",
+      "politiattestLederFormat" : "application/pdf",
+      "politiattestLederTittel" : "Politiattest for daglig leder",
+      "postadresseGateadresse" : "",
+      "postadressePostnummer" : "",
+      "postadressePoststed" : "",
+      "soknadFil" : "250f5355-a13f-3961-8195-3e3785862f9e",
+      "soknadFormat" : "application/pdf",
+      "soknadTittel" : "Søknadsskjema"
+    }
+  },
+  "uploadedFiles" : [ {
+    "base64Contents" : "JVBERiBwb2xpdGlhdHRlc3QtZGFnbGlnbGVkZXIucGRm",
+    "encoding" : "base64",
+    "name" : "politiattest-dagligleder.pdf",
+    "sourceApplicationId" : 5,
+    "sourceApplicationInstanceId" : "50001234/0b8a6c2e-1f3d-4b5a-9c7e-2d4f6a8b0c1d",
+    "type" : "application/pdf"
+  }, {
+    "base64Contents" : "JVBERiByZWYtZGF0YS1hcy1wZGYucGRm",
+    "encoding" : "base64",
+    "name" : "ref-data-as-pdf.pdf",
+    "sourceApplicationId" : 5,
+    "sourceApplicationInstanceId" : "50001234/0b8a6c2e-1f3d-4b5a-9c7e-2d4f6a8b0c1d",
+    "type" : "application/pdf"
+  } ]
+}

@@ -1,0 +1,14 @@
+{
+  "vigo/drosjeloyve 50001234/abc" : {
+    "sourceApplicationInstanceId" : "50001234/abc",
+    "sourceApplicationIntegrationId" : "DROSJELOYVE"
+  },
+  "vigo/drosjeloyve null" : {
+    "sourceApplicationInstanceId" : null,
+    "sourceApplicationIntegrationId" : "DROSJELOYVE"
+  },
+  "vigo/drosjesentral 50001234/def" : {
+    "sourceApplicationInstanceId" : "50001234/def",
+    "sourceApplicationIntegrationId" : "DROSJESENTRAL"
+  }
+}

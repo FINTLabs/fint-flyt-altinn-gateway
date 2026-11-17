@@ -1,0 +1,127 @@
+{
+  "altinnRequests" : [ "GET /api/file/50001234/0b8a6c2e-1f3d-4b5a-9c7e-2d4f6a8b0c1d/beskrivelse-yrkestransportloven", "GET /api/file/50001234/0b8a6c2e-1f3d-4b5a-9c7e-2d4f6a8b0c1d/dom-forelegg", "GET /api/file/50001234/0b8a6c2e-1f3d-4b5a-9c7e-2d4f6a8b0c1d/konkursattest-dagligleder", "GET /api/file/50001234/0b8a6c2e-1f3d-4b5a-9c7e-2d4f6a8b0c1d/politiattest-dagligleder", "GET /api/file/50001234/0b8a6c2e-1f3d-4b5a-9c7e-2d4f6a8b0c1d/ref-data-as-pdf", "GET /api/file/50001234/0b8a6c2e-1f3d-4b5a-9c7e-2d4f6a8b0c1d/skatteattest-dagligleder", "GET /api/file/ebevis/50001234/0b8a6c2e-1f3d-4b5a-9c7e-2d4f6a8b0c1d/KonkursDrosje", "GET /api/file/ebevis/50001234/0b8a6c2e-1f3d-4b5a-9c7e-2d4f6a8b0c1d/RestanserV2" ],
+  "instanceObject" : {
+    "objectCollectionPerKey" : {
+      "beskrivelse" : [ {
+        "objectCollectionPerKey" : { },
+        "valuePerKey" : {
+          "beskrivelseFil" : "9c9489a0-69f4-33f2-b3d3-66533d38583b",
+          "beskrivelseFormat" : "application/pdf",
+          "beskrivelseTittel" : "Håndtering av Yrkestransportloven § 9 c og d"
+        }
+      } ],
+      "domForelegg" : [ {
+        "objectCollectionPerKey" : { },
+        "valuePerKey" : {
+          "domForeleggFil" : "fa46d350-cd6c-31e6-a562-75ff190bf452",
+          "domForeleggFormat" : "application/pdf",
+          "domForeleggTittel" : "Kopi av eventuelle dom/forelegg"
+        }
+      } ],
+      "konkursattestLeder" : [ {
+        "objectCollectionPerKey" : { },
+        "valuePerKey" : {
+          "konkursattestLederFil" : "e1bdce3a-da4c-32c6-99c0-dd0ee643b911",
+          "konkursattestLederFormat" : "application/pdf",
+          "konkursattestLederTittel" : "Konkursattest for daglig leder"
+        }
+      } ],
+      "skatteattestLeder" : [ {
+        "objectCollectionPerKey" : { },
+        "valuePerKey" : {
+          "skatteattestLederFil" : "da10b021-ae00-32a3-be11-07da32c5cc73",
+          "skatteattestLederFormat" : "application/pdf",
+          "skatteattestLederTittel" : "Skatteattest for daglig leder"
+        }
+      } ]
+    },
+    "valuePerKey" : {
+      "dagligLederEpostadresse" : "kari@drosje.no",
+      "dagligLederEtternavn" : "Nordmann",
+      "dagligLederFornavn" : "Kari",
+      "dagligLederFødselsnummer" : "01010112345",
+      "dagligLederTelefonnummer" : "90000000",
+      "konkursattestForetakFil" : "81edf7e0-6631-31b1-b926-85512c83291e",
+      "konkursattestForetakFormat" : "application/pdf",
+      "konkursattestForetakTittel" : "Konkursattest for foretaket",
+      "politiattestLederFil" : "028347fc-186f-3b09-be72-622a0c600754",
+      "politiattestLederFormat" : "application/pdf",
+      "politiattestLederTittel" : "Politiattest for daglig leder",
+      "postadresseGateadresse" : "Postboks 10",
+      "postadressePostnummer" : "1602",
+      "postadressePoststed" : "Fredrikstad",
+      "skatteattestForetakFil" : "6ecfabcc-0b4b-3a6c-8f79-afac334e3df1",
+      "skatteattestForetakFormat" : "application/pdf",
+      "skatteattestForetakTittel" : "Skatteattest for foretaket",
+      "soknadFil" : "250f5355-a13f-3961-8195-3e3785862f9e",
+      "soknadFormat" : "application/pdf",
+      "soknadTittel" : "Søknadsskjema",
+      "virksomhetEpostadresse" : "post@drosje.no",
+      "virksomhetFylke" : "Østfold",
+      "virksomhetGateadresse" : "Storgata 1",
+      "virksomhetKommune" : "Fredrikstad",
+      "virksomhetOrganisasjonsnavn" : "Drosje AS",
+      "virksomhetOrganisasjonsnummer" : "912345678",
+      "virksomhetPostnummer" : "1601",
+      "virksomhetPoststed" : "Fredrikstad",
+      "virksomhetTelefonnummer" : "69000000"
+    }
+  },
+  "uploadedFiles" : [ {
+    "base64Contents" : "JVBERiBLb25rdXJzRHJvc2plLnBkZg==",
+    "encoding" : "base64",
+    "name" : "KonkursDrosje.pdf",
+    "sourceApplicationId" : 5,
+    "sourceApplicationInstanceId" : "50001234/0b8a6c2e-1f3d-4b5a-9c7e-2d4f6a8b0c1d",
+    "type" : "application/pdf"
+  }, {
+    "base64Contents" : "JVBERiBSZXN0YW5zZXJWMi5wZGY=",
+    "encoding" : "base64",
+    "name" : "RestanserV2.pdf",
+    "sourceApplicationId" : 5,
+    "sourceApplicationInstanceId" : "50001234/0b8a6c2e-1f3d-4b5a-9c7e-2d4f6a8b0c1d",
+    "type" : "application/pdf"
+  }, {
+    "base64Contents" : "JVBERiBiZXNrcml2ZWxzZS15cmtlc3RyYW5zcG9ydGxvdmVuLnBkZg==",
+    "encoding" : "base64",
+    "name" : "beskrivelse-yrkestransportloven.pdf",
+    "sourceApplicationId" : 5,
+    "sourceApplicationInstanceId" : "50001234/0b8a6c2e-1f3d-4b5a-9c7e-2d4f6a8b0c1d",
+    "type" : "application/pdf"
+  }, {
+    "base64Contents" : "JVBERiBkb20tZm9yZWxlZ2cucGRm",
+    "encoding" : "base64",
+    "name" : "dom-forelegg.pdf",
+    "sourceApplicationId" : 5,
+    "sourceApplicationInstanceId" : "50001234/0b8a6c2e-1f3d-4b5a-9c7e-2d4f6a8b0c1d",
+    "type" : "application/pdf"
+  }, {
+    "base64Contents" : "JVBERiBrb25rdXJzYXR0ZXN0LWRhZ2xpZ2xlZGVyLnBkZg==",
+    "encoding" : "base64",
+    "name" : "konkursattest-dagligleder.pdf",
+    "sourceApplicationId" : 5,
+    "sourceApplicationInstanceId" : "50001234/0b8a6c2e-1f3d-4b5a-9c7e-2d4f6a8b0c1d",
+    "type" : "application/pdf"
+  }, {
+    "base64Contents" : "JVBERiBwb2xpdGlhdHRlc3QtZGFnbGlnbGVkZXIucGRm",
+    "encoding" : "base64",
+    "name" : "politiattest-dagligleder.pdf",
+    "sourceApplicationId" : 5,
+    "sourceApplicationInstanceId" : "50001234/0b8a6c2e-1f3d-4b5a-9c7e-2d4f6a8b0c1d",
+    "type" : "application/pdf"
+  }, {
+    "base64Contents" : "JVBERiByZWYtZGF0YS1hcy1wZGYucGRm",
+    "encoding" : "base64",
+    "name" : "ref-data-as-pdf.pdf",
+    "sourceApplicationId" : 5,
+    "sourceApplicationInstanceId" : "50001234/0b8a6c2e-1f3d-4b5a-9c7e-2d4f6a8b0c1d",
+    "type" : "application/pdf"
+  }, {
+    "base64Contents" : "JVBERiBza2F0dGVhdHRlc3QtZGFnbGlnbGVkZXIucGRm",
+    "encoding" : "base64",
+    "name" : "skatteattest-dagligleder.pdf",
+    "sourceApplicationId" : 5,
+    "sourceApplicationInstanceId" : "50001234/0b8a6c2e-1f3d-4b5a-9c7e-2d4f6a8b0c1d",
+    "type" : "application/pdf"
+  } ]
+}
