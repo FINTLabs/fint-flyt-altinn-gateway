@@ -12,16 +12,8 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.listener.CommonErrorHandler;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.test.util.ReflectionTestUtils;
-import org.springframework.web.reactive.function.client.ClientResponse;
-import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -30,6 +22,7 @@ import java.util.function.Consumer;
 import static no.fintlabs.golden.GoldenFiles.assertMatchesGolden;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -48,16 +41,7 @@ class AltinnInstanceConsumerGoldenTest {
     @BeforeEach
     @SuppressWarnings("unchecked")
     void setUp() {
-        // The current consumer fetches a NAM token before each instance.
-        WebClient webClient = WebClient.builder()
-                .exchangeFunction(request -> Mono.just(ClientResponse.create(HttpStatus.OK)
-                        .header(HttpHeaders.CONTENT_TYPE, "application/json")
-                        .body("{\"access_token\":\"token\"}")
-                        .build()))
-                .build();
-        AltinnInstanceConsumer consumer = new AltinnInstanceConsumer(mock(EventTopicService.class), webClient, "ofk-no", instanceProcessor);
-        ReflectionTestUtils.setField(consumer, "clientId", "client-id");
-        ReflectionTestUtils.setField(consumer, "clientSecret", "client-secret");
+        AltinnInstanceConsumer consumer = new AltinnInstanceConsumer(mock(EventTopicService.class), "ofk-no", instanceProcessor);
 
         ParameterizedListenerContainerFactoryService factoryService = mock(ParameterizedListenerContainerFactoryService.class);
         when(factoryService.createRecordListenerContainerFactory(eq(KafkaAltinnInstance.class), any(Consumer.class),
@@ -74,15 +58,14 @@ class AltinnInstanceConsumerGoldenTest {
     @Test
     void recordIsProcessedAsSourceApplicationFive() throws Exception {
         KafkaAltinnInstance instance = InstanceMappingGoldenTest.fullInstance("vigo/drosjeloyve");
-        when(instanceProcessor.processInstance(any(Authentication.class), eq(instance)))
-                .thenReturn(ResponseEntity.accepted().build());
+        when(instanceProcessor.processInstance(anyLong(), eq(instance))).thenReturn(ResponseEntity.accepted().build());
 
         listener.accept(new ConsumerRecord<>("ofk-no.altinn.event.instance-received", 0, 0, instance.getInstanceId(), instance));
 
-        ArgumentCaptor<Authentication> authentication = ArgumentCaptor.forClass(Authentication.class);
-        verify(instanceProcessor).processInstance(authentication.capture(), eq(instance));
+        ArgumentCaptor<Long> sourceApplicationId = ArgumentCaptor.forClass(Long.class);
+        verify(instanceProcessor).processInstance(sourceApplicationId.capture(), eq(instance));
         Map<String, Object> result = new LinkedHashMap<>();
-        result.put("sourceApplicationId", sourceApplicationId(authentication.getValue()));
+        result.put("sourceApplicationId", sourceApplicationId.getValue());
         result.put("sourceApplicationInstanceId", instance.getInstanceId());
         assertMatchesGolden("altinn-consumer-processed", result);
     }
@@ -90,7 +73,7 @@ class AltinnInstanceConsumerGoldenTest {
     @Test
     void processingErrorIsRethrownToTheContainer() throws Exception {
         KafkaAltinnInstance instance = InstanceMappingGoldenTest.fullInstance("vigo/drosjeloyve");
-        when(instanceProcessor.processInstance(any(Authentication.class), eq(instance)))
+        when(instanceProcessor.processInstance(anyLong(), eq(instance)))
                 .thenThrow(new IllegalStateException("intgr-conf-service unavailable"));
 
         RuntimeException exception = assertThrows(RuntimeException.class, () ->
@@ -100,14 +83,5 @@ class AltinnInstanceConsumerGoldenTest {
         result.put("exception", exception.getClass().getName());
         result.put("message", exception.getMessage());
         assertMatchesGolden("altinn-consumer-error", result);
-    }
-
-    private static Long sourceApplicationId(Authentication authentication) {
-        return authentication.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .filter(authority -> authority.startsWith("SOURCE_APPLICATION_ID_"))
-                .map(authority -> Long.parseLong(authority.substring("SOURCE_APPLICATION_ID_".length())))
-                .findFirst()
-                .orElse(null);
     }
 }
