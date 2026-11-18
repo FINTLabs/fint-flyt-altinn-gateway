@@ -1,9 +1,12 @@
-FROM gradle:8.14.6-jdk17-alpine AS builder
-USER root
+FROM eclipse-temurin:17-jdk AS builder
 COPY . .
-RUN gradle --no-daemon build
+RUN ./gradlew --no-daemon build
 
-FROM gcr.io/distroless/java17
+FROM eclipse-temurin:17-jre
+WORKDIR /data
 ENV JAVA_TOOL_OPTIONS="-XX:+ExitOnOutOfMemoryError -XX:-UseBASE64Intrinsics"
-COPY --from=builder /home/gradle/build/libs/fint-flyt-altinn-gateway-*.jar /data/app.jar
+COPY --from=builder build/libs/fint-flyt-altinn-gateway-*.jar /data/app.jar
+
+USER 1337
+ENTRYPOINT ["java", "-jar"]
 CMD ["/data/app.jar"]
