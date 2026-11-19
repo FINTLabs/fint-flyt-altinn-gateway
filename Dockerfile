@@ -1,9 +1,12 @@
-FROM gradle:9.8.1-jdk25 AS builder
-USER root
+FROM eclipse-temurin:25-jdk AS builder
 COPY . .
-RUN gradle --no-daemon build
+RUN ./gradlew --no-daemon build
 
-FROM gcr.io/distroless/java25:nonroot
-ENV JAVA_TOOL_OPTIONS=-XX:+ExitOnOutOfMemoryError
-COPY --from=builder /home/gradle/build/libs/fint-flyt-altinn-gateway-*.jar /data/app.jar
+FROM eclipse-temurin:25-jre
+WORKDIR /data
+ENV JAVA_TOOL_OPTIONS="-XX:+ExitOnOutOfMemoryError -XX:-UseBASE64Intrinsics"
+COPY --from=builder build/libs/fint-flyt-altinn-gateway-*.jar /data/app.jar
+
+USER 1337
+ENTRYPOINT ["java", "-jar"]
 CMD ["/data/app.jar"]

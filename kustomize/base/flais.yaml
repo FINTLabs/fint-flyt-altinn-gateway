@@ -31,7 +31,7 @@ spec:
     basePath: path
   env:
     - name: JAVA_TOOL_OPTIONS
-      value: '-XX:+ExitOnOutOfMemoryError -Xmx1840M'
+      value: '-XX:+ExitOnOutOfMemoryError -Xmx1840M -XX:-UseBASE64Intrinsics'
     - name: logging.level.org.apache.kafka
       value: 'WARN'
     - name: fint.flyt.authorization.sso.client-id
