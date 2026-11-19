@@ -1,12 +1,10 @@
 package no.fintlabs.flyt;
 
 import no.novari.fint.altinn.model.kafka.KafkaAltinnInstance;
-import no.fintlabs.gateway.instance.InstanceProcessor;
-import no.fintlabs.gateway.instance.InstanceProcessorFactoryService;
+import no.novari.flyt.gateway.instance.InstanceProcessor;
+import no.novari.flyt.gateway.instance.InstanceProcessorFactoryService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.util.Optional;
 
 @Configuration
 public class InstanceProcessorConfiguration {
@@ -17,8 +15,8 @@ public class InstanceProcessorConfiguration {
             IncomingInstanceMappingService incomingInstanceMappingService
     ) {
         return instanceProcessorFactoryService.createInstanceProcessor(
-                incomingInstance -> Optional.of(incomingInstance.getAppId().replace("vigo/", "").toUpperCase()),
-                incomingInstance -> Optional.ofNullable(incomingInstance.getInstanceId()),
+                incomingInstance -> incomingInstance.getAppId().replace("vigo/", "").toUpperCase(),
+                KafkaAltinnInstance::getInstanceId,
                 incomingInstanceMappingService
         );
     }

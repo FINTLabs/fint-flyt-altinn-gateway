@@ -34,6 +34,16 @@ spec:
       value: '-XX:+ExitOnOutOfMemoryError -Xmx1840M -XX:-UseBASE64Intrinsics'
     - name: logging.level.org.apache.kafka
       value: 'WARN'
+    - name: fint.flyt.authorization.sso.client-id
+      valueFrom:
+        secretKeyRef:
+          name: fint-flyt-authorization-oauth2-client
+          key: fint.sso.client-id
+    - name: fint.flyt.authorization.sso.client-secret
+      valueFrom:
+        secretKeyRef:
+          name: fint-flyt-authorization-oauth2-client
+          key: fint.sso.client-secret
   envFrom:
     - secretRef:
         name: fint-flyt-file-oauth2-client

@@ -1,5 +1,5 @@
 plugins {
-    id 'org.springframework.boot' version '2.7.18'
+    id 'org.springframework.boot' version '3.5.16'
     id 'io.spring.dependency-management' version '1.1.7'
     id 'java'
     id 'com.github.ben-manes.versions' version '0.67.0'
@@ -10,9 +10,12 @@ version = '0.0.1-SNAPSHOT'
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
+        languageVersion = JavaLanguageVersion.of(25)
     }
 }
+
+// flyt-gateway-starter is compiled against Kotlin 2.4.10, so keep the Spring Boot BOM from downgrading kotlin-stdlib
+ext['kotlin.version'] = '2.4.10'
 
 configurations {
     compileOnly {
@@ -41,23 +44,19 @@ dependencies {
 
 
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
-    implementation 'io.netty:netty-resolver-dns-native-macos:4.1.101.Final:osx-aarch_64'
 
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
     implementation 'org.hibernate.validator:hibernate-validator'
 
-    implementation 'no.fintlabs:fint-kafka:4.0.3'
-    implementation 'no.fintlabs:fint-flyt-kafka:3.1.2'
-    implementation 'org.springframework.kafka:spring-kafka'
-
-    implementation 'no.fintlabs:fint-flyt-instance-gateway:6.0.5'
-    implementation 'no.fintlabs:fint-flyt-resource-server:5.1.1'
+    implementation 'no.novari:flyt-gateway-starter:5.0.0'
+    implementation 'org.jetbrains.kotlin:kotlin-reflect'
 
     implementation 'no.novari:fint-altinn-model:4.0.0'
 
     compileOnly 'org.projectlombok:lombok'
+    runtimeOnly 'org.aspectj:aspectjweaver'
     runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     annotationProcessor 'org.projectlombok:lombok'

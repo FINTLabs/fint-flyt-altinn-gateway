@@ -20,7 +20,7 @@ jobs:
   build-push:
     uses: fintlabs/shared-workflows/.github/workflows/java-gradle-build-push.yaml@v0
     with:
-      java-version: '17'
+      java-version: '25'
 
   beta:
     needs: build-push

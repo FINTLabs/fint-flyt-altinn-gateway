@@ -1,0 +1,4 @@
+{
+  "exception" : "java.lang.IllegalStateException",
+  "message" : "intgr-conf-service unavailable"
+}

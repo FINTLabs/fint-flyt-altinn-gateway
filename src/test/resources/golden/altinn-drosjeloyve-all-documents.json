@@ -1,0 +1,142 @@
+{
+  "altinnRequests" : [ "GET /api/file/50001234/0b8a6c2e-1f3d-4b5a-9c7e-2d4f6a8b0c1d/dokumentasjon-fagkompetanse", "GET /api/file/50001234/0b8a6c2e-1f3d-4b5a-9c7e-2d4f6a8b0c1d/dom-forelegg", "GET /api/file/50001234/0b8a6c2e-1f3d-4b5a-9c7e-2d4f6a8b0c1d/konkursattest-dagligleder", "GET /api/file/50001234/0b8a6c2e-1f3d-4b5a-9c7e-2d4f6a8b0c1d/politiattest-dagligleder", "GET /api/file/50001234/0b8a6c2e-1f3d-4b5a-9c7e-2d4f6a8b0c1d/politiattest-foretak", "GET /api/file/50001234/0b8a6c2e-1f3d-4b5a-9c7e-2d4f6a8b0c1d/ref-data-as-pdf", "GET /api/file/50001234/0b8a6c2e-1f3d-4b5a-9c7e-2d4f6a8b0c1d/skatteattest-dagligleder", "GET /api/file/ebevis/50001234/0b8a6c2e-1f3d-4b5a-9c7e-2d4f6a8b0c1d/KonkursDrosje", "GET /api/file/ebevis/50001234/0b8a6c2e-1f3d-4b5a-9c7e-2d4f6a8b0c1d/RestanserV2" ],
+  "instanceObject" : {
+    "objectCollectionPerKey" : {
+      "domForelegg" : [ {
+        "objectCollectionPerKey" : { },
+        "valuePerKey" : {
+          "domForeleggFil" : "fa46d350-cd6c-31e6-a562-75ff190bf452",
+          "domForeleggFormat" : "application/pdf",
+          "domForeleggTittel" : "Kopi av eventuelle dom/forelegg"
+        }
+      } ],
+      "kompetanse" : [ {
+        "objectCollectionPerKey" : { },
+        "valuePerKey" : {
+          "kompetanseFil" : "08a23bfd-7a45-3c65-8b38-0928a3a02504",
+          "kompetanseFormat" : "application/pdf",
+          "kompetanseTittel" : "Dokumentasjon av fagkompetanse"
+        }
+      } ],
+      "konkursattestLeder" : [ {
+        "objectCollectionPerKey" : { },
+        "valuePerKey" : {
+          "konkursattestLederFil" : "e1bdce3a-da4c-32c6-99c0-dd0ee643b911",
+          "konkursattestLederFormat" : "application/pdf",
+          "konkursattestLederTittel" : "Konkursattest for daglig leder"
+        }
+      } ],
+      "politiattestForetak" : [ {
+        "objectCollectionPerKey" : { },
+        "valuePerKey" : {
+          "politiattestForetakFil" : "b41086af-91ef-3522-93cd-d6076582d185",
+          "politiattestForetakFormat" : "application/pdf",
+          "politiattestForetakTittel" : "Politiattest for foretaket"
+        }
+      } ],
+      "skatteattestLeder" : [ {
+        "objectCollectionPerKey" : { },
+        "valuePerKey" : {
+          "skatteattestLederFil" : "da10b021-ae00-32a3-be11-07da32c5cc73",
+          "skatteattestLederFormat" : "application/pdf",
+          "skatteattestLederTittel" : "Skatteattest for daglig leder"
+        }
+      } ]
+    },
+    "valuePerKey" : {
+      "dagligLederEpostadresse" : "kari@drosje.no",
+      "dagligLederEtternavn" : "Nordmann",
+      "dagligLederFornavn" : "Kari",
+      "dagligLederFødselsnummer" : "01010112345",
+      "dagligLederTelefonnummer" : "90000000",
+      "foretakEpostadresse" : "post@drosje.no",
+      "foretakFylke" : "Østfold",
+      "foretakGateadresse" : "Storgata 1",
+      "foretakKommune" : "Fredrikstad",
+      "foretakOrganisasjonsnavn" : "Drosje AS",
+      "foretakOrganisasjonsnummer" : "912345678",
+      "foretakPostnummer" : "1601",
+      "foretakPoststed" : "Fredrikstad",
+      "foretakTelefonnummer" : "69000000",
+      "konkursattestForetakFil" : "81edf7e0-6631-31b1-b926-85512c83291e",
+      "konkursattestForetakFormat" : "application/pdf",
+      "konkursattestForetakTittel" : "Konkursattest for foretaket",
+      "politiattestLederFil" : "028347fc-186f-3b09-be72-622a0c600754",
+      "politiattestLederFormat" : "application/pdf",
+      "politiattestLederTittel" : "Politiattest for daglig leder",
+      "postadresseGateadresse" : "Postboks 10",
+      "postadressePostnummer" : "1602",
+      "postadressePoststed" : "Fredrikstad",
+      "skatteattestForetakFil" : "6ecfabcc-0b4b-3a6c-8f79-afac334e3df1",
+      "skatteattestForetakFormat" : "application/pdf",
+      "skatteattestForetakTittel" : "Skatteattest for foretaket",
+      "soknadFil" : "250f5355-a13f-3961-8195-3e3785862f9e",
+      "soknadFormat" : "application/pdf",
+      "soknadTittel" : "Søknadsskjema"
+    }
+  },
+  "uploadedFiles" : [ {
+    "base64Contents" : "JVBERiBLb25rdXJzRHJvc2plLnBkZg==",
+    "encoding" : "base64",
+    "name" : "KonkursDrosje.pdf",
+    "sourceApplicationId" : 5,
+    "sourceApplicationInstanceId" : "50001234/0b8a6c2e-1f3d-4b5a-9c7e-2d4f6a8b0c1d",
+    "type" : "application/pdf"
+  }, {
+    "base64Contents" : "JVBERiBSZXN0YW5zZXJWMi5wZGY=",
+    "encoding" : "base64",
+    "name" : "RestanserV2.pdf",
+    "sourceApplicationId" : 5,
+    "sourceApplicationInstanceId" : "50001234/0b8a6c2e-1f3d-4b5a-9c7e-2d4f6a8b0c1d",
+    "type" : "application/pdf"
+  }, {
+    "base64Contents" : "JVBERiBkb2t1bWVudGFzam9uLWZhZ2tvbXBldGFuc2UucGRm",
+    "encoding" : "base64",
+    "name" : "dokumentasjon-fagkompetanse.pdf",
+    "sourceApplicationId" : 5,
+    "sourceApplicationInstanceId" : "50001234/0b8a6c2e-1f3d-4b5a-9c7e-2d4f6a8b0c1d",
+    "type" : "application/pdf"
+  }, {
+    "base64Contents" : "JVBERiBkb20tZm9yZWxlZ2cucGRm",
+    "encoding" : "base64",
+    "name" : "dom-forelegg.pdf",
+    "sourceApplicationId" : 5,
+    "sourceApplicationInstanceId" : "50001234/0b8a6c2e-1f3d-4b5a-9c7e-2d4f6a8b0c1d",
+    "type" : "application/pdf"
+  }, {
+    "base64Contents" : "JVBERiBrb25rdXJzYXR0ZXN0LWRhZ2xpZ2xlZGVyLnBkZg==",
+    "encoding" : "base64",
+    "name" : "konkursattest-dagligleder.pdf",
+    "sourceApplicationId" : 5,
+    "sourceApplicationInstanceId" : "50001234/0b8a6c2e-1f3d-4b5a-9c7e-2d4f6a8b0c1d",
+    "type" : "application/pdf"
+  }, {
+    "base64Contents" : "JVBERiBwb2xpdGlhdHRlc3QtZGFnbGlnbGVkZXIucGRm",
+    "encoding" : "base64",
+    "name" : "politiattest-dagligleder.pdf",
+    "sourceApplicationId" : 5,
+    "sourceApplicationInstanceId" : "50001234/0b8a6c2e-1f3d-4b5a-9c7e-2d4f6a8b0c1d",
+    "type" : "application/pdf"
+  }, {
+    "base64Contents" : "JVBERiBwb2xpdGlhdHRlc3QtZm9yZXRhay5wZGY=",
+    "encoding" : "base64",
+    "name" : "politiattest-foretak.pdf",
+    "sourceApplicationId" : 5,
+    "sourceApplicationInstanceId" : "50001234/0b8a6c2e-1f3d-4b5a-9c7e-2d4f6a8b0c1d",
+    "type" : "application/pdf"
+  }, {
+    "base64Contents" : "JVBERiByZWYtZGF0YS1hcy1wZGYucGRm",
+    "encoding" : "base64",
+    "name" : "ref-data-as-pdf.pdf",
+    "sourceApplicationId" : 5,
+    "sourceApplicationInstanceId" : "50001234/0b8a6c2e-1f3d-4b5a-9c7e-2d4f6a8b0c1d",
+    "type" : "application/pdf"
+  }, {
+    "base64Contents" : "JVBERiBza2F0dGVhdHRlc3QtZGFnbGlnbGVkZXIucGRm",
+    "encoding" : "base64",
+    "name" : "skatteattest-dagligleder.pdf",
+    "sourceApplicationId" : 5,
+    "sourceApplicationInstanceId" : "50001234/0b8a6c2e-1f3d-4b5a-9c7e-2d4f6a8b0c1d",
+    "type" : "application/pdf"
+  } ]
+}

@@ -1,8 +1,8 @@
 package no.fintlabs.flyt;
 
 import no.novari.fint.altinn.model.kafka.KafkaAltinnInstance;
-import no.fintlabs.gateway.instance.model.File;
-import no.fintlabs.gateway.instance.model.instance.InstanceObject;
+import no.novari.flyt.gateway.instance.model.File;
+import no.novari.flyt.gateway.instance.model.instance.InstanceObject;
 import reactor.core.publisher.Mono;
 
 import java.util.UUID;
