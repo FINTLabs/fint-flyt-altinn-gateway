@@ -10,7 +10,7 @@ services:
     ports:
       - 2181:2181
   kafka:
-    image: confluentinc/cp-kafka:7.6.1
+    image: confluentinc/cp-kafka:8.4.0
     networks:
       - broker-kafka
     depends_on:
