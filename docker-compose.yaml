@@ -36,7 +36,7 @@ services:
     environment:
       KAFKA_BROKERCONNECT: kafka:29092
   rest-proxy:
-    image: confluentinc/cp-kafka-rest:7.6.1
+    image: confluentinc/cp-kafka-rest:8.4.0
     networks: [broker-kafka]
     depends_on:
       - kafka
