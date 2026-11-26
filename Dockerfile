@@ -1,8 +1,8 @@
-FROM eclipse-temurin:17-jdk AS builder
+FROM eclipse-temurin:24-jdk AS builder
 COPY . .
 RUN ./gradlew --no-daemon build
 
-FROM eclipse-temurin:17-jre
+FROM eclipse-temurin:24-jre
 WORKDIR /data
 ENV JAVA_TOOL_OPTIONS="-XX:+ExitOnOutOfMemoryError -XX:-UseBASE64Intrinsics"
 COPY --from=builder build/libs/fint-flyt-altinn-gateway-*.jar /data/app.jar
