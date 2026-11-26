@@ -10,7 +10,7 @@ services:
     ports:
       - 2181:2181
   kafka:
-    image: confluentinc/cp-kafka:7.6.1
+    image: confluentinc/cp-kafka:8.4.0
     networks:
       - broker-kafka
     depends_on:
@@ -36,7 +36,7 @@ services:
     environment:
       KAFKA_BROKERCONNECT: kafka:29092
   rest-proxy:
-    image: confluentinc/cp-kafka-rest:7.6.1
+    image: confluentinc/cp-kafka-rest:8.4.0
     networks: [broker-kafka]
     depends_on:
       - kafka
@@ -48,7 +48,7 @@ services:
       KAFKA_REST_LISTENERS: "http://0.0.0.0:8082"
 
   db:
-    image: postgres:18.6-alpine
+    image: postgres:18.7-alpine
     restart: always
     environment:
       - POSTGRES_USER=postgres
