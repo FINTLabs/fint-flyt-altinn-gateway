@@ -2,21 +2,37 @@ version: 2
 updates:
 
   - package-ecosystem: "github-actions"
+    groups:
+      github-actions-dependencies:
+        patterns:
+          - "*"
     directory: "/"
     schedule:
       interval: "weekly"
 
   - package-ecosystem: "gradle"
+    groups:
+      gradle-dependencies:
+        patterns:
+          - "*"
     directory: "/"
     schedule:
       interval: "weekly"
 
   - package-ecosystem: "docker"
+    groups:
+      docker-dependencies:
+        patterns:
+          - "*"
     directory: "/"
     schedule:
       interval: "weekly"
 
   - package-ecosystem: "docker-compose"
+    groups:
+      docker-compose-dependencies:
+        patterns:
+          - "*"
     directory: "/"
     schedule:
       interval: "weekly"
