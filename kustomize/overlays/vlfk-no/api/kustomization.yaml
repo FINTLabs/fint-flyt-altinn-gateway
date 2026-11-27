@@ -56,6 +56,10 @@ patches:
         path: "/spec/probes/readiness/path"
         value: "/vlfk-no/actuator/health"
 
+      - op: replace
+        path: "/spec/observability/metrics/path"
+        value: "/vlfk-no/actuator/prometheus"
+
     target:
       kind: Application
       name: fint-flyt-altinn-gateway

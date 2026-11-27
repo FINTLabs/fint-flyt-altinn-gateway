@@ -56,6 +56,10 @@ patches:
         path: "/spec/probes/readiness/path"
         value: "/beta/telemarkfylke-no/actuator/health"
 
+      - op: replace
+        path: "/spec/observability/metrics/path"
+        value: "/beta/telemarkfylke-no/actuator/prometheus"
+
     target:
       kind: Application
       name: fint-flyt-altinn-gateway
