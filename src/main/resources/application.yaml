@@ -29,5 +29,5 @@ spring:
     include:
       - flyt-kafka
       - flyt-logging
-      - flyt-resource-server
       - flyt-file-client
+      - flyt-authorization-client

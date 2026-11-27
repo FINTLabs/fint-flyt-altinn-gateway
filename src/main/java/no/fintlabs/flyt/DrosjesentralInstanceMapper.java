@@ -3,8 +3,8 @@ package no.fintlabs.flyt;
 import lombok.extern.slf4j.Slf4j;
 import no.novari.fint.altinn.model.kafka.KafkaAltinnInstance;
 import no.fintlabs.altinn.AltinnFileService;
-import no.fintlabs.gateway.instance.model.File;
-import no.fintlabs.gateway.instance.model.instance.InstanceObject;
+import no.novari.flyt.gateway.instance.model.File;
+import no.novari.flyt.gateway.instance.model.instance.InstanceObject;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
@@ -57,10 +57,10 @@ public class DrosjesentralInstanceMapper extends AbstractInstanceMapper {
                 .map(zip -> {
                             List<DocumentEntry> allMandatoryDocuments = Stream.of(zip.getT1(), zip.getT2()).flatMap(List::stream).toList();
 
-                            return InstanceObject.builder()
-                                    .valuePerKey(toValuePerKey(incomingInstance, allMandatoryDocuments))
-                                    .objectCollectionPerKey(mapCollectionsDynamically(zip.getT3(), collectionDocumentRefs))
-                                    .build();
+                            return new InstanceObject(
+                                    toValuePerKey(incomingInstance, allMandatoryDocuments),
+                                    mapCollectionsDynamically(zip.getT3(), collectionDocumentRefs)
+                            );
                         }
                 );
     }

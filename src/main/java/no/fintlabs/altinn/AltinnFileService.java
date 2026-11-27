@@ -1,7 +1,7 @@
 package no.fintlabs.altinn;
 
 import lombok.extern.slf4j.Slf4j;
-import no.fintlabs.gateway.instance.model.File;
+import no.novari.flyt.gateway.instance.model.File;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -29,16 +29,16 @@ public class AltinnFileService {
                 .exchangeToMono(response -> response.bodyToMono(byte[].class)
                         .map(body -> {
                             log.debug("Response status code: {}", response.statusCode());
-                            HttpHeaders httpHeaders = HttpHeaders.writableHttpHeaders(response.headers().asHttpHeaders());
+                            HttpHeaders httpHeaders = response.headers().asHttpHeaders();
                             log.debug("Response headers filename: {}", httpHeaders.getContentDisposition().getFilename());
-                            return File.builder()
-                                    .name(getFilenameFromHeaders(httpHeaders))
-                                    .sourceApplicationId(sourceApplicationId)
-                                    .sourceApplicationInstanceId(instanceId)
-                                    .type(response.headers().contentType().orElse(MediaType.APPLICATION_OCTET_STREAM))
-                                    .encoding("base64")
-                                    .base64Contents(Base64.getEncoder().encodeToString(body))
-                                    .build();
+                            return new File(
+                                    getFilenameFromHeaders(httpHeaders),
+                                    sourceApplicationId,
+                                    instanceId,
+                                    response.headers().contentType().orElse(MediaType.APPLICATION_OCTET_STREAM),
+                                    "base64",
+                                    Base64.getEncoder().encodeToString(body)
+                            );
                         }))
                 .doOnError(throwable -> {
                     throw new RuntimeException(String.format("Failed to fetch file with reference %s", documentReference),  throwable);
@@ -54,16 +54,16 @@ public class AltinnFileService {
                 .uri(String.format("/api/file/ebevis/%s/%s", instanceId, evidenceCodeName))
                 .exchangeToMono(response -> response.bodyToMono(byte[].class)
                         .map(body -> {
-                            HttpHeaders httpHeaders = HttpHeaders.writableHttpHeaders(response.headers().asHttpHeaders());
+                            HttpHeaders httpHeaders = response.headers().asHttpHeaders();
                             log.debug("Response ebevis filename: {}", httpHeaders.getContentDisposition().getFilename());
-                            return File.builder()
-                                    .name(getFilenameFromHeaders(httpHeaders))
-                                    .sourceApplicationId(sourceApplicationId)
-                                    .sourceApplicationInstanceId(instanceId)
-                                    .type(response.headers().contentType().orElse(MediaType.APPLICATION_OCTET_STREAM))
-                                    .encoding("base64")
-                                    .base64Contents(Base64.getEncoder().encodeToString(body))
-                                    .build();
+                            return new File(
+                                    getFilenameFromHeaders(httpHeaders),
+                                    sourceApplicationId,
+                                    instanceId,
+                                    response.headers().contentType().orElse(MediaType.APPLICATION_OCTET_STREAM),
+                                    "base64",
+                                    Base64.getEncoder().encodeToString(body)
+                            );
                                 }))
                 .doOnError(throwable -> {
                     throw new RuntimeException(String.format("Failed to fetch file with instanceId %s and evidence code name %s",

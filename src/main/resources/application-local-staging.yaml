@@ -1,17 +1,12 @@
 fint:
-  org-id: ofk.no
+  org-id: ofk-no
   altinn:
     api:
       base-url: http://localhost:8080/
+novari:
   flyt:
     file-service-url: http://localhost:8091
-    resource-server:
-      security:
-        api:
-          external:
-            enabled: true
-            authorized-client-ids: 5
-    instance-gateway:
+    gateway-starter:
       check-integration-exists: false
   kafka:
     default-replicas: 1

@@ -1,0 +1,66 @@
+{
+  "altinnRequests" : [ "GET /api/file/50001234/0b8a6c2e-1f3d-4b5a-9c7e-2d4f6a8b0c1d/dokumentasjon-fagkompetanse", "GET /api/file/50001234/0b8a6c2e-1f3d-4b5a-9c7e-2d4f6a8b0c1d/dom-forelegg", "GET /api/file/50001234/0b8a6c2e-1f3d-4b5a-9c7e-2d4f6a8b0c1d/konkursattest-dagligleder", "GET /api/file/50001234/0b8a6c2e-1f3d-4b5a-9c7e-2d4f6a8b0c1d/politiattest-dagligleder", "GET /api/file/50001234/0b8a6c2e-1f3d-4b5a-9c7e-2d4f6a8b0c1d/politiattest-foretak", "GET /api/file/50001234/0b8a6c2e-1f3d-4b5a-9c7e-2d4f6a8b0c1d/ref-data-as-pdf", "GET /api/file/50001234/0b8a6c2e-1f3d-4b5a-9c7e-2d4f6a8b0c1d/skatteattest-dagligleder", "GET /api/file/ebevis/50001234/0b8a6c2e-1f3d-4b5a-9c7e-2d4f6a8b0c1d/KonkursDrosje", "GET /api/file/ebevis/50001234/0b8a6c2e-1f3d-4b5a-9c7e-2d4f6a8b0c1d/RestanserV2" ],
+  "instanceObject" : {
+    "objectCollectionPerKey" : {
+      "domForelegg" : [ ],
+      "kompetanse" : [ ],
+      "konkursattestLeder" : [ {
+        "objectCollectionPerKey" : { },
+        "valuePerKey" : {
+          "konkursattestLederFil" : "4c3d9e83-fe9d-35e6-8643-1736ed64b702",
+          "konkursattestLederFormat" : "text/plain",
+          "konkursattestLederTittel" : "Konkursattest for daglig leder"
+        }
+      } ],
+      "politiattestForetak" : [ ],
+      "skatteattestLeder" : [ ]
+    },
+    "valuePerKey" : {
+      "dagligLederEpostadresse" : "kari@drosje.no",
+      "dagligLederEtternavn" : "Nordmann",
+      "dagligLederFornavn" : "Kari",
+      "dagligLederFødselsnummer" : "01010112345",
+      "dagligLederTelefonnummer" : "90000000",
+      "foretakEpostadresse" : "post@drosje.no",
+      "foretakFylke" : "Østfold",
+      "foretakGateadresse" : "Storgata 1",
+      "foretakKommune" : "Fredrikstad",
+      "foretakOrganisasjonsnavn" : "Drosje AS",
+      "foretakOrganisasjonsnummer" : "912345678",
+      "foretakPostnummer" : "1601",
+      "foretakPoststed" : "Fredrikstad",
+      "foretakTelefonnummer" : "69000000",
+      "konkursattestForetakFil" : "81edf7e0-6631-31b1-b926-85512c83291e",
+      "konkursattestForetakFormat" : "application/pdf",
+      "konkursattestForetakTittel" : "Konkursattest for foretaket",
+      "postadresseGateadresse" : "Postboks 10",
+      "postadressePostnummer" : "1602",
+      "postadressePoststed" : "Fredrikstad",
+      "soknadFil" : "250f5355-a13f-3961-8195-3e3785862f9e",
+      "soknadFormat" : "application/pdf",
+      "soknadTittel" : "Søknadsskjema"
+    }
+  },
+  "uploadedFiles" : [ {
+    "base64Contents" : "JVBERiBLb25rdXJzRHJvc2plLnBkZg==",
+    "encoding" : "base64",
+    "name" : "KonkursDrosje.pdf",
+    "sourceApplicationId" : 5,
+    "sourceApplicationInstanceId" : "50001234/0b8a6c2e-1f3d-4b5a-9c7e-2d4f6a8b0c1d",
+    "type" : "application/pdf"
+  }, {
+    "base64Contents" : "SW50ZXJuYWwgU2VydmVyIEVycm9y",
+    "encoding" : "base64",
+    "name" : "error.txt",
+    "sourceApplicationId" : 5,
+    "sourceApplicationInstanceId" : "50001234/0b8a6c2e-1f3d-4b5a-9c7e-2d4f6a8b0c1d",
+    "type" : "text/plain"
+  }, {
+    "base64Contents" : "JVBERiByZWYtZGF0YS1hcy1wZGYucGRm",
+    "encoding" : "base64",
+    "name" : "ref-data-as-pdf.pdf",
+    "sourceApplicationId" : 5,
+    "sourceApplicationInstanceId" : "50001234/0b8a6c2e-1f3d-4b5a-9c7e-2d4f6a8b0c1d",
+    "type" : "application/pdf"
+  } ]
+}

@@ -1,0 +1,10 @@
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          intgr-conf-service:
+            authorization-grant-type: client_credentials
+            provider: fint-idp
+            client-id: ${fint.flyt.authorization.sso.client-id}
+            client-secret: ${fint.flyt.authorization.sso.client-secret}

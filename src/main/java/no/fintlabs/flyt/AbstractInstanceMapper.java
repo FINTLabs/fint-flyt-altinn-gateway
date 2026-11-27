@@ -4,8 +4,8 @@ import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import no.novari.fint.altinn.model.kafka.KafkaAltinnInstance;
 import no.fintlabs.altinn.AltinnFileService;
-import no.fintlabs.gateway.instance.model.File;
-import no.fintlabs.gateway.instance.model.instance.InstanceObject;
+import no.novari.flyt.gateway.instance.model.File;
+import no.novari.flyt.gateway.instance.model.instance.InstanceObject;
 import org.springframework.http.MediaType;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -161,10 +161,11 @@ public abstract class AbstractInstanceMapper implements ApplicationInstanceMappe
         entries.add(Map.entry(prefix + "Format", String.valueOf(documentEntry.type())));
         entries.add(Map.entry(prefix + "Fil", documentEntry.id()));
 
-        return InstanceObject.builder()
-                .valuePerKey(entries.stream()
-                        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)))
-                .build();
+        return new InstanceObject(
+                entries.stream()
+                        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)),
+                new HashMap<>()
+        );
     }
 
     protected Map.Entry<String, String> entry(String key, String value) {
